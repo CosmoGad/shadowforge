@@ -1,0 +1,4 @@
+test-output/
+__pycache__/
+*.zip
+*.tar.gz
