@@ -1,0 +1,2 @@
+import {makeWallDesign,simulateWall} from './wall.mjs';
+self.onmessage=({data})=>{try{const d=makeWallDesign(data.gray,data.iw,data.ih,data.settings);self.postMessage({id:data.id,phase:'geometry',d});const sim=simulateWall(d,data.width,data.samples);self.postMessage({id:data.id,phase:'done',sim},[sim.data.buffer,sim.shadow.buffer]);}catch(e){self.postMessage({id:data.id,error:e.message});}};
