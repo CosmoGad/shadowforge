@@ -2,7 +2,7 @@ import earcut from './vendor/earcut.mjs';
 import {clamp,sourceSamples} from './core.mjs';
 export {stlBuffer,zipStore} from './core.mjs';
 // Wall is z=0. The source is in front of the sculpture, at positive z.
-export const DEFAULTS=Object.freeze({wallWidth:330,resolution:144,threshold:.30,style:'solid',contrast:1,gap:42,relief:18,thickness:2.4,sourceZ:100,emitter:1.2,sourceX:0,sourceY:0,minWeb:1.4,socket:14,exposure:2.2,invert:false,ambient:.018});
+export const DEFAULTS=Object.freeze({shape:'square',bodySide:120,wallWidth:330,resolution:144,threshold:.30,style:'solid',contrast:1,gap:42,relief:18,thickness:2.4,sourceZ:100,emitter:1.2,sourceX:0,sourceY:0,minWeb:1.4,socket:14,exposure:2.2,invert:false,ambient:.018});
 const key=(x,y)=>x+','+y;
 const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0)/2;
@@ -10,7 +10,7 @@ const pointIn=(p,poly)=>{let inside=false;for(let i=0,j=poly.length-1;i<poly.len
 function disk(mask,nx,ny,cx,cy,r,value=1){for(let y=Math.max(1,Math.floor(cy-r));y<=Math.min(ny-2,Math.ceil(cy+r));y++)for(let x=Math.max(1,Math.floor(cx-r));x<=Math.min(nx-2,Math.ceil(cx+r));x++)if((x-cx)**2+(y-cy)**2<=r*r)mask[y*nx+x]=value;}
 function morphology(mask,nx,ny,r,dilate){const out=new Uint8Array(mask.length);for(let y=1;y<ny-1;y++)for(let x=1;x<nx-1;x++){let v=dilate?0:1;outer:for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(dx*dx+dy*dy>r*r)continue;const xx=x+dx,yy=y+dy,a=xx>=0&&yy>=0&&xx<nx&&yy<ny?mask[yy*nx+xx]:0;if(dilate&&a){v=1;break outer;}if(!dilate&&!a){v=0;break outer;}}out[y*nx+x]=v;}return out;}
 function flood(mask,nx,ny,start){const seen=new Uint8Array(mask.length),queue=new Int32Array(mask.length);let a=0,b=0;if(mask[start]){seen[start]=1;queue[b++]=start;}while(a<b){const k=queue[a++],x=k%nx,y=Math.floor(k/nx);for(const v of[x>0?k-1:-1,x<nx-1?k+1:-1,y>0?k-nx:-1,y<ny-1?k+nx:-1])if(v>=0&&mask[v]&&!seen[v]){seen[v]=1;queue[b++]=v;}}return{seen,cells:queue.subarray(0,b)};}
-function connect(mask,nx,ny,radius){let bridges=0;const start=Math.floor(ny/2)*nx+Math.floor(nx/2);for(let iteration=0;iteration<400;iteration++){
+function connect(mask,nx,ny,radius,start=Math.floor(ny/2)*nx+Math.floor(nx/2)){let bridges=0;for(let iteration=0;iteration<400;iteration++){
   const root=flood(mask,nx,ny,start);if(root.cells.length===mask.reduce((s,x)=>s+x,0))return bridges;
   const parent=new Int32Array(mask.length);parent.fill(-1);const queue=new Int32Array(mask.length);let a=0,b=0,found=-1;for(const k of root.cells){parent[k]=k;queue[b++]=k;}
   while(a<b&&found<0){const k=queue[a++],x=k%nx,y=Math.floor(k/nx);for(const v of[x>1?k-1:-1,x<nx-2?k+1:-1,y>1?k-nx:-1,y<ny-2?k+nx:-1])if(v>=0&&parent[v]===-1){parent[v]=k;if(mask[v]&&!root.seen[v]){found=v;break;}queue[b++]=v;}}
@@ -56,15 +56,16 @@ function choosePosts(target,nx,ny,pitch,scale){
 }
 export function makeWallDesign(gray,iw,ih,settings={}){
   const p={...DEFAULTS,...settings},nx=Math.round(p.resolution),ny=Math.round(nx*ih/iw),pitch=p.wallWidth/nx,height=ny*pitch;
-  if(p.sourceZ-p.gap-p.relief-p.thickness<20)throw new Error('Между источником и самым высоким участком нужно оставить минимум 20 мм.');
+  if(p.shape!=='square'&&p.sourceZ-p.gap-p.relief-p.thickness<20)throw new Error('Между источником и самым высоким участком нужно оставить минимум 20 мм.');
   if(p.gap<8)throw new Error('Зазор до стены слишком мал.');
   const scale=1-p.gap/p.sourceZ,minScale=1-(p.gap+p.relief+p.thickness)/p.sourceZ;
-  if(p.minWeb>pitch*minScale*4)throw new Error('Перемычки слишком широкие для этой детализации.');
+  if(p.shape!=='square'&&p.minWeb>pitch*minScale*4)throw new Error('Перемычки слишком широкие для этой детализации.');
   let border=0,borderN=0;for(let y=0;y<ih;y++)for(let x=0;x<iw;x++)if(x<iw*.04||x>iw*.96||y<ih*.04||y>ih*.96){border+=gray[y*iw+x];borderN++;}
   const darkBackground=border/borderN<.45,target=new Uint8Array(nx*ny),tones=new Float32Array(nx*ny);let mask=new Uint8Array(target.length),foreground=new Uint8Array(target.length);
   for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){let sum=0;for(const [dx,dy]of[[.2,.2],[.8,.2],[.2,.8],[.8,.8]]){const xx=Math.min(iw-1,Math.floor((x+dx)*iw/nx)),yy=Math.min(ih-1,Math.floor((y+dy)*ih/ny));sum+=gray[yy*iw+xx];}const raw=sum/4,g=clamp((raw-.5)*p.contrast+.5);tones[y*nx+x]=g;foreground[y*nx+x]=darkBackground?+(raw>.022):+(raw<.97);}
   foreground=morphology(morphology(foreground,nx,ny,2,true),nx,ny,2,false);const background=Uint8Array.from(foreground,x=>1-x),outside=flood(background,nx,ny,0).seen;for(let k=0;k<foreground.length;k++)foreground[k]=outside[k]?0:1;
   for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){const k=y*nx+x,g=tones[k],ink=p.style==='lines'?(darkBackground?g>=p.threshold:g<=1-p.threshold):!!foreground[k]&&g<=p.threshold;target[k]=p.invert?(foreground[k]?+!ink:0):+ink;}
+  if(p.shape==='square')return makeSquareDesign({p,nx,ny,pitch,height,target,darkBackground});
   const radius=Math.max(1,Math.floor(p.minWeb/(pitch*minScale)*.5));
   mask=morphology(target,nx,ny,1,true);mask=morphology(mask,nx,ny,1,false);mask=morphology(mask,nx,ny,radius,false);mask=morphology(mask,nx,ny,radius,true);
   const rootW=72,rootH=96,flatW=70/scale,flatH=92/scale,posts=choosePosts(target,nx,ny,pitch,scale);
@@ -85,6 +86,37 @@ export function makeWallDesign(gray,iw,ih,settings={}){
   d.bounds=[[Infinity,-Infinity],[Infinity,-Infinity],[Infinity,-Infinity]];for(const t of d.sculpture)for(let i=0;i<9;i++){const a=i%3;d.bounds[a][0]=Math.min(d.bounds[a][0],t[i]);d.bounds[a][1]=Math.max(d.bounds[a][1],t[i]);}
   d.addedPixels=mask.reduce((s,x,i)=>s+(x&&!before[i]?1:0),0);return d;
 }
+function makeSquareDesign(d){
+  const {p,target,nx,ny,pitch,height}=d,side=p.bodySide,t=p.thickness,h=side/2,z0=3,z1=p.sourceZ+16,H=z1-z0;
+  if(side<70||side>220||t<1||t>side/10)throw new Error('Проверьте сторону квадратного корпуса и толщину стенок.');
+  const panels=[],panelNx=Math.max(48,Math.round(p.resolution/1.5)),panelPitch=side/panelNx,panelNy=Math.max(40,Math.round(H/panelPitch)),frame=Math.max(3,p.minWeb*2),radius=Math.max(1,Math.floor(p.minWeb/panelPitch*.5));let bridges=0,holes=0;
+  // Tangent direction and outward normal form a right-handed (u,z,n) basis.
+  const toWorld=(face,u,z,normal)=>face===0?[normal,u,z]:face===1?[-u,normal,z]:face===2?[-normal,-u,z]:[u,-normal,z];
+  for(let face=0;face<4;face++){
+    let mask=new Uint8Array(panelNx*panelNy);const py=H/panelNy;
+    for(let y=1;y<panelNy-1;y++)for(let x=1;x<panelNx-1;x++){
+      const u=((x+.5)/panelNx-.5)*side,z=z0+(1-(y+.5)/panelNy)*H;
+      if(z>=p.sourceZ){mask[y*panelNx+x]=1;continue;}
+      const [xx,yy]=toWorld(face,u,z,h),k=p.sourceZ/(p.sourceZ-z),wx=xx*k,wy=yy*k,ix=Math.floor(wx/pitch+nx/2),iy=Math.floor(ny/2-wy/pitch);
+      mask[y*panelNx+x]=ix>=0&&iy>=0&&ix<nx&&iy<ny?target[iy*nx+ix]:0;
+    }
+    mask=morphology(morphology(mask,panelNx,panelNy,1,true),panelNx,panelNy,1,false);
+    mask=morphology(morphology(mask,panelNx,panelNy,radius,false),panelNx,panelNy,radius,true);
+    for(let y=1;y<panelNy-1;y++)for(let x=1;x<panelNx-1;x++)if(x*panelPitch<frame||(panelNx-1-x)*panelPitch<frame||y*py<frame||(panelNy-1-y)*py<frame)mask[y*panelNx+x]=1;
+    bridges+=connect(mask,panelNx,panelNy,radius,panelNx+1);fixDiagonal(mask,panelNx,panelNy);
+    const extracted=contours(mask,panelNx,panelNy,panelPitch),gridH=panelNy*panelPitch;
+    const cutouts=extracted.filter(loop=>area(loop)<0);holes+=cutouts.length;
+    const loops=[rectangle(side,gridH),...cutouts],k=(h-t)/h;
+    const triangles=extrude(loops,([u,v],outer)=>{
+      const z=z0+(v+gridH/2)*H/gridH,isBoundary=Math.abs(Math.abs(u)-h)<1e-4||Math.abs(Math.abs(v)-gridH/2)<1e-4;
+      return outer?toWorld(face,u,z,h):toWorld(face,u*k,isBoundary?z:p.sourceZ+(z-p.sourceZ)*k,h-t);
+    });
+    panels.push({file:`side-panel-${face+1}.stl`,label:['Правая стенка','Верхняя стенка','Левая стенка','Нижняя стенка'][face],triangles});
+  }
+  const support=extrude([rectangle(side,side),circle(0,h-12,2),circle(0,-h+12,2)],([x,y],front)=>[x,y,front*3]);
+  const cover=extrude([rectangle(side,side),circle(0,0,p.socket/2)],([x,y],front)=>[x,y,z1+front*3]);
+  return {...d,panels,sculpture:panels.flatMap(x=>x.triangles),support,cover,hardware:[],washers:[],washer:[],posts:[],rootW:side*p.sourceZ/(p.sourceZ-3),rootH:side*p.sourceZ/(p.sourceZ-3),holes,bridges,bounds:[[-h,h],[-h,h],[z0,z1]],bodyBounds:[[-h,h],[-h,h],[0,z1+3]],minFeature:panelPitch,addedPixels:0,mask:target,before:target};
+}
 // BVH over the exact triangles used for STL export, including the structural posts.
 export function buildBVH(triangles){
   const records=triangles.map(t=>{const a=t.slice(0,3),e1=[t[3]-t[0],t[4]-t[1],t[5]-t[2]],e2=[t[6]-t[0],t[7]-t[1],t[8]-t[2]];return{a,e1,e2,min:[0,1,2].map(i=>Math.min(t[i],t[i+3],t[i+6])),max:[0,1,2].map(i=>Math.max(t[i],t[i+3],t[i+6]))};});
@@ -102,5 +134,6 @@ export function simulateWall(d,width=280,count=13){
     data[k]=light/samples.length;shadow[k]=blocked/samples.length;
     const ix=Math.floor(wx/d.pitch+d.nx/2),iy=Math.floor(d.ny/2-wy/d.pitch);if(ix>=0&&iy>=0&&ix<d.nx&&iy<d.ny&&!(Math.abs(wx)<d.rootW/2+5&&Math.abs(wy)<d.rootH/2+5)){
       const target=d.target[iy*d.nx+ix],actual=shadow[k]>=.5;intersection+=actual&&target?1:0;union+=actual||target?1:0;error+=(shadow[k]-target)**2;scored++;}}
-  return{width,height,data,shadow,worldWidth,worldHeight,samples:samples.length,iou:union?intersection/union:1,rmse:Math.sqrt(error/Math.max(1,scored)),blur:p.emitter*(p.gap+p.relief/2)/(p.sourceZ-p.gap-p.relief/2),triangles:triangles.length};
+  const effectiveZ=p.shape==='square'?Math.max(3,p.sourceZ*(1-p.bodySide/Math.max(p.wallWidth,d.height))):p.gap+p.relief/2;
+  return{width,height,data,shadow,worldWidth,worldHeight,samples:samples.length,iou:union?intersection/union:1,rmse:Math.sqrt(error/Math.max(1,scored)),blur:p.emitter*effectiveZ/(p.sourceZ-effectiveZ),triangles:triangles.length};
 }
