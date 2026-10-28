@@ -1,0 +1,26 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {detailLimits,simplifyTarget,incidentLight,displayRGB,measureContrast,autoExposure} from './dist/clarity.mjs';
+import {DEFAULTS,makeWallDesign,stlBuffer} from './dist/wall.mjs';
+assert.equal(incidentLight(0,0,100,0,0),1);
+assert.equal(incidentLight(0,0,200,0,0),.25,'same lamp at twice the distance: one quarter of illuminance');
+assert(incidentLight(0,0,100,100,0)<incidentLight(0,0,100,0,0),'obliquity and distance reduce wall illumination');
+const normal=detailLimits(DEFAULTS,451),large=detailLimits({...DEFAULTS,emitter:5},451);
+assert(large.minDetailMM>normal.minDetailMM);assert(normal.minDetailMM>=normal.projectedPrint);assert(normal.minDetailMM>=2*normal.penumbra);
+assert.equal(detailLimits({...DEFAULTS,opticsAware:false,detailSize:4},451).minDetailMM,4);
+const w=80,h=80,raw=new Uint8Array(w*h),tones=new Float32Array(w*h);for(let y=20;y<60;y++)for(let x=20;x<60;x++)raw[y*w+x]=1;
+raw[5*w+5]=1;for(let y=28;y<36;y++)for(let x=28;x<36;x++){raw[y*w+x]=0;tones[y*w+x]=.9;}
+const clean=simplifyTarget(raw,tones,w,h,1,DEFAULTS,{...normal,minDetailMM:12});
+assert.equal(clean.target[5*w+5],0,'an isolated sub-resolution speck disappears');
+assert.equal(clean.target[50*w+50],1,'the broad silhouette remains');
+assert.equal(clean.target[31*w+31],0,'a strong enclosed highlight is retained and enlarged');
+const scene={nx:2,ny:2,pitch:50,rootW:0,rootH:0,target:new Uint8Array([1,0,1,0])},synthetic={width:2,height:2,worldWidth:100,worldHeight:100,data:new Float32Array([0,1,0,1]),incident:new Float32Array([1,1,1,1])};
+assert(Math.abs(measureContrast(scene,synthetic,0)-1)<1e-8);
+assert(measureContrast(scene,synthetic,.2)<measureContrast(scene,synthetic,.01),'room light reduces contrast');
+const zero=displayRGB(.2,.008,0),plus=displayRGB(.2,.008,1);assert(plus.every((x,i)=>x>zero[i]));assert.deepEqual(displayRGB(0,0,0),[0,0,0]);assert(Number.isFinite(autoExposure(synthetic,.008)));
+const gray=Float32Array.from(await readFile(new URL('./tests/batman.gray',import.meta.url)),x=>x/255),d=makeWallDesign(gray,306,418),otherEV=makeWallDesign(gray,306,418,{exposureEV:2,ambient:.04});
+const hash=d=>createHash('sha256').update(new Uint8Array(stlBuffer(d.sculpture))).digest('hex');assert.equal(hash(d),hash(otherEV),'view exposure and room light do not alter STL geometry');
+assert(d.simplification.components<d.simplification.rawComponents);
+assert(d.simplification.edges<d.simplification.rawEdges*.65,'default design retains substantially fewer contour details');
+console.log(JSON.stringify({passed:true,inverseSquare:true,exposureChangesGeometry:false,detailMM:d.simplification.minDetailMM,fragments:[d.simplification.rawComponents,d.simplification.components],edges:[d.simplification.rawEdges,d.simplification.edges],holes:d.holes},null,2));

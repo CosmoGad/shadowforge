@@ -1,14 +1,14 @@
 import earcut from './vendor/earcut.mjs';
+import {morphology,detailLimits,simplifyTarget,incidentLight} from './clarity.mjs';
 import {clamp,sourceSamples} from './core.mjs';
 export {stlBuffer,zipStore} from './core.mjs';
 // Wall is z=0. The source is in front of the sculpture, at positive z.
-export const DEFAULTS=Object.freeze({shape:'square',bodySide:120,wallWidth:330,resolution:144,threshold:.30,style:'solid',contrast:1,gap:42,relief:18,thickness:2.4,sourceZ:100,emitter:1.2,sourceX:0,sourceY:0,minWeb:1.4,socket:14,exposure:2.2,invert:false,ambient:.018});
+export const DEFAULTS=Object.freeze({shape:'square',bodySide:120,wallWidth:330,resolution:144,threshold:.30,style:'solid',contrast:1,gap:42,relief:18,thickness:2.4,sourceZ:100,emitter:1.2,sourceX:0,sourceY:0,minWeb:1.4,socket:14,exposureEV:0,detailSize:12,opticsAware:true,invert:false,ambient:.008});
 const key=(x,y)=>x+','+y;
 const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0)/2;
 const pointIn=(p,poly)=>{let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a[1]>p[1])!==(b[1]>p[1])&&p[0]<(b[0]-a[0])*(p[1]-a[1])/(b[1]-a[1])+a[0])inside=!inside;}return inside;};
 function disk(mask,nx,ny,cx,cy,r,value=1){for(let y=Math.max(1,Math.floor(cy-r));y<=Math.min(ny-2,Math.ceil(cy+r));y++)for(let x=Math.max(1,Math.floor(cx-r));x<=Math.min(nx-2,Math.ceil(cx+r));x++)if((x-cx)**2+(y-cy)**2<=r*r)mask[y*nx+x]=value;}
-function morphology(mask,nx,ny,r,dilate){const out=new Uint8Array(mask.length);for(let y=1;y<ny-1;y++)for(let x=1;x<nx-1;x++){let v=dilate?0:1;outer:for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(dx*dx+dy*dy>r*r)continue;const xx=x+dx,yy=y+dy,a=xx>=0&&yy>=0&&xx<nx&&yy<ny?mask[yy*nx+xx]:0;if(dilate&&a){v=1;break outer;}if(!dilate&&!a){v=0;break outer;}}out[y*nx+x]=v;}return out;}
 function flood(mask,nx,ny,start){const seen=new Uint8Array(mask.length),queue=new Int32Array(mask.length);let a=0,b=0;if(mask[start]){seen[start]=1;queue[b++]=start;}while(a<b){const k=queue[a++],x=k%nx,y=Math.floor(k/nx);for(const v of[x>0?k-1:-1,x<nx-1?k+1:-1,y>0?k-nx:-1,y<ny-1?k+nx:-1])if(v>=0&&mask[v]&&!seen[v]){seen[v]=1;queue[b++]=v;}}return{seen,cells:queue.subarray(0,b)};}
 function connect(mask,nx,ny,radius,start=Math.floor(ny/2)*nx+Math.floor(nx/2)){let bridges=0;for(let iteration=0;iteration<400;iteration++){
   const root=flood(mask,nx,ny,start);if(root.cells.length===mask.reduce((s,x)=>s+x,0))return bridges;
@@ -61,11 +61,12 @@ export function makeWallDesign(gray,iw,ih,settings={}){
   const scale=1-p.gap/p.sourceZ,minScale=1-(p.gap+p.relief+p.thickness)/p.sourceZ;
   if(p.shape!=='square'&&p.minWeb>pitch*minScale*4)throw new Error('Перемычки слишком широкие для этой детализации.');
   let border=0,borderN=0;for(let y=0;y<ih;y++)for(let x=0;x<iw;x++)if(x<iw*.04||x>iw*.96||y<ih*.04||y>ih*.96){border+=gray[y*iw+x];borderN++;}
-  const darkBackground=border/borderN<.45,target=new Uint8Array(nx*ny),tones=new Float32Array(nx*ny);let mask=new Uint8Array(target.length),foreground=new Uint8Array(target.length);
+  const darkBackground=border/borderN<.45,rawTarget=new Uint8Array(nx*ny),tones=new Float32Array(nx*ny);let mask=new Uint8Array(rawTarget.length),foreground=new Uint8Array(rawTarget.length);
   for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){let sum=0;for(const [dx,dy]of[[.2,.2],[.8,.2],[.2,.8],[.8,.8]]){const xx=Math.min(iw-1,Math.floor((x+dx)*iw/nx)),yy=Math.min(ih-1,Math.floor((y+dy)*ih/ny));sum+=gray[yy*iw+xx];}const raw=sum/4,g=clamp((raw-.5)*p.contrast+.5);tones[y*nx+x]=g;foreground[y*nx+x]=darkBackground?+(raw>.022):+(raw<.97);}
   foreground=morphology(morphology(foreground,nx,ny,2,true),nx,ny,2,false);const background=Uint8Array.from(foreground,x=>1-x),outside=flood(background,nx,ny,0).seen;for(let k=0;k<foreground.length;k++)foreground[k]=outside[k]?0:1;
-  for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){const k=y*nx+x,g=tones[k],ink=p.style==='lines'?(darkBackground?g>=p.threshold:g<=1-p.threshold):!!foreground[k]&&g<=p.threshold;target[k]=p.invert?(foreground[k]?+!ink:0):+ink;}
-  if(p.shape==='square')return makeSquareDesign({p,nx,ny,pitch,height,target,darkBackground});
+  for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){const k=y*nx+x,g=tones[k],ink=p.style==='lines'?(darkBackground?g>=p.threshold:g<=1-p.threshold):!!foreground[k]&&g<=p.threshold;rawTarget[k]=p.invert?(foreground[k]?+!ink:0):+ink;}
+  const simplified=simplifyTarget(rawTarget,tones,nx,ny,pitch,p,detailLimits(p,height)),target=simplified.target,simplification=simplified.stats;
+  if(p.shape==='square')return makeSquareDesign({p,nx,ny,pitch,height,target,referenceTarget:rawTarget,simplification,darkBackground});
   const radius=Math.max(1,Math.floor(p.minWeb/(pitch*minScale)*.5));
   mask=morphology(target,nx,ny,1,true);mask=morphology(mask,nx,ny,1,false);mask=morphology(mask,nx,ny,radius,false);mask=morphology(mask,nx,ny,radius,true);
   const rootW=72,rootH=96,flatW=70/scale,flatH=92/scale,posts=choosePosts(target,nx,ny,pitch,scale);
@@ -77,7 +78,7 @@ export function makeWallDesign(gray,iw,ih,settings={}){
   for(const [px,py]of posts){const cx=px/scale,cy=py/scale,r=3.3/Math.min(scale,scale-p.thickness/p.sourceZ);for(let y=1;y<ny-1;y++)for(let x=1;x<nx-1;x++)if(Math.abs((x+.5-nx/2)*pitch-cx)<r&&Math.abs((ny/2-y-.5)*pitch-cy)<r)mask[y*nx+x]=0;}
   fixDiagonal(mask,nx,ny);const loops=contours(mask,nx,ny,pitch),outerCount=loops.filter(x=>area(x)>0).length;
   if(outerCount!==1)throw new Error('Фрагменты не соединились в одну деталь. Измените порог или перемычки.');
-  const d={p,nx,ny,pitch,height,mask,target,before,bridges,posts,loops,rootW,rootH,darkBackground,minFeature:pitch*minScale,holes:loops.filter(x=>area(x)<0).length};
+  const d={p,nx,ny,pitch,height,mask,target,referenceTarget:rawTarget,simplification,before,bridges,posts,loops,rootW,rootH,darkBackground,minFeature:pitch*minScale,holes:loops.filter(x=>area(x)<0).length};
   const point=([x,y],front)=>{const r=Math.max(Math.abs(x)/(flatW/2),Math.abs(y)/(flatH/2)),u=clamp((r-1)/2),z=p.gap+p.relief*u*(.75+.25*Math.cos(Math.atan2(y,x)*3))+front*p.thickness,k=1-z/p.sourceZ;return[x*k,y*k,z];};
   d.sculpture=extrude(loops,point);d.support=supportMesh(d);d.cover=extrude([rectangle(64,86),circle(0,0,p.socket/2),...posts.map(([x,y])=>circle(x,y,1.1))],([x,y],f)=>[x,y,p.sourceZ+16+f*3]);
   d.hardware=posts.flatMap(([x,y])=>extrude([circle(x,y,1,32,false)],([x,y],f)=>[x,y,f*(p.sourceZ+24)]));
@@ -127,13 +128,13 @@ function boxHit(n,o,dir){let lo=1e-7,hi=.9999999;for(let a=0;a<3;a++){if(Math.ab
 export function triangleHit(t,o,d){const h0=d[1]*t.e2[2]-d[2]*t.e2[1],h1=d[2]*t.e2[0]-d[0]*t.e2[2],h2=d[0]*t.e2[1]-d[1]*t.e2[0],det=t.e1[0]*h0+t.e1[1]*h1+t.e1[2]*h2;if(Math.abs(det)<1e-10)return false;const sx=o[0]-t.a[0],sy=o[1]-t.a[1],sz=o[2]-t.a[2],u=(sx*h0+sy*h1+sz*h2)/det;if(u<0||u>1)return false;const q0=sy*t.e1[2]-sz*t.e1[1],q1=sz*t.e1[0]-sx*t.e1[2],q2=sx*t.e1[1]-sy*t.e1[0],v=(d[0]*q0+d[1]*q1+d[2]*q2)/det;if(v<0||u+v>1)return false;const distance=(t.e2[0]*q0+t.e2[1]*q1+t.e2[2]*q2)/det;return distance>1e-7&&distance<.9999999;}
 export function occluded(bvh,o,dir){const stack=[bvh.root];while(stack.length){const n=stack.pop();if(!boxHit(n,o,dir))continue;if(n.ids){for(const id of n.ids)if(triangleHit(bvh.records[id],o,dir))return true;}else{stack.push(n.left,n.right);}}return false;}
 export function simulateWall(d,width=280,count=13){
-  const triangles=[...d.sculpture,...d.support,...d.cover,...d.hardware,...d.washers],bvh=buildBVH(triangles),height=Math.round(width*d.height/d.p.wallWidth),data=new Float32Array(width*height),shadow=new Float32Array(width*height),samples=sourceSamples(d.p.emitter,count),worldWidth=d.p.wallWidth*1.18,worldHeight=worldWidth*height/width,p=d.p;
+  const triangles=[...d.sculpture,...d.support,...d.cover,...d.hardware,...d.washers],bvh=buildBVH(triangles),height=Math.round(width*d.height/d.p.wallWidth),data=new Float32Array(width*height),shadow=new Float32Array(width*height),incident=new Float32Array(width*height),samples=sourceSamples(d.p.emitter,count),worldWidth=d.p.wallWidth*1.18,worldHeight=worldWidth*height/width,p=d.p;
   let intersection=0,union=0,error=0,scored=0;for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-    const wx=((x+.5)/width-.5)*worldWidth,wy=(.5-(y+.5)/height)*worldHeight,k=y*width+x;let light=0,blocked=0;
-    for(const [dx,dy]of samples){const o=[p.sourceX+dx,p.sourceY+dy,p.sourceZ],dir=[wx-o[0],wy-o[1],-p.sourceZ];if(occluded(bvh,o,dir)){blocked++;continue;}const r2=dir[0]**2+dir[1]**2+p.sourceZ**2;light+=Math.pow(p.sourceZ**2/r2,1.5);}
-    data[k]=light/samples.length;shadow[k]=blocked/samples.length;
+    const wx=((x+.5)/width-.5)*worldWidth,wy=(.5-(y+.5)/height)*worldHeight,k=y*width+x;let light=0,blocked=0,totalIncident=0;
+    for(const [dx,dy]of samples){const o=[p.sourceX+dx,p.sourceY+dy,p.sourceZ],dir=[wx-o[0],wy-o[1],-p.sourceZ];const flux=incidentLight(o[0],o[1],o[2],wx,wy);totalIncident+=flux;if(occluded(bvh,o,dir)){blocked++;continue;}light+=flux;}
+    data[k]=light/samples.length;incident[k]=totalIncident/samples.length;shadow[k]=totalIncident?1-light/totalIncident:0;
     const ix=Math.floor(wx/d.pitch+d.nx/2),iy=Math.floor(d.ny/2-wy/d.pitch);if(ix>=0&&iy>=0&&ix<d.nx&&iy<d.ny&&!(Math.abs(wx)<d.rootW/2+5&&Math.abs(wy)<d.rootH/2+5)){
       const target=d.target[iy*d.nx+ix],actual=shadow[k]>=.5;intersection+=actual&&target?1:0;union+=actual||target?1:0;error+=(shadow[k]-target)**2;scored++;}}
   const effectiveZ=p.shape==='square'?Math.max(3,p.sourceZ*(1-p.bodySide/Math.max(p.wallWidth,d.height))):p.gap+p.relief/2;
-  return{width,height,data,shadow,worldWidth,worldHeight,samples:samples.length,iou:union?intersection/union:1,rmse:Math.sqrt(error/Math.max(1,scored)),blur:p.emitter*effectiveZ/(p.sourceZ-effectiveZ),triangles:triangles.length};
+  return{width,height,data,shadow,incident,worldWidth,worldHeight,samples:samples.length,iou:union?intersection/union:1,rmse:Math.sqrt(error/Math.max(1,scored)),blur:p.emitter*effectiveZ/(p.sourceZ-effectiveZ),triangles:triangles.length};
 }
