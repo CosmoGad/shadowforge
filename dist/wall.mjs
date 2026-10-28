@@ -56,6 +56,7 @@ function choosePosts(target,nx,ny,pitch,scale){
 }
 export function makeWallDesign(gray,iw,ih,settings={}){
   const p={...DEFAULTS,...settings},nx=Math.round(p.resolution),ny=Math.round(nx*ih/iw),pitch=p.wallWidth/nx,height=ny*pitch;
+  if(p.shape==='square'){p.sourceX=0;p.sourceY=0;}
   if(p.shape!=='square'&&p.sourceZ-p.gap-p.relief-p.thickness<20)throw new Error('Между источником и самым высоким участком нужно оставить минимум 20 мм.');
   if(p.gap<8)throw new Error('Зазор до стены слишком мал.');
   const scale=1-p.gap/p.sourceZ,minScale=1-(p.gap+p.relief+p.thickness)/p.sourceZ;
@@ -114,9 +115,22 @@ function makeSquareDesign(d){
     });
     panels.push({file:`side-panel-${face+1}.stl`,label:['Правая стенка','Верхняя стенка','Левая стенка','Нижняя стенка'][face],triangles});
   }
-  const support=extrude([rectangle(side,side),circle(0,h-12,2),circle(0,-h+12,2)],([x,y],front)=>[x,y,front*3]);
-  const cover=extrude([rectangle(side,side),circle(0,0,p.socket/2)],([x,y],front)=>[x,y,z1+front*3]);
-  return {...d,panels,sculpture:panels.flatMap(x=>x.triangles),support,cover,hardware:[],washers:[],washer:[],posts:[],rootW:side*p.sourceZ/(p.sourceZ-3),rootH:side*p.sourceZ/(p.sourceZ-3),holes,bridges,bounds:[[-h,h],[-h,h],[z0,z1]],bodyBounds:[[-h,h],[-h,h],[0,z1+3]],minFeature:panelPitch,addedPixels:0,mask:target,before:target};
+  // The front stays open. A hollow central pedestal carries a purchased socket.
+  const mount={baseZ:3,flangeTop:6,topZ:p.sourceZ-16,seatZ:p.sourceZ-28,outerRadius:p.socket/2+2.4,cableRadius:2.2};
+  mount.flangeRadius=mount.outerRadius+7;mount.boltOffset=mount.outerRadius+3.5;
+  const screws=[[-mount.boltOffset,0],[mount.boltOffset,0]],outer=circle(0,0,mount.flangeRadius,32,false),stem=circle(0,0,mount.outerRadius,32,false),cable=circle(0,0,mount.cableRadius,32,false),socketHole=circle(0,0,p.socket/2,32,false),holder=[];
+  const screwHoles=screws.map(([x,y])=>circle(x,y,1.6));
+  surface(holder,[outer,[...cable].reverse(),...screwHoles],3,true);
+  surface(holder,[outer,[...stem].reverse(),...screwHoles],6);
+  wallBetween(holder,outer,3,6);for(const hole of screwHoles)wallBetween(holder,[...hole].reverse(),3,6,true);
+  wallBetween(holder,stem,6,mount.topZ);wallBetween(holder,cable,3,mount.seatZ,true);
+  annulus(holder,0,0,mount.cableRadius,p.socket/2,mount.seatZ);
+  wallBetween(holder,socketHole,mount.seatZ,mount.topZ,true);
+  annulus(holder,0,0,p.socket/2,mount.outerRadius,mount.topZ);
+  const support=extrude([rectangle(side,side),circle(0,h-7,2),circle(0,-h+7,2),circle(0,0,mount.cableRadius),...screwHoles],([x,y],front)=>[x,y,front*3]);
+  // Nominal opaque socket also casts a shadow; glass is only a visual guide.
+  const hardware=extrude([circle(0,0,(p.socket-2)/2,32,false)],([x,y],front)=>[x,y,mount.seatZ+front*16]);
+  return {...d,panels,sculpture:panels.flatMap(x=>x.triangles),support,cover:[],holder,mount,hardware,washers:[],washer:[],posts:[],rootW:side*p.sourceZ/(p.sourceZ-3),rootH:side*p.sourceZ/(p.sourceZ-3),holes,bridges,bounds:[[-h,h],[-h,h],[z0,z1]],bodyBounds:[[-h,h],[-h,h],[0,z1]],minFeature:panelPitch,addedPixels:0,mask:target,before:target};
 }
 // BVH over the exact triangles used for STL export, including the structural posts.
 export function buildBVH(triangles){
@@ -128,7 +142,7 @@ function boxHit(n,o,dir){let lo=1e-7,hi=.9999999;for(let a=0;a<3;a++){if(Math.ab
 export function triangleHit(t,o,d){const h0=d[1]*t.e2[2]-d[2]*t.e2[1],h1=d[2]*t.e2[0]-d[0]*t.e2[2],h2=d[0]*t.e2[1]-d[1]*t.e2[0],det=t.e1[0]*h0+t.e1[1]*h1+t.e1[2]*h2;if(Math.abs(det)<1e-10)return false;const sx=o[0]-t.a[0],sy=o[1]-t.a[1],sz=o[2]-t.a[2],u=(sx*h0+sy*h1+sz*h2)/det;if(u<0||u>1)return false;const q0=sy*t.e1[2]-sz*t.e1[1],q1=sz*t.e1[0]-sx*t.e1[2],q2=sx*t.e1[1]-sy*t.e1[0],v=(d[0]*q0+d[1]*q1+d[2]*q2)/det;if(v<0||u+v>1)return false;const distance=(t.e2[0]*q0+t.e2[1]*q1+t.e2[2]*q2)/det;return distance>1e-7&&distance<.9999999;}
 export function occluded(bvh,o,dir){const stack=[bvh.root];while(stack.length){const n=stack.pop();if(!boxHit(n,o,dir))continue;if(n.ids){for(const id of n.ids)if(triangleHit(bvh.records[id],o,dir))return true;}else{stack.push(n.left,n.right);}}return false;}
 export function simulateWall(d,width=280,count=13){
-  const triangles=[...d.sculpture,...d.support,...d.cover,...d.hardware,...d.washers],bvh=buildBVH(triangles),height=Math.round(width*d.height/d.p.wallWidth),data=new Float32Array(width*height),shadow=new Float32Array(width*height),incident=new Float32Array(width*height),samples=sourceSamples(d.p.emitter,count),worldWidth=d.p.wallWidth*1.18,worldHeight=worldWidth*height/width,p=d.p;
+  const triangles=[...d.sculpture,...d.support,...d.cover,...(d.holder||[]),...d.hardware,...d.washers],bvh=buildBVH(triangles),height=Math.round(width*d.height/d.p.wallWidth),data=new Float32Array(width*height),shadow=new Float32Array(width*height),incident=new Float32Array(width*height),samples=sourceSamples(d.p.emitter,count),worldWidth=d.p.wallWidth*1.18,worldHeight=worldWidth*height/width,p=d.p;
   let intersection=0,union=0,error=0,scored=0;for(let y=0;y<height;y++)for(let x=0;x<width;x++){
     const wx=((x+.5)/width-.5)*worldWidth,wy=(.5-(y+.5)/height)*worldHeight,k=y*width+x;let light=0,blocked=0,totalIncident=0;
     for(const [dx,dy]of samples){const o=[p.sourceX+dx,p.sourceY+dy,p.sourceZ],dir=[wx-o[0],wy-o[1],-p.sourceZ];const flux=incidentLight(o[0],o[1],o[2],wx,wy);totalIncident+=flux;if(occluded(bvh,o,dir)){blocked++;continue;}light+=flux;}
