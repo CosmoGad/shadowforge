@@ -1,7 +1,8 @@
 // Fit a new reference to the reachable sidewall field without changing lamp hardware.
-import {DEFAULTS} from './sidewall.mjs?v=sidewall-6';
+import {DEFAULTS} from './sidewall.mjs?v=surround-1';
 export function settingsForReference(iw,ih,current=DEFAULTS){
  if(!Number.isFinite(iw)||!Number.isFinite(ih)||iw<=0||ih<=0)throw Error('Некорректные размеры изображения.');
+ if(current.composition==='surround'){const p={...DEFAULTS,...current};p.wallWidth=Math.max(240,Math.round(Math.min(700,700/(ih/iw))/10)*10);p.imageY=Math.min(80,Math.round(p.wallWidth*ih/iw*.12/10)*10);return p;}
  const p={...DEFAULTS,...current,wallWidth:DEFAULTS.wallWidth,imageY:DEFAULTS.imageY},ratio=ih/iw,B=p.bodySide/2,R=p.sourceZ*B/24;
  if(ratio>.9){
   const aboveWidth=Math.floor(Math.min(600,(R-B-32)/ratio,2*(400-B-12)/ratio)/10)*10;
