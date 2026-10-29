@@ -1,22 +1,22 @@
-import {prepareTarget} from './projector-target.mjs?v=projector-2';
-import {flood,extrude,rectangle,circle,contours,connect,fixDiagonal,surface,wallBetween,annulus,buildBVH,occluded} from './projector-mesh.mjs?v=projector-2';
+import {prepareTarget} from './projector-target.mjs?v=projector-5';
+import {flood,extrude,rectangle,circle,contours,connect,fixDiagonal,surface,wallBetween,annulus,buildBVH,occluded} from './projector-mesh.mjs?v=projector-5';
 import {morphology,incidentLight} from './clarity.mjs?v=auto-integration-6';
 import {sourceSamples,stlBuffer,zipStore} from './core.mjs';
 export {stlBuffer,zipStore};
-export const DEFAULTS=Object.freeze({bodySide:210,wallWidth:330,sourceZ:160,emitter:1.2,minWeb:.8,thickness:1.2,bodyThickness:2.4,threshold:.34,contrast:1,resolution:200,layout:'auto',style:'portrait',ambient:.002,exposureEV:0,socket:14});
+export const DEFAULTS=Object.freeze({bodySide:210,wallWidth:330,sourceZ:160,emitter:1.2,minWeb:.8,thickness:1.2,bodyThickness:2.4,threshold:.34,contrast:1,resolution:200,layout:'auto',integrationY:245,viewDistance:2000,bodyReflectance:.02,style:'portrait',ambient:.002,exposureEV:0,socket:14});
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0)/2;
 export function opticalLayout(p,height){
  const B=p.bodySide/2,frame=6,gap=8,layouts=p.layout==='auto'?['above','right','below','left']:[p.layout];
- return layouts.map(layout=>{if(!['above','right','below','left'].includes(layout))throw new Error('Unknown layout.');const imageX=layout==='right'?B+gap+p.wallWidth/2:layout==='left'?-(B+gap+p.wallWidth/2):0,imageY=layout==='above'?B+gap+height/2:layout==='below'?-(B+gap+height/2):0;
+ return layouts.map(layout=>{if(!['above','right','below','left','integrated'].includes(layout))throw new Error('Unknown layout.');const imageX=layout==='right'?B+gap+p.wallWidth/2:layout==='left'?-(B+gap+p.wallWidth/2):0,imageY=layout==='integrated'?p.integrationY:layout==='above'?B+gap+height/2:layout==='below'?-(B+gap+height/2):0;
  const minM=Math.max((Math.abs(imageX)+p.wallWidth/2)/(B-frame),(Math.abs(imageY)+height/2)/(B-frame)),magnification=Math.ceil(Math.max(1.8,minM*1.06)*10)/10,sourceGap=p.sourceZ/magnification,maskZ=p.sourceZ-sourceGap;
  return{layout,imageX,imageY,magnification,sourceGap,maskZ,window:[imageX/magnification,imageY/magnification,p.wallWidth/magnification,height/magnification],penumbra:p.emitter*(magnification-1),projectedWeb:p.minWeb*magnification};}).sort((a,b)=>a.magnification-b.magnification)[0];
 }
 export function makeProjector(gray,iw,ih,settings={}){
  const p={...DEFAULTS,...settings};for(const k of Object.keys(DEFAULTS))if(typeof DEFAULTS[k]==='number'&&!Number.isFinite(p[k]))throw new Error('Некорректный параметр: '+k);
- if(p.bodySide<120||p.bodySide>210||p.wallWidth<200||p.wallWidth>600||p.sourceZ<120||p.sourceZ>240||p.emitter<0||p.emitter>5||p.minWeb<.45||p.minWeb>2||p.thickness<.8||p.thickness>2.4||p.bodyThickness<2||p.bodyThickness>4||p.socket<10||p.socket>24||p.resolution<96||p.resolution>256||p.threshold<.05||p.threshold>.9||p.contrast<.5||p.contrast>2||p.ambient<0||p.ambient>.1)throw new Error('Параметры вне рабочего диапазона.');
+ if(p.bodySide<120||p.bodySide>210||p.wallWidth<200||p.wallWidth>600||p.sourceZ<120||p.sourceZ>240||p.emitter<0||p.emitter>5||p.minWeb<.45||p.minWeb>2||p.thickness<.8||p.thickness>2.4||p.bodyThickness<2||p.bodyThickness>4||p.socket<10||p.socket>24||p.resolution<96||p.resolution>256||p.threshold<.05||p.threshold>.9||p.contrast<.5||p.contrast>2||p.ambient<0||p.ambient>.1||p.integrationY<0||p.integrationY>900||p.viewDistance<1000||p.viewDistance>5000||p.bodyReflectance<0||p.bodyReflectance>.1)throw new Error('Параметры вне рабочего диапазона.');
  const ref=prepareTarget(gray,iw,ih,p),pitch=p.wallWidth/ref.nx,height=ref.ny*pitch,q=opticalLayout(p,height);if(q.sourceGap<24)throw new Error('Между маской и источником меньше 24 мм. Увеличьте глубину источника или корпус.');
- const N=Math.ceil(p.bodySide/(pitch/q.magnification)),mp=p.bodySide/N,mask=new Uint8Array(N*N),B=p.bodySide/2;
- for(let y=1;y<N-1;y++)for(let x=1;x<N-1;x++){const wx=((x+.5)*mp-B)*q.magnification,wy=(B-(y+.5)*mp)*q.magnification,ix=Math.floor((wx-q.imageX)/pitch+ref.nx/2),iy=Math.floor(ref.ny/2-(wy-q.imageY)/pitch);mask[y*N+x]=ix>=0&&iy>=0&&ix<ref.nx&&iy<ref.ny?ref.target[iy*ref.nx+ix]:1;}
+ const mp=pitch/q.magnification,N=Math.ceil(p.bodySide/mp-1e-9),mask=new Uint8Array(N*N),B=p.bodySide/2;const fx=((ref.nx-N)%2+2)%2*.5,fy=((N-ref.ny)%2+2)%2*.5;q.imageX=(Math.round(q.imageX/pitch-fx)+fx)*pitch;q.imageY=(Math.round(q.imageY/pitch-fy)+fy)*pitch;q.window=[q.imageX/q.magnification,q.imageY/q.magnification,p.wallWidth/q.magnification,height/q.magnification];
+ for(let y=1;y<N-1;y++)for(let x=1;x<N-1;x++){const wx=(x+.5-N/2)*mp*q.magnification,wy=(N/2-y-.5)*mp*q.magnification,ix=Math.floor((wx-q.imageX)/pitch+ref.nx/2),iy=Math.floor(ref.ny/2-(wy-q.imageY)/pitch);mask[y*N+x]=ix>=0&&iy>=0&&ix<ref.nx&&iy<ref.ny?ref.target[iy*ref.nx+ix]:1;}
  // All black islands are attached to the frame. The added tabs are real triangles.
  const radius=Math.max(1,Math.ceil(p.minWeb/mp*.5));let cleaned=morphology(morphology(mask,N,N,radius,false),N,N,radius,true);
  // Preserve a continuous physical outer frame after filtering.
@@ -28,10 +28,10 @@ export function makeProjector(gray,iw,ih,settings={}){
  const holder=extrude([rectangle(p.bodySide,26),circle(0,0,p.socket/2)],([x,y],f)=>[x,y,p.sourceZ+25+f*3]);
  // Purchased E10 socket is behind the emitting plane. It cannot block wallward rays.
  const socket=extrude([circle(0,0,(p.socket-2)/2,32,false)],([x,y],f)=>[x,y,p.sourceZ+8+f*20]);
- const feet=[],anchors=[-p.bodySide*.34,p.bodySide*.34].map(v=>q.layout==='above'?[v,-B+22]:q.layout==='below'?[v,B-22]:q.layout==='right'?[-B+22,v]:[B-22,v]);for(const [x,y] of anchors){const r=14,post=4,holes=[circle(x-9,y,1.7),circle(x+9,y,1.7)],tris=[];surface(tris,[circle(x,y,r,32,false),...holes],0,true);surface(tris,[circle(x,y,r,32,false),circle(x,y,post),...holes],4);wallBetween(tris,circle(x,y,r,32,false),0,4);for(const hole of holes)wallBetween(tris,[...hole].reverse(),0,4,true);wallBetween(tris,circle(x,y,post,32,false),4,z);surface(tris,[circle(x,y,post,32,false)],z);feet.push({name:'wall-post-'+(feet.length+1),triangles:tris});}
+ const feet=[],anchors=[-p.bodySide*.34,p.bodySide*.34].map(v=>(q.layout==='above'||q.layout==='integrated')?[v,-B+22]:q.layout==='below'?[v,B-22]:q.layout==='right'?[-B+22,v]:[B-22,v]);for(const [x,y] of anchors){const r=14,post=4,holes=[circle(x-9,y,1.7),circle(x+9,y,1.7)],tris=[];surface(tris,[circle(x,y,r,32,false),...holes],0,true);surface(tris,[circle(x,y,r,32,false),circle(x,y,post),...holes],4);wallBetween(tris,circle(x,y,r,32,false),0,4);for(const hole of holes)wallBetween(tris,[...hole].reverse(),0,4,true);wallBetween(tris,circle(x,y,post,32,false),4,z);surface(tris,[circle(x,y,post,32,false)],z);feet.push({name:'wall-post-'+(feet.length+1),triangles:tris});}
  const parts=[{name:'gobo-mask',triangles:maskMesh},{name:'square-hood',triangles:housing},{name:'socket-bridge',triangles:holder},...feet],triangles=[...parts.flatMap(p=>p.triangles),...socket];
  const left=Math.min(q.imageX-p.wallWidth/2,-B),right=Math.max(q.imageX+p.wallWidth/2,B),bottom=Math.min(q.imageY-height/2,-B),upper=Math.max(q.imageY+height/2,B),scene={centerX:(left+right)/2,centerY:(bottom+upper)/2,width:(right-left)*1.18,height:(upper-bottom)*1.18};
- return{p,ref,height,pitch,q,scene,parts,socket,triangles,bridges,holes:holes.length,maskGrid:{N,pitch:mp,black:cleaned},limits:{nominalWeb:p.minWeb,projectedWeb:q.projectedWeb,penumbra:q.penumbra,minimumReliableDetail:Math.max(2*q.penumbra,q.projectedWeb)},validation:{physical:false,bulbFluxKnown:false,glassModelled:false,webCertified:false}};
+ return{p,ref,height,pitch,q,scene,parts,socket,triangles,bridges,holes:holes.length,maskGrid:{N,pitch:mp,span:N*mp,black:cleaned},limits:{nominalWeb:p.minWeb,projectedWeb:q.projectedWeb,penumbra:q.penumbra,minimumReliableDetail:Math.max(2*q.penumbra,q.projectedWeb)},validation:{physical:false,bulbFluxKnown:false,glassModelled:false,webCertified:false}};
 }
 export function traceProjector(d,width=320,samplesCount=25,sourceOffset=[0,0]){
  const H=Math.round(width*d.scene.height/d.scene.width),data=new Float32Array(width*H),incident=new Float32Array(width*H),visibility=new Float32Array(width*H),bvh=buildBVH(d.triangles),samples=sourceSamples(d.p.emitter,samplesCount),p=d.p;
