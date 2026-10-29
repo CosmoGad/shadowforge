@@ -2,7 +2,7 @@
 // Every image-forming surface lies on one of four planes x/y=±bodySide/2.
 import {smoothContours} from './smooth-contours.mjs';
 import {prepareTarget} from './projector-target.mjs';
-import {extrude,rectangle,circle,contours,connect,fixDiagonal,flood} from './projector-mesh.mjs';
+import {extrude,rectangle,circle,contours,connect,fixDiagonal,flood} from './projector-mesh.mjs?v=surround-2';
 import {morphology} from './clarity.mjs';
 import {traceProjector} from './projector.mjs';
 export {stlBuffer,zipStore} from './core.mjs';

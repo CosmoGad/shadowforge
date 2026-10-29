@@ -28,7 +28,21 @@ function contours(mask,nx,ny,pitch){
 function triangulate(loops){const outers=loops.filter(l=>area(l)>0),holes=loops.filter(l=>area(l)<0),groups=[];
   for(const outer of outers){const inner=holes.filter(h=>pointIn(h[0],outer)&&!outers.some(o=>o!==outer&&Math.abs(area(o))<Math.abs(area(outer))&&pointIn(h[0],o)));const all=[outer,...inner],points=all.flat(),starts=[];let offset=outer.length;for(const h of inner){starts.push(offset);offset+=h.length;}const idx=earcut(points.flat().map(x=>Math.round(x*1e5)),starts,2);groups.push({points,indices:idx,loops:all});}return groups;
 }
-function extrude(loops,point){const tris=[];for(const group of triangulate(loops)){
+// Earcut may omit a collinear boundary vertex. Subdivide cap edges at those
+// original vertices so the caps and the extruded side strips share every edge.
+function completeCapBoundary(group){
+ const counts=new Map(),boundary=new Set(),edge=(a,b)=>a<b?a+','+b:b+','+a;
+ for(let i=0;i<group.indices.length;i+=3)for(let j=0;j<3;j++){const a=group.indices[i+j],b=group.indices[i+(j+1)%3],k=edge(a,b);counts.set(k,(counts.get(k)||0)+1);}
+ let offset=0;for(const loop of group.loops){for(let i=0;i<loop.length;i++)boundary.add(edge(offset+i,offset+(i+1)%loop.length));offset+=loop.length;}
+ const split=new Map();for(const [key,n]of counts){if(n!==1||boundary.has(key))continue;const [a,b]=key.split(',').map(Number),A=group.points[a],B=group.points[b],dx=B[0]-A[0],dy=B[1]-A[1],den=dx*dx+dy*dy,points=[];if(den<1e-16)continue;
+  for(let i=0;i<group.points.length;i++){if(i===a||i===b)continue;const P=group.points[i],u=((P[0]-A[0])*dx+(P[1]-A[1])*dy)/den;if(u>1e-8&&u<1-1e-8&&Math.abs(dx*(P[1]-A[1])-dy*(P[0]-A[0]))<1e-7*Math.sqrt(den))points.push({i,u});}
+  if(points.length)split.set(key,points.sort((a,b)=>a.u-b.u).map(p=>p.i));
+ }
+ if(!split.size)return group.indices;const result=[],queue=[];for(let i=0;i<group.indices.length;i+=3)queue.push(group.indices.slice(i,i+3));
+ while(queue.length){const t=queue.pop();let divided=false;for(let j=0;j<3;j++){const a=t[j],b=t[(j+1)%3],c=t[(j+2)%3],key=edge(a,b),middle=split.get(key);if(!middle?.length)continue;const chain=[a,...(a<b?middle:[...middle].reverse()),b];for(let k=0;k<chain.length-1;k++)queue.push([chain[k],chain[k+1],c]);divided=true;break;}if(!divided)result.push(...t);}
+ return result;
+}
+function extrude(loops,point){const tris=[];for(const group of triangulate(loops)){group.indices=completeCapBoundary(group);
   const near=group.points.map(p=>point(p,0)),far=group.points.map(p=>point(p,1));for(let i=0;i<group.indices.length;i+=3){let[a,b,c]=group.indices.slice(i,i+3);if(cross(group.points[a],group.points[b],group.points[c])<0)[b,c]=[c,b];tris.push([...near[c],...near[b],...near[a]],[...far[a],...far[b],...far[c]]);}
   let offset=0;for(const loop of group.loops){for(let i=0;i<loop.length;i++){let a=offset+i,b=offset+(i+1)%loop.length;tris.push([...near[a],...near[b],...far[b]],[...near[a],...far[b],...far[a]]);}offset+=loop.length;}}
   return tris;
