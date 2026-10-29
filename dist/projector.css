@@ -4,3 +4,5 @@
 #integrate{width:100%;margin:4px 0 9px;border-color:#95845b;color:#e8c98e}#viewSettings{padding:12px;border:1px solid #4c5c3d;border-radius:6px;margin-bottom:12px}nav{gap:12px}nav button{font-size:12px}
 
 .scheme-note{padding:12px;border:1px solid #766542;border-radius:5px;color:#dac498;font-size:11px;margin:12px 0}#panelsView{width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;gap:18px;overflow:auto;padding:25px}#panelsView figure{display:flex;flex-direction:column;justify-content:center}#compareView{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:1100px){#compareView{grid-template-columns:1fr 1fr}#panelsView{padding:18px}}@media(max-width:700px){aside .scheme-note{grid-column:1/-1}nav{gap:6px;overflow:auto}nav button{white-space:nowrap;font-size:10px}.stage{min-height:460px}}
+
+.reference small{display:block;overflow-wrap:anywhere;color:#a6b796;margin:6px 0}
