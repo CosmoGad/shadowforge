@@ -1,9 +1,10 @@
-import earcut from './vendor/earcut.mjs';
-import {morphology,detailLimits,simplifyTarget,incidentLight} from './clarity.mjs';
-import {clamp,sourceSamples} from './core.mjs';
-export {stlBuffer,zipStore} from './core.mjs';
+import {projectionLayout,integrationMetrics,hubHalfSize} from './integration.mjs?v=auto-integration-6';
+import earcut from './vendor/earcut.mjs?v=auto-integration-6';
+import {morphology,detailLimits,simplifyTarget,incidentLight} from './clarity.mjs?v=auto-integration-6';
+import {clamp,sourceSamples} from './core.mjs?v=auto-integration-6';
+export {stlBuffer,zipStore} from './core.mjs?v=auto-integration-6';
 // Wall is z=0. The source is in front of the sculpture, at positive z.
-export const DEFAULTS=Object.freeze({shape:'square',bodySide:120,wallWidth:330,resolution:144,threshold:.30,style:'solid',contrast:1,gap:42,relief:18,thickness:2.4,sourceZ:100,emitter:1.2,sourceX:0,sourceY:0,minWeb:1.4,socket:14,exposureEV:0,detailSize:12,opticsAware:true,invert:false,ambient:.008});
+export const DEFAULTS=Object.freeze({shape:'square',layout:'above',bodySide:120,wallWidth:330,resolution:144,threshold:.30,style:'solid',contrast:1,gap:42,relief:18,thickness:2.4,sourceZ:100,emitter:1.2,sourceX:0,sourceY:0,minWeb:1.4,socket:14,exposureEV:0,detailSize:12,opticsAware:true,invert:false,ambient:.008});
 const key=(x,y)=>x+','+y;
 const cross=(a,b,c)=>(b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0]);
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0)/2;
@@ -66,8 +67,12 @@ export function makeWallDesign(gray,iw,ih,settings={}){
   for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){let sum=0;for(const [dx,dy]of[[.2,.2],[.8,.2],[.2,.8],[.8,.8]]){const xx=Math.min(iw-1,Math.floor((x+dx)*iw/nx)),yy=Math.min(ih-1,Math.floor((y+dy)*ih/ny));sum+=gray[yy*iw+xx];}const raw=sum/4,g=clamp((raw-.5)*p.contrast+.5);tones[y*nx+x]=g;foreground[y*nx+x]=darkBackground?+(raw>.022):+(raw<.97);}
   foreground=morphology(morphology(foreground,nx,ny,2,true),nx,ny,2,false);const background=Uint8Array.from(foreground,x=>1-x),outside=flood(background,nx,ny,0).seen;for(let k=0;k<foreground.length;k++)foreground[k]=outside[k]?0:1;
   for(let y=2;y<ny-2;y++)for(let x=2;x<nx-2;x++){const k=y*nx+x,g=tones[k],ink=p.style==='lines'?(darkBackground?g>=p.threshold:g<=1-p.threshold):!!foreground[k]&&g<=p.threshold;rawTarget[k]=p.invert?(foreground[k]?+!ink:0):+ink;}
-  const simplified=simplifyTarget(rawTarget,tones,nx,ny,pitch,p,detailLimits(p,height)),target=simplified.target,simplification=simplified.stats;
-  if(p.shape==='square')return makeSquareDesign({p,nx,ny,pitch,height,target,referenceTarget:rawTarget,simplification,darkBackground});
+  // Preserve bright extremities on an isolated figure: hands/head must not
+  // disappear just because their skin is lighter than the ink threshold.
+  let silhouetteFilled=0;const coverage=foreground.reduce((a,b)=>a+b,0)/foreground.length;
+  if(p.style==='solid'&&!p.invert&&coverage<.8){const interior=morphology(foreground,nx,ny,2,false),bright=Uint8Array.from(foreground,(v,k)=>+(v&&tones[k]>p.threshold)),seen=new Uint8Array(bright.length);for(let k=0;k<bright.length;k++)if(bright[k]&&!interior[k]&&!seen[k]){const region=flood(bright,nx,ny,k);for(const q of region.cells){seen[q]=1;if(!rawTarget[q])silhouetteFilled++;rawTarget[q]=1;}}}
+  const simplified=simplifyTarget(rawTarget,tones,nx,ny,pitch,p,detailLimits(p,height)),target=simplified.target,simplification={...simplified.stats,silhouetteFilledPixels:silhouetteFilled};
+  if(p.shape==='square'){const d=makeSquareDesign({p,nx,ny,pitch,height,target,referenceTarget:rawTarget,simplification,darkBackground,projection:projectionLayout(p,height)});d.integration=integrationMetrics(d);return d;}
   const radius=Math.max(1,Math.floor(p.minWeb/(pitch*minScale)*.5));
   mask=morphology(target,nx,ny,1,true);mask=morphology(mask,nx,ny,1,false);mask=morphology(mask,nx,ny,radius,false);mask=morphology(mask,nx,ny,radius,true);
   const rootW=72,rootH=96,flatW=70/scale,flatH=92/scale,posts=choosePosts(target,nx,ny,pitch,scale);
@@ -99,7 +104,7 @@ function makeSquareDesign(d){
     for(let y=1;y<panelNy-1;y++)for(let x=1;x<panelNx-1;x++){
       const u=((x+.5)/panelNx-.5)*side,z=z0+(1-(y+.5)/panelNy)*H;
       if(z>=p.sourceZ){mask[y*panelNx+x]=1;continue;}
-      const [xx,yy]=toWorld(face,u,z,h),k=p.sourceZ/(p.sourceZ-z),wx=xx*k,wy=yy*k,ix=Math.floor(wx/pitch+nx/2),iy=Math.floor(ny/2-wy/pitch);
+      const [xx,yy]=toWorld(face,u,z,h),k=p.sourceZ/(p.sourceZ-z),wx=xx*k-d.projection.imageX,wy=yy*k-d.projection.imageY,ix=Math.floor(wx/pitch+nx/2),iy=Math.floor(ny/2-wy/pitch);
       mask[y*panelNx+x]=ix>=0&&iy>=0&&ix<nx&&iy<ny?target[iy*nx+ix]:0;
     }
     mask=morphology(morphology(mask,panelNx,panelNy,1,true),panelNx,panelNy,1,false);
@@ -130,7 +135,7 @@ function makeSquareDesign(d){
   const support=extrude([rectangle(side,side),circle(0,h-7,2),circle(0,-h+7,2),circle(0,0,mount.cableRadius),...screwHoles],([x,y],front)=>[x,y,front*3]);
   // Nominal opaque socket also casts a shadow; glass is only a visual guide.
   const hardware=extrude([circle(0,0,(p.socket-2)/2,32,false)],([x,y],front)=>[x,y,mount.seatZ+front*16]);
-  return {...d,panels,sculpture:panels.flatMap(x=>x.triangles),support,cover:[],holder,mount,hardware,washers:[],washer:[],posts:[],rootW:side*p.sourceZ/(p.sourceZ-3),rootH:side*p.sourceZ/(p.sourceZ-3),holes,bridges,bounds:[[-h,h],[-h,h],[z0,z1]],bodyBounds:[[-h,h],[-h,h],[0,z1]],minFeature:panelPitch,addedPixels:0,mask:target,before:target};
+  return {...d,panels,sculpture:panels.flatMap(x=>x.triangles),support,cover:[],holder,mount,hardware,washers:[],washer:[],posts:[],rootW:2*hubHalfSize(p),rootH:2*hubHalfSize(p),holes,bridges,bounds:[[-h,h],[-h,h],[z0,z1]],bodyBounds:[[-h,h],[-h,h],[0,z1]],minFeature:panelPitch,addedPixels:0,mask:target,before:target};
 }
 // BVH over the exact triangles used for STL export, including the structural posts.
 export function buildBVH(triangles){
@@ -142,13 +147,13 @@ function boxHit(n,o,dir){let lo=1e-7,hi=.9999999;for(let a=0;a<3;a++){if(Math.ab
 export function triangleHit(t,o,d){const h0=d[1]*t.e2[2]-d[2]*t.e2[1],h1=d[2]*t.e2[0]-d[0]*t.e2[2],h2=d[0]*t.e2[1]-d[1]*t.e2[0],det=t.e1[0]*h0+t.e1[1]*h1+t.e1[2]*h2;if(Math.abs(det)<1e-10)return false;const sx=o[0]-t.a[0],sy=o[1]-t.a[1],sz=o[2]-t.a[2],u=(sx*h0+sy*h1+sz*h2)/det;if(u<0||u>1)return false;const q0=sy*t.e1[2]-sz*t.e1[1],q1=sz*t.e1[0]-sx*t.e1[2],q2=sx*t.e1[1]-sy*t.e1[0],v=(d[0]*q0+d[1]*q1+d[2]*q2)/det;if(v<0||u+v>1)return false;const distance=(t.e2[0]*q0+t.e2[1]*q1+t.e2[2]*q2)/det;return distance>1e-7&&distance<.9999999;}
 export function occluded(bvh,o,dir){const stack=[bvh.root];while(stack.length){const n=stack.pop();if(!boxHit(n,o,dir))continue;if(n.ids){for(const id of n.ids)if(triangleHit(bvh.records[id],o,dir))return true;}else{stack.push(n.left,n.right);}}return false;}
 export function simulateWall(d,width=280,count=13){
-  const triangles=[...d.sculpture,...d.support,...d.cover,...(d.holder||[]),...d.hardware,...d.washers],bvh=buildBVH(triangles),height=Math.round(width*d.height/d.p.wallWidth),data=new Float32Array(width*height),shadow=new Float32Array(width*height),incident=new Float32Array(width*height),samples=sourceSamples(d.p.emitter,count),worldWidth=d.p.wallWidth*1.18,worldHeight=worldWidth*height/width,p=d.p;
+  const triangles=[...d.sculpture,...d.support,...d.cover,...(d.holder||[]),...d.hardware,...d.washers],bvh=buildBVH(triangles),p=d.p,projection=d.projection||projectionLayout(p,d.height),{worldWidth,worldHeight,centerX,centerY,imageX,imageY}=projection,height=Math.round(width*worldHeight/worldWidth),data=new Float32Array(width*height),shadow=new Float32Array(width*height),incident=new Float32Array(width*height),samples=sourceSamples(d.p.emitter,count);
   let intersection=0,union=0,error=0,scored=0;for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-    const wx=((x+.5)/width-.5)*worldWidth,wy=(.5-(y+.5)/height)*worldHeight,k=y*width+x;let light=0,blocked=0,totalIncident=0;
+    const wx=((x+.5)/width-.5)*worldWidth+centerX,wy=(.5-(y+.5)/height)*worldHeight+centerY,k=y*width+x;let light=0,blocked=0,totalIncident=0;
     for(const [dx,dy]of samples){const o=[p.sourceX+dx,p.sourceY+dy,p.sourceZ],dir=[wx-o[0],wy-o[1],-p.sourceZ];const flux=incidentLight(o[0],o[1],o[2],wx,wy);totalIncident+=flux;if(occluded(bvh,o,dir)){blocked++;continue;}light+=flux;}
     data[k]=light/samples.length;incident[k]=totalIncident/samples.length;shadow[k]=totalIncident?1-light/totalIncident:0;
-    const ix=Math.floor(wx/d.pitch+d.nx/2),iy=Math.floor(d.ny/2-wy/d.pitch);if(ix>=0&&iy>=0&&ix<d.nx&&iy<d.ny&&!(Math.abs(wx)<d.rootW/2+5&&Math.abs(wy)<d.rootH/2+5)){
+    const ix=Math.floor((wx-imageX)/d.pitch+d.nx/2),iy=Math.floor(d.ny/2-(wy-imageY)/d.pitch);if(ix>=0&&iy>=0&&ix<d.nx&&iy<d.ny){
       const target=d.target[iy*d.nx+ix],actual=shadow[k]>=.5;intersection+=actual&&target?1:0;union+=actual||target?1:0;error+=(shadow[k]-target)**2;scored++;}}
   const effectiveZ=p.shape==='square'?Math.max(3,p.sourceZ*(1-p.bodySide/Math.max(p.wallWidth,d.height))):p.gap+p.relief/2;
-  return{width,height,data,shadow,incident,worldWidth,worldHeight,samples:samples.length,iou:union?intersection/union:1,rmse:Math.sqrt(error/Math.max(1,scored)),blur:p.emitter*effectiveZ/(p.sourceZ-effectiveZ),triangles:triangles.length};
+  return{width,height,data,shadow,incident,worldWidth,worldHeight,centerX,centerY,imageX,imageY,samples:samples.length,iou:union?intersection/union:1,rmse:Math.sqrt(error/Math.max(1,scored)),blur:d.simplification.penumbra,triangles:triangles.length};
 }

@@ -3,3 +3,5 @@
 select{width:100%;background:#131a14;color:#dce7d5;border:1px solid #3a4735;border-radius:4px;padding:9px;margin-top:7px;font:inherit}
 
 .ambient-field{margin-top:18px}#autoExposure{margin-bottom:3px}#simplifyHint{margin-bottom:16px;line-height:1.7}#compareContainer figure,#compareContainer figure:last-of-type{width:100%;grid-column:auto}#compareContainer{grid-template-columns:repeat(2,minmax(0,1fr))}#compareContainer p{grid-column:1/-1}@media(min-width:1350px){#compareContainer{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding-top:95px}}
+
+.auto-pick{margin:16px 0;padding:12px;border:1px solid #816f47;border-radius:7px;background:#23291d}.auto-pick p{font-size:10px;line-height:1.6;margin:10px 0 0}#optimize{white-space:normal;line-height:1.4;padding:11px 6px}#integrationStatus{line-height:1.6}select{min-width:0}#referenceSelect{font-size:11px}

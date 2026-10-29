@@ -1,10 +1,11 @@
+import {projectionLayout} from './integration.mjs?v=auto-integration-6';
 // Relative geometric optics. Illumination is normalized to the same point lamp
 // at 100 mm on the wall normal; no measured lumen/lux claim is made.
 export function incidentLight(sx,sy,sz,wx,wy){const r2=(wx-sx)**2+(wy-sy)**2+sz*sz;return 10000*sz/Math.pow(r2,1.5);}
 export function detailLimits(p,height){
   let magnification,penumbra,projectedPrint;
   if(p.shape==='square'){
-    magnification=Math.max(1,Math.max(p.wallWidth,height)/p.bodySide);
+    const q=projectionLayout(p,height);magnification=Math.max(1,Math.max(p.wallWidth+2*Math.abs(q.imageX),height+2*Math.abs(q.imageY))/p.bodySide);
     penumbra=p.emitter*Math.max(0,magnification-1);
     // Side-wall projection has different scales along the rim and along depth.
     projectedPrint=p.minWeb*Math.max(magnification,magnification*magnification*p.bodySide/(2*p.sourceZ));
@@ -41,7 +42,7 @@ export function simplifyTarget(raw,tones,w,h,pitch,p,limits){
 }
 export function measureContrast(d,sim,ambient){let light=0,dark=0,nLight=0,nDark=0;
   for(let y=0;y<sim.height;y++)for(let x=0;x<sim.width;x++){
-    const wx=((x+.5)/sim.width-.5)*sim.worldWidth,wy=(.5-(y+.5)/sim.height)*sim.worldHeight,ix=Math.floor(wx/d.pitch+d.nx/2),iy=Math.floor(d.ny/2-wy/d.pitch);if(ix<0||iy<0||ix>=d.nx||iy>=d.ny||(Math.abs(wx)<d.rootW/2+5&&Math.abs(wy)<d.rootH/2+5))continue;
+    const wx=((x+.5)/sim.width-.5)*sim.worldWidth+(sim.centerX||0),wy=(.5-(y+.5)/sim.height)*sim.worldHeight+(sim.centerY||0),ix=Math.floor((wx-(sim.imageX||0))/d.pitch+d.nx/2),iy=Math.floor(d.ny/2-(wy-(sim.imageY||0))/d.pitch);if(ix<0||iy<0||ix>=d.nx||iy>=d.ny)continue;
     const k=y*sim.width+x,v=(sim.data[k]+ambient)/(sim.incident[k]+ambient+1e-10);if(d.target[iy*d.nx+ix]){dark+=v;nDark++;}else{light+=v;nLight++;}}
   if(!nLight||!nDark)return 0;light/=nLight;dark/=nDark;return Math.max(0,Math.min(1,(light-dark)/(light+dark+1e-10)));
 }
