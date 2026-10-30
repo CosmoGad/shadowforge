@@ -49,7 +49,7 @@ function extrude(loops,point){const tris=[];for(const group of triangulate(loops
 }
 const rectangle=(w,h)=>[[-w/2,-h/2],[w/2,-h/2],[w/2,h/2],[-w/2,h/2]];
 function circle(x,y,r,n=32,clockwise=true){return Array.from({length:n},(_,i)=>{const a=(clockwise?-1:1)*i/n*Math.PI*2;return[x+r*Math.cos(a),y+r*Math.sin(a)];});}
-function surface(tris,loops,z,reverse=false){for(const g of triangulate(loops))for(let i=0;i<g.indices.length;i+=3){let[a,b,c]=g.indices.slice(i,i+3);if(cross(g.points[a],g.points[b],g.points[c])<0)[b,c]=[c,b];if(reverse)[b,c]=[c,b];tris.push(...[[...g.points[a],z,...g.points[b],z,...g.points[c],z]]);}}
+function surface(tris,loops,z,reverse=false){for(const g of triangulate(loops))for(let i=0,indices=completeCapBoundary(g);i<indices.length;i+=3){let[a,b,c]=indices.slice(i,i+3);if(cross(g.points[a],g.points[b],g.points[c])<0)[b,c]=[c,b];if(reverse)[b,c]=[c,b];tris.push(...[[...g.points[a],z,...g.points[b],z,...g.points[c],z]]);}}
 function wallBetween(tris,loop,z0,z1,inside=false){for(let i=0;i<loop.length;i++){const a=[...loop[i],z0],b=[...loop[(i+1)%loop.length],z0],c=[...loop[(i+1)%loop.length],z1],d=[...loop[i],z1];if(inside)tris.push([...b,...a,...d],[...b,...d,...c]);else tris.push([...a,...b,...c],[...a,...c,...d]);}}
 function annulus(tris,x,y,r0,r1,z,up=true){const a=circle(x,y,r0,32,false),b=circle(x,y,r1,32,false);for(let i=0;i<32;i++){const j=(i+1)%32,v0=[...a[i],z],v1=[...b[i],z],v2=[...b[j],z],v3=[...a[j],z];if(up)tris.push([...v0,...v1,...v2],[...v0,...v2,...v3]);else tris.push([...v0,...v2,...v1],[...v0,...v3,...v2]);}}
 export function buildBVH(triangles){

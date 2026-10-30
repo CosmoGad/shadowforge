@@ -1,5 +1,5 @@
 import {prepareTarget} from './projector-target.mjs?v=projector-5';
-import {flood,extrude,rectangle,circle,contours,connect,fixDiagonal,surface,wallBetween,annulus,buildBVH,occluded} from './projector-mesh.mjs?v=projector-5';
+import {flood,extrude,rectangle,circle,contours,connect,fixDiagonal,surface,wallBetween,annulus,buildBVH,occluded} from './projector-mesh.mjs?v=service-5';
 import {morphology,incidentLight} from './clarity.mjs?v=auto-integration-6';
 import {sourceSamples,stlBuffer,zipStore} from './core.mjs';
 export {stlBuffer,zipStore};
@@ -35,8 +35,8 @@ export function makeProjector(gray,iw,ih,settings={}){
 }
 export function traceProjector(d,width=320,samplesCount=25,sourceOffset=[0,0]){
  const H=Math.round(width*d.scene.height/d.scene.width),data=new Float32Array(width*H),incident=new Float32Array(width*H),visibility=new Float32Array(width*H),bvh=buildBVH(d.triangles),samples=sourceSamples(d.p.emitter,samplesCount),p=d.p;
- for(let y=0;y<H;y++)for(let x=0;x<width;x++){const wx=((x+.5)/width-.5)*d.scene.width+d.scene.centerX,wy=(.5-(y+.5)/H)*d.scene.height+d.scene.centerY,k=y*width+x;let flux=0,clear=0,total=0;for(const [dx,dy]of samples){const o=[dx+sourceOffset[0],dy+sourceOffset[1],p.sourceZ],v=incidentLight(o[0],o[1],o[2],wx,wy);total+=v;if(!occluded(bvh,o,[wx-o[0],wy-o[1],-o[2]])){flux+=v;clear++;}}data[k]=flux/samples.length;incident[k]=total/samples.length;visibility[k]=clear/samples.length;}
- return{width,height:H,data,incident,visibility,samples:samples.length,centerX:d.scene.centerX,centerY:d.scene.centerY,worldWidth:d.scene.width,worldHeight:d.scene.height};
+ for(let y=0;y<H;y++)for(let x=0;x<width;x++){const wx=((x+.5)/width-.5)*d.scene.width+d.scene.centerX,wy=(.5-(y+.5)/H)*d.scene.height+d.scene.centerY,k=y*width+x;let flux=0,clear=0,total=0,sampleIndex=0;for(const [dx,dy]of samples){const j=sampleIndex++,jx=samples.length>1?((j*.754877666+.5)%1-.5)*d.scene.width/width:0,jy=samples.length>1?((j*.569840291+.5)%1-.5)*d.scene.height/H:0,tx=wx+jx,ty=wy+jy;const o=[dx+sourceOffset[0],dy+sourceOffset[1],p.sourceZ],v=incidentLight(o[0],o[1],o[2],tx,ty);total+=v;if(!occluded(bvh,o,[tx-o[0],ty-o[1],-o[2]])){flux+=v;clear++;}}data[k]=flux/samples.length;incident[k]=total/samples.length;visibility[k]=clear/samples.length;}
+ return{width,height:H,data,incident,visibility,samples:samples.length,centerX:d.scene.centerX,centerY:d.scene.centerY,worldWidth:d.scene.width,worldHeight:d.scene.height,pixelFilter:'box, integrated by subpixel rays'};
 }
 export function evaluateProjector(d,sim){let tp=0,fp=0,fn=0,tn=0,light=0,dark=0,nl=0,nd=0,leak=0,outside=0,litInside=0;const expected=new Uint8Array(sim.width*sim.height),actual=new Uint8Array(expected.length),inside=new Uint8Array(expected.length);const guard=Math.max(d.q.penumbra,2*d.scene.width/sim.width);
  for(let y=0;y<sim.height;y++)for(let x=0;x<sim.width;x++){const k=y*sim.width+x,wxMM=((x+.5)/sim.width-.5)*d.scene.width+d.scene.centerX,wy=(.5-(y+.5)/sim.height)*d.scene.height+d.scene.centerY,rx=wxMM-d.q.imageX,ry=wy-d.q.imageY,ix=Math.floor(rx/d.pitch+d.ref.nx/2),iy=Math.floor(d.ref.ny/2-ry/d.pitch);if(ix>=0&&iy>=0&&ix<d.ref.nx&&iy<d.ref.ny){inside[k]=1;const goal=d.ref.raw[iy*d.ref.nx+ix],a=+(sim.visibility[k]<.5);expected[k]=goal;actual[k]=a;if(a&&goal)tp++;else if(a)fp++;else if(goal)fn++;else tn++;const v=(sim.data[k]+d.p.ambient)/(sim.incident[k]+d.p.ambient);if(goal){dark+=v;nd++;}else{light+=v;nl++;litInside+=sim.visibility[k];}}else if(Math.abs(rx)>d.p.wallWidth/2+guard||Math.abs(ry)>d.height/2+guard){outside++;leak+=sim.visibility[k];}}

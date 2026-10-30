@@ -25,8 +25,8 @@ function turnEnergy(p){let sum=0;for(let i=0;i<p.length;i++){const a=p[(i+p.leng
  * maxDeviation is a conservative sampled Hausdorff bound, not a web-width certificate.
  */
 export function smoothContours(input,options={}){
- const opt={tolerance:.8,cornerRadius:.75,iterations:2,preserveBottom:true,bottomBand:2,maxDeviation:1.65,...options};
- for(const k of ['tolerance','cornerRadius','iterations','bottomBand','maxDeviation'])if(typeof opt[k]!=='number'||!Number.isFinite(opt[k])||opt[k]<0)throw Error('Invalid smoothing option: '+k);
+ const opt={tolerance:.8,cornerRadius:.75,iterations:2,preserveBottom:true,bottomBand:2,maxDeviation:1.65,quantum:0,...options};
+ for(const k of ['tolerance','cornerRadius','iterations','bottomBand','maxDeviation','quantum'])if(typeof opt[k]!=='number'||!Number.isFinite(opt[k])||opt[k]<0)throw Error('Invalid smoothing option: '+k);
  if(typeof opt.preserveBottom!=='boolean'||!Number.isInteger(opt.iterations)||opt.iterations>3||opt.maxDeviation<=0)throw Error('Invalid smoothing iteration/deviation limit.');
  if(!Array.isArray(input)||input.some(p=>!Array.isArray(p)||p.length<3||p.some(v=>!Array.isArray(v)||v.length!==2||!v.every(Number.isFinite))))throw Error('Invalid printable contour.');
  const original=input.map(p=>clean(p));if(original.some(p=>p.length<3||!selfSimple(p)))throw Error('Input contour must be simple and nondegenerate.');const loops=original.map(p=>p.map(v=>[...v])),bottom=original.reduce((m,p)=>p.reduce((n,v)=>Math.min(n,v[1]),m),Infinity),protectedPoint=p=>opt.preserveBottom&&p[1]<=bottom+opt.bottomBand+EPS;
@@ -35,7 +35,7 @@ export function smoothContours(input,options={}){
   const before=original[i];let reason=null,maxDeviation=Infinity,candidate=before,strategy='original';
   const attempts=[{tolerance:opt.tolerance,radius:opt.cornerRadius,name:'RDP + curves'},{tolerance:opt.tolerance*.45,radius:opt.cornerRadius*.75,name:'conservative RDP + curves'},{tolerance:0,radius:opt.cornerRadius*.65,name:'curves only'}];
   for(const attempt of attempts){
-   candidate=attempt.tolerance?simplifyClosed(before,attempt.tolerance,protectedPoint):before.map(p=>[...p]);for(let j=0;j<opt.iterations;j++)candidate=roundCorners(candidate,attempt.radius,protectedPoint);
+   candidate=attempt.tolerance?simplifyClosed(before,attempt.tolerance,protectedPoint):before.map(p=>[...p]);for(let j=0;j<opt.iterations;j++)candidate=roundCorners(candidate,attempt.radius,protectedPoint);if(opt.quantum)candidate=clean(candidate.map(p=>p.map(v=>Math.round(v/opt.quantum)*opt.quantum)));
    reason=null;maxDeviation=Infinity;
    if(!selfSimple(candidate))reason='self-intersection';
    else if(Math.sign(area(before))!==Math.sign(area(candidate))||Math.abs(area(candidate))<Math.abs(area(before))*.25)reason='orientation/area';
