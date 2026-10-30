@@ -1,8 +1,8 @@
 // Side-cut square shadow lamp. Wall z=0; the emitting plane is z=sourceZ.
 // Every image-forming surface lies on one of four planes x/y=±bodySide/2.
 import {makeServiceParts} from './service-parts.mjs?v=service-5';
-import {smoothContours} from './smooth-contours.mjs?v=service-5';
-import {prepareShadowTarget} from './shadow-target.mjs?v=minimal-1';
+import {smoothContours} from './smooth-contours.mjs?v=minimal-2';
+import {prepareShadowTarget} from './shadow-target.mjs?v=minimal-2';
 import {extrude,rectangle,circle,contours,connect,fixDiagonal,flood} from './projector-mesh.mjs?v=service-5';
 import {morphology} from './clarity.mjs';
 import {traceProjector} from './projector.mjs?v=service-5';
@@ -45,7 +45,7 @@ export function makeSidewall(gray,iw,ih,settings={},preparedReference=null){
   const notches=[];if(servicePack)for(let y=1;y<ny-1;y++)for(let x=1;x<nx-1;x++){const u=(x-.5)*px-B,z=z0+(ny-y-1.5)*pz;if(Math.abs(u)<6.8&&z>z0+3&&z<21){mask[y*nx+x]=0;notches.push(y*nx+x);}}
   const root=(ny-2)*nx+1,tabs=connect(mask,nx,ny,radius,root);bridges+=tabs;fixDiagonal(mask,nx,ny);for(const k of notches)mask[k]=0;
   if(flood(mask,nx,ny,root).cells.length!==mask.reduce((a,b)=>a+b,0))throw new Error('На стенке остались несвязанные фрагменты.');
-  const originalLoops=contours(mask,nx,ny,1),smoothed=p.smooth?smoothContours(originalLoops,{tolerance:p.smooth>1?1.1:.8,cornerRadius:p.smooth>1?2:.75,iterations:p.smooth>1?3:2,preserveBottom:true,bottomBand:servicePack?Math.ceil(8/pz):rearRows,maxDeviation:p.smooth>1?2.8:1.65,quantum:p.smooth>1?.1:0}):null,initialLoops=smoothed?.loops||originalLoops,k=(B-p.thickness)/B;
+  const originalLoops=contours(mask,nx,ny,1),smoothed=p.smooth?smoothContours(originalLoops,{tolerance:p.smooth>1?1.1:.8,cornerRadius:p.smooth>1?2:.75,iterations:p.smooth>1?3:2,preserveBottom:true,preserveSides:true,sideLimit:(nx-2)/2,bottomBand:servicePack?Math.ceil(8/pz):rearRows,maxDeviation:p.smooth>1?2.8:1.65,quantum:p.smooth>1?.1:0}):null,initialLoops=smoothed?.loops||originalLoops,k=(B-p.thickness)/B;
   let loops=initialLoops;
   holes+=loops.filter(loop=>loop.reduce((s,a,i)=>{const b=loop[(i+1)%loop.length];return s+a[0]*b[1]-b[0]*a[1];},0)<0).length;
   const point=([u,v],outer)=>{
@@ -54,7 +54,7 @@ export function makeSidewall(gray,iw,ih,settings={},preparedReference=null){
    const innerZ=servicePack?z+Math.max(0,Math.min(1,(z-z0-4.3)/4))*(1-k)*(S-z):Math.abs(z-z0)<1e-4?z:S+k*(z-S);
    return outer?toWorld(face,uu,z,B):toWorld(face,uu*k,innerZ,B-p.thickness);
   };
-  let triangles=extrude(loops,point);if(p.smooth>1&&!closedSurface(triangles)){for(const spec of[{tolerance:1.1,cornerRadius:2,quantum:.2},{tolerance:0,cornerRadius:1.5,quantum:.2}]){const retry=smoothContours(originalLoops,{...spec,iterations:3,preserveBottom:true,bottomBand:servicePack?Math.ceil(8/pz):rearRows,maxDeviation:2.8}),candidate=extrude(retry.loops,point);if(closedSurface(candidate)){loops=retry.loops;triangles=candidate;Object.assign(smoothed,retry);smoothed.stats.meshStrategy=spec.tolerance?'quantized retry':'curves-only closed mesh';break;}}}if(p.smooth&&!closedSurface(triangles)){loops=originalLoops;triangles=extrude(loops,point);smoothed.stats.meshFallback=true;smoothed.stats.fallbackReason='Cap triangulation failed closed-edge verification';}if(!closedSurface(triangles))throw new Error('Не удалось замкнуть стенку. Увеличьте размер деталей или измените порог.');
+  let triangles=extrude(loops,point);if(p.smooth>1&&!closedSurface(triangles)){for(const spec of[{tolerance:1.1,cornerRadius:2,quantum:.2},{tolerance:0,cornerRadius:1.5,quantum:.2}]){const retry=smoothContours(originalLoops,{...spec,iterations:3,preserveBottom:true,preserveSides:true,sideLimit:(nx-2)/2,bottomBand:servicePack?Math.ceil(8/pz):rearRows,maxDeviation:2.8}),candidate=extrude(retry.loops,point);if(closedSurface(candidate)){loops=retry.loops;triangles=candidate;Object.assign(smoothed,retry);smoothed.stats.meshStrategy=spec.tolerance?'quantized retry':'curves-only closed mesh';break;}}}if(p.smooth&&!closedSurface(triangles)){loops=originalLoops;triangles=extrude(loops,point);smoothed.stats.meshFallback=true;smoothed.stats.fallbackReason='Cap triangulation failed closed-edge verification';}if(!closedSurface(triangles))throw new Error('Не удалось замкнуть стенку. Увеличьте размер деталей или измените порог.');
   panels.push({face,name:'side-panel-'+(face+1),label:FACE_NAMES[face],triangles,mask,nx,ny,NX:nx,NY:ny,pitch:px,zPitch:pz,z0,z1,side:p.bodySide,bridges:tabs,loops:loops.length,smoothing:smoothed?.stats||null,contourLoops:loops});
  }
  const base=extrude([rectangle(p.bodySide,p.bodySide),circle(0,B-9,1.7),circle(0,-B+9,1.7),circle(0,0,2.2)],([x,y],f)=>[x,y,f*z0]);

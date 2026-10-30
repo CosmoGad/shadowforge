@@ -25,11 +25,12 @@ function turnEnergy(p){let sum=0;for(let i=0;i<p.length;i++){const a=p[(i+p.leng
  * maxDeviation is a conservative sampled Hausdorff bound, not a web-width certificate.
  */
 export function smoothContours(input,options={}){
- const opt={tolerance:.8,cornerRadius:.75,iterations:2,preserveBottom:true,bottomBand:2,maxDeviation:1.65,quantum:0,...options};
+ const opt={tolerance:.8,cornerRadius:.75,iterations:2,preserveBottom:true,bottomBand:2,maxDeviation:1.65,quantum:0,preserveSides:false,sideLimit:0,...options};
  for(const k of ['tolerance','cornerRadius','iterations','bottomBand','maxDeviation','quantum'])if(typeof opt[k]!=='number'||!Number.isFinite(opt[k])||opt[k]<0)throw Error('Invalid smoothing option: '+k);
+ if(typeof opt.preserveSides!=='boolean'||opt.preserveSides&&(!Number.isFinite(opt.sideLimit)||opt.sideLimit<=0))throw Error('Invalid side boundary preservation.');
  if(typeof opt.preserveBottom!=='boolean'||!Number.isInteger(opt.iterations)||opt.iterations>3||opt.maxDeviation<=0)throw Error('Invalid smoothing iteration/deviation limit.');
  if(!Array.isArray(input)||input.some(p=>!Array.isArray(p)||p.length<3||p.some(v=>!Array.isArray(v)||v.length!==2||!v.every(Number.isFinite))))throw Error('Invalid printable contour.');
- const original=input.map(p=>clean(p));if(original.some(p=>p.length<3||!selfSimple(p)))throw Error('Input contour must be simple and nondegenerate.');const loops=original.map(p=>p.map(v=>[...v])),bottom=original.reduce((m,p)=>p.reduce((n,v)=>Math.min(n,v[1]),m),Infinity),protectedPoint=p=>opt.preserveBottom&&p[1]<=bottom+opt.bottomBand+EPS;
+ const original=input.map(p=>clean(p));if(original.some(p=>p.length<3||!selfSimple(p)))throw Error('Input contour must be simple and nondegenerate.');const loops=original.map(p=>p.map(v=>[...v])),bottom=original.reduce((m,p)=>p.reduce((n,v)=>Math.min(n,v[1]),m),Infinity),protectedPoint=p=>(opt.preserveBottom&&p[1]<=bottom+opt.bottomBand+EPS)||(opt.preserveSides&&Math.abs(p[0])>=opt.sideLimit-1.5-EPS);
  const relation=original.map((a,i)=>original.map((b,j)=>i!==j&&pointIn(a[0],b))),reports=[];
  for(let i=0;i<loops.length;i++){
   const before=original[i];let reason=null,maxDeviation=Infinity,candidate=before,strategy='original';
