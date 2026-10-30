@@ -2,27 +2,28 @@
 // Every image-forming surface lies on one of four planes x/y=±bodySide/2.
 import {makeServiceParts} from './service-parts.mjs?v=service-5';
 import {smoothContours} from './smooth-contours.mjs?v=service-5';
-import {prepareTarget} from './projector-target.mjs';
+import {prepareShadowTarget} from './shadow-target.mjs?v=stencil-2';
 import {extrude,rectangle,circle,contours,connect,fixDiagonal,flood} from './projector-mesh.mjs?v=service-5';
 import {morphology} from './clarity.mjs';
 import {traceProjector} from './projector.mjs?v=service-5';
 export {stlBuffer,zipStore} from './core.mjs';
-export const DEFAULTS=Object.freeze({bodySide:160,wallWidth:600,sourceZ:140,imageY:200,emitter:1.2,minWeb:.8,thickness:1.2,threshold:.34,contrast:1,resolution:200,panelPitch:.65,style:'portrait',ambient:.002,exposureEV:0,socket:14,smooth:0,detailMM:0,composition:'free',serviceMode:0,glareScreen:1,filamentLift:12,socketDiameter:10.6,socketHeight:13.2,cableDiameter:2.8});
+export const DEFAULTS=Object.freeze({bodySide:160,wallWidth:600,sourceZ:140,imageY:200,emitter:1.2,minWeb:.8,thickness:1.2,threshold:.34,contrast:1,resolution:200,panelPitch:.65,style:'portrait',ambient:.002,exposureEV:0,socket:14,smooth:0,detailMM:0,composition:'free',serviceMode:0,glareScreen:1,filamentLift:12,socketDiameter:10.6,socketHeight:13.2,cableDiameter:2.8,stencilMode:'legacy'});
 export const FACE_NAMES=['Правая стенка','Верхняя стенка','Левая стенка','Нижняя стенка'];
 const toWorld=(face,u,z,normal)=>face===0?[normal,u,z]:face===1?[-u,normal,z]:face===2?[-normal,-u,z]:[u,-normal,z];
 function closedSurface(triangles){const edges=new Map();for(const t of triangles){const a=[t[3]-t[0],t[4]-t[1],t[5]-t[2]],b=[t[6]-t[0],t[7]-t[1],t[8]-t[2]];if(Math.hypot(a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0])<1e-10)return false;const vs=[0,3,6].map(k=>t.slice(k,k+3).map(v=>Math.round(v*1e7)).join(','));for(let i=0;i<3;i++){const e=[vs[i],vs[(i+1)%3]].sort().join('|');edges.set(e,(edges.get(e)||0)+1);}}return [...edges.values()].every(n=>n===2);}
 const range=(v,lo,hi)=>Number.isFinite(v)&&v>=lo&&v<=hi;
-export function makeSidewall(gray,iw,ih,settings={}){
+export function makeSidewall(gray,iw,ih,settings={},preparedReference=null){
  const p={...DEFAULTS,...settings};for(const k of Object.keys(DEFAULTS))if(typeof DEFAULTS[k]==='number'&&(typeof p[k]!=='number'||!Number.isFinite(p[k])))throw new Error('Некорректный параметр: '+k);
  if(!range(p.bodySide,100,210)||!range(p.wallWidth,240,800)||!range(p.sourceZ,90,220)||!range(p.imageY,-400,600)||!range(p.emitter,0,5)||!range(p.minWeb,.5,2)||!range(p.thickness,.8,3)||!range(p.threshold,.05,.9)||!range(p.contrast,.5,2)||!range(p.resolution,96,512)||!range(p.smooth,0,2)||!range(p.detailMM,0,10)||!['free','surround'].includes(p.composition)||!range(p.panelPitch,.4,1.5)||!range(p.ambient,0,.1)||!range(p.exposureEV,-4,8)||!range(p.socket,10,24)||!['portrait','silhouette'].includes(p.style))throw new Error('Параметры вне рабочего диапазона.');
  if(![0,1].includes(p.serviceMode)||![0,1].includes(p.glareScreen))throw new Error('Некорректный режим сборки.');const servicePack=p.serviceMode?makeServiceParts(p):null;
- const ref=prepareTarget(gray,iw,ih,p),pitch=p.wallWidth/ref.nx,height=ref.ny*pitch,B=p.bodySide/2,S=p.sourceZ,z0=servicePack?.baseTop||3,radialExtent=Math.max(p.wallWidth/2,Math.abs(p.imageY)+height/2)+20;
+ if(!['legacy','bold','balanced','detail'].includes(p.stencilMode))throw Error('Некорректный режим эскиза.');
+ const ref=preparedReference?{...preparedReference,target:preparedReference.target.slice()}:prepareShadowTarget(gray,iw,ih,p),pitch=p.wallWidth/ref.nx,height=ref.ny*pitch,B=p.bodySide/2,S=p.sourceZ,z0=servicePack?.baseTop||3,radialExtent=Math.max(p.wallWidth/2,Math.abs(p.imageY)+height/2)+20;
  const sourceGap=Math.max(24,S*B/radialExtent),z1=S-sourceGap;if(z1-z0<24)throw new Error('Недостаточная глубина фигурных стенок.');
  // The socket faces outward. Its opaque shadow must fit under the physical base.
  const socketRadius=(p.socket-2)/2,holderRadius=p.socket/2+2.4,sourceRadius=p.emitter/2;
  const socketShadowRadius=socketRadius*S/12+sourceRadius*(S-12)/12,holderShadowRadius=holderRadius*S/20+sourceRadius*(S-20)/20;
  if(!servicePack&&Math.max(socketShadowRadius,holderShadowRadius)>B-1)throw new Error('Тень патрона выходит за квадратное основание. Увеличьте корпус или уменьшите расстояние источника до стены.');
- if(p.detailMM>0){const r=Math.max(1,Math.round(p.detailMM/(2*pitch)));ref.target=morphology(morphology(ref.target,ref.nx,ref.ny,r,false),ref.nx,ref.ny,r,true);ref.target=morphology(morphology(ref.target,ref.nx,ref.ny,r,true),ref.nx,ref.ny,r,false);}
+ if(p.detailMM>0&&p.stencilMode==='legacy'){const r=Math.max(1,Math.round(p.detailMM/(2*pitch)));ref.target=morphology(morphology(ref.target,ref.nx,ref.ny,r,false),ref.nx,ref.ny,r,true);ref.target=morphology(morphology(ref.target,ref.nx,ref.ny,r,true),ref.nx,ref.ny,r,false);}
  const nx=Math.min(p.smooth?480:240,Math.ceil(p.bodySide/p.panelPitch)+2),px=p.bodySide/(nx-2),ny=Math.ceil((z1-z0)/px)+2,pz=(z1-z0)/(ny-2),panels=[];let bridges=0,holes=0;
  // Sample a continuous coverage field. Nearest-neighbour target lookup produced
  // staircase boundaries even after smoothing the panel's cell contour.
