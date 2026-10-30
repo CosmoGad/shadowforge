@@ -2,7 +2,7 @@
 // Every image-forming surface lies on one of four planes x/y=±bodySide/2.
 import {makeServiceParts} from './service-parts.mjs?v=service-5';
 import {smoothContours} from './smooth-contours.mjs?v=service-5';
-import {prepareShadowTarget} from './shadow-target.mjs?v=stencil-2';
+import {prepareShadowTarget} from './shadow-target.mjs?v=stencil-3';
 import {extrude,rectangle,circle,contours,connect,fixDiagonal,flood} from './projector-mesh.mjs?v=service-5';
 import {morphology} from './clarity.mjs';
 import {traceProjector} from './projector.mjs?v=service-5';
