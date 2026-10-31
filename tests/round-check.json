@@ -1,0 +1,297 @@
+{
+  "passed": true,
+  "physicalValidation": false,
+  "checks": [
+    {
+      "name": "round-optical-shell",
+      "triangles": 103448,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 27542.78618932988,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          14,
+          115.77249908447266
+        ]
+      ]
+    },
+    {
+      "name": "service-backplate",
+      "triangles": 2936,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 62700.78873939948,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          0,
+          11
+        ]
+      ]
+    },
+    {
+      "name": "optical-deck",
+      "triangles": 2796,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 59572.8601419036,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          11,
+          16
+        ]
+      ]
+    },
+    {
+      "name": "socket-carrier",
+      "triangles": 1256,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 26323.636280226903,
+      "bounds": [
+        [
+          -21,
+          21
+        ],
+        [
+          -15,
+          15
+        ],
+        [
+          14,
+          113.19999694824219
+        ]
+      ]
+    },
+    {
+      "name": "cable-clamp",
+      "triangles": 276,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 304.89221534907875,
+      "bounds": [
+        [
+          -10,
+          10
+        ],
+        [
+          -56,
+          -48
+        ],
+        [
+          5.650000095367432,
+          7.650000095367432
+        ]
+      ]
+    },
+    {
+      "name": "mount-access-plug",
+      "triangles": 252,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 438.3383659429853,
+      "bounds": [
+        [
+          -6.5,
+          6.5
+        ],
+        [
+          -70.5,
+          -57.5
+        ],
+        [
+          11.199999809265137,
+          15.600000381469727
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-1",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          70,
+          82.30000305175781
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-2",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          70,
+          82.30000305175781
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-3",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          -82.30000305175781,
+          -70
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-4",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -82.30000305175781,
+          -70
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "glare-bracket",
+      "triangles": 472,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 1231.7742332349826,
+      "bounds": [
+        [
+          -7,
+          7
+        ],
+        [
+          -31,
+          -11
+        ],
+        [
+          108.4000015258789,
+          156
+        ]
+      ]
+    },
+    {
+      "name": "glare-cap",
+      "triangles": 848,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 60279.26659430834,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          156,
+          159
+        ]
+      ]
+    }
+  ],
+  "maxAngleDegrees": 1.000087001470614,
+  "maxRadiusErrorMM": 0.00006563922306668246,
+  "seamRaysChecked": 9,
+  "quality": {
+    "iou": 0.9327253957329663,
+    "edgeF1": 0.9474870756934343,
+    "precision": 0.9497635933806147,
+    "recall": 0.9452214452214452,
+    "contrast": 0.8745697220882116,
+    "strayShadow": 0.009467801080086269,
+    "faceShares": [
+      0.27459433770113384,
+      0.2781757077873583,
+      0.38653336954307826,
+      0.060696584968429626
+    ],
+    "leakage": 0.009467801080086269,
+    "outsideShadow": 0.009412878734821623,
+    "reachableIoU": 0.9296632927081182,
+    "inaccessibleLightFraction": 0.052008238928939236,
+    "targetCoverage": 0.2756385803222656,
+    "accepted": true,
+    "reasons": [],
+    "score": 0.9094949465142209,
+    "source": "fixed raw target; all canonical pixels including base; outside expected light except unavoidable physical base/rear rail",
+    "physicalValidation": false
+  }
+}

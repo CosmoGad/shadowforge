@@ -1,6 +1,6 @@
 // Serviceable, low-voltage mechanical package. Coordinates in mm; wall z=0.
 import{extrude,rectangle,circle,surface,wallBetween,annulus}from'./projector-mesh.mjs?v=service-5';
-import{makeGlareScreen,evaluateFrontScreen}from'./glare-screen.mjs?v=service-5';
+import{makeGlareScreen,evaluateFrontScreen}from'./glare-screen.mjs?v=round-2';
 const area=p=>p.reduce((s,a,i)=>{const b=p[(i+1)%p.length];return s+a[0]*b[1]-b[0]*a[1];},0)/2;
 const cw=p=>area(p)<0?p:[...p].reverse(),ccw=p=>area(p)>0?p:[...p].reverse();
 const ring=(x,y,r)=>circle(x,y,r,32,false),hole=(x,y,r)=>cw(ring(x,y,r));
@@ -16,16 +16,16 @@ function box(w,h,z0,z1,x=0,y=0){return extrude([atRect(w,h,x,y)],([a,b],f)=>[a,b
 function beam(a,b,r=.7){const v=b.map((n,i)=>n-a[i]),length=Math.hypot(...v),n=v.map(x=>x/length),pick=Math.abs(n[2])<.9?[0,0,1]:[0,1,0],u=[n[1]*pick[2]-n[2]*pick[1],n[2]*pick[0]-n[0]*pick[2],n[0]*pick[1]-n[1]*pick[0]],ul=Math.hypot(...u),U=u.map(x=>x/ul),V=[n[1]*U[2]-n[2]*U[1],n[2]*U[0]-n[0]*U[2],n[0]*U[1]-n[1]*U[0]];return extrude([circle(0,0,r,8,false)],([x,y],f)=>a.map((q,i)=>q+U[i]*x+V[i]*y+v[i]*f));}
 function wireMesh(points,r){return points.slice(1).flatMap((p,i)=>beam(points[i],p,r));}
 function mapped(tris,face){return tris.map(t=>{const out=[];for(let k=0;k<9;k+=3){const[u,n,z]=t.slice(k,k+3),p=face===0?[n,u,z]:face===1?[-u,n,z]:face===2?[-n,-u,z]:[u,-n,z];out.push(...p);}return[...out.slice(0,3),...out.slice(6,9),...out.slice(3,6)];});}
-function clip(B,t,face){const u=6,n0=B-10,n1=B-t-3,n2=B-t-.3,n3=B+.3,n4=B+2.3,z0=14,z1=16,z2=17.5,z3=20,tris=[];
+function clip(B,t,face,round=false){const u=6,n0=B-10,n1=B-t-3,n2=B-t-(round?.8:.3),n3=B+.3,n4=B+2.3,z0=14,z1=16,z2=17.5,z3=20,tris=[];
  const outer=atRect(12,n1-n0,0,(n0+n1)/2),screw=hole(0,B-7,1.1);surface(tris,[outer,screw],z0,true);surface(tris,[outer,screw],z1);const walls=[];wallBetween(walls,outer,z0,z1);tris.push(...walls.filter(t=>![0,3,6].every(k=>Math.abs(t[k+1]-n1)<1e-7)));wallBetween(tris,ccw(screw),z0,z1,true);
  // Shared interface is omitted, forming one connected U clip, not overlapping boxes.
- const profile=ccw([[n1,z0],[n2,z0],[n2,z2],[n3,z2],[n3,z0],[n4,z0],[n4,z3],[n1,z3],[n1,z1]]),arch=orient(extrude([profile],([n,z],f)=>[u-2*u*f,n,z]));
+ const profile=ccw(round?[[n1,z0],[n2,z0],[n2,z2],[n4,z2],[n4,z3],[n1,z3],[n1,z1]]:[[n1,z0],[n2,z0],[n2,z2],[n3,z2],[n3,z0],[n4,z0],[n4,z3],[n1,z3],[n1,z1]]),arch=orient(extrude([profile],([n,z],f)=>[u-2*u*f,n,z]));
  for(const tri of arch){if([0,3,6].every(k=>Math.abs(tri[k+1]-n1)<1e-7&&tri[k+2]<=z1+1e-7))continue;tris.push(tri);}return mapped(tris,face);
 }
 export function makeServiceParts(p){
- const B=p.bodySide/2,S=p.sourceZ,lift=p.filamentLift??12,od=p.socketDiameter??10.6,sh=p.socketHeight??13.2,cable=p.cableDiameter??2.8,pcbTop=S-lift-sh,pcbBottom=pcbTop-1.6,platformBottom=pcbBottom-2.4,deckBottom=11,deckTop=14,corner=B-20,clampY=-(B-28),gap=cable-.15,clampBottom=3+gap,slack=Math.ceil(Math.max(150,pcbTop-deckTop+40)/10)*10;
+ const B=p.bodySide/2,S=p.sourceZ,lift=p.filamentLift??12,od=p.socketDiameter??10.6,sh=p.socketHeight??13.2,cable=p.cableDiameter??2.8,pcbTop=S-lift-sh,pcbBottom=pcbTop-1.6,platformBottom=pcbBottom-2.4,deckBottom=11,deckTop=14,corner=p.bodyShape==='round'?(B-12)/Math.sqrt(2):B-20,clampY=-(B-28),gap=cable-.15,clampBottom=3+gap,slack=Math.ceil(Math.max(150,pcbTop-deckTop+40)/10)*10;
  if(![B,S,lift,od,sh,cable].every(Number.isFinite)||B<60||B>105||lift<8||lift>20||od<9||od>14||sh<10||sh>20||cable<2||cable>3.5||platformBottom<deckTop+30)throw Error('Проверьте размеры сервисного узла.');
- const corners=[[-corner,-corner],[corner,-corner],[corner,corner],[-corner,corner]],keys=[[-B*.45,B-32],[B*.45,B-32]],lock=[0,-(B-16)],outer=rounded(p.bodySide,p.bodySide,2),back=[],deck=[],carrier=[],parts=[],purchased=[];
+ const corners=[[-corner,-corner],[corner,-corner],[corner,corner],[-corner,corner]],keys=[[-B*.45,B-32],[B*.45,B-32]],lock=[0,-(B-16)],outer=p.bodyShape==='round'?circle(0,0,B,180,false):rounded(p.bodySide,p.bodySide,2),back=[],deck=[],carrier=[],parts=[],purchased=[];
  const keyloops=keys.map(([x,y])=>keyhole(x,y)),hexes=corners.map(([x,y])=>circle(x,y,3.3,6,false)),posts=corners.map(([x,y])=>ring(x,y,6)),cornerHoles=corners.map(([x,y])=>hole(x,y,1.7)),clampCenters=[[-7,clampY],[7,clampY]];
  surface(back,[outer,...hexes.map(cw),...keyloops.map(cw),hole(...lock,2.25)],0,true);
  surface(back,[outer,...posts.map(cw),...keyloops.map(cw),hole(...lock,2.25),...clampCenters.map(([x,y])=>hole(x,y,2.5))],3);wallBetween(back,outer,0,3);
@@ -50,7 +50,7 @@ export function makeServiceParts(p){
  const plugFixed=plug.filter(t=>![0,3,6].every(k=>Math.abs(t[k+2]-14)<1e-8&&Math.hypot(t[k]-lock[0],t[k+1]-lock[1])<=6.50001));
  annulus(plugFixed,...lock,5.1,6.5,14,false);
  parts.push({name:'service-backplate',triangles:orient(back)},{name:'optical-deck',triangles:orient(deck)},{name:'socket-carrier',triangles:orient(carrier)},{name:'cable-clamp',triangles:orient(strain)},{name:'mount-access-plug',triangles:orient(plugFixed)});
- for(let face=0;face<4;face++)parts.push({name:'panel-clip-'+(face+1),triangles:orient(clip(B,p.thickness,face))});
+ for(let face=0;face<4;face++)parts.push({name:'panel-clip-'+(face+1),triangles:orient(clip(B,p.thickness,face,p.bodyShape==='round'))});
  const socket=extrude([ring(0,0,od/2)],([x,y],f)=>[x,y,pcbTop+f*sh]),pcb=extrude([atRect(18,26,0,0),...pcbMounts.map(([x,y])=>hole(x,y,1.1)),hole(-5,0,.8),hole(5,0,.8)],([x,y],f)=>[x,y,pcbBottom+1.6*f]);purchased.push({name:'socket-pcb',triangles:pcb});
  for(const[x,y]of corners)purchased.push({name:'M3-deck-screw-'+purchased.length,triangles:[...cylinder(1.5,0,16,x,y),...cylinder(3,16,18,x,y)]});
  for(const[x,y]of carrierBolts)purchased.push({name:'M3-carrier-screw-'+purchased.length,triangles:[...cylinder(1.5,8,18,x,y),...cylinder(3,18,20,x,y)]});
