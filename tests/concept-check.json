@@ -1,0 +1,299 @@
+{
+  "passed": true,
+  "physicalValidation": false,
+  "printedParts": [
+    {
+      "name": "round-optical-shell",
+      "triangles": 106918,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 30480.52325215915,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80.32564544677734
+        ],
+        [
+          14,
+          167
+        ]
+      ]
+    },
+    {
+      "name": "service-backplate",
+      "triangles": 2936,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 62700.78873939948,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          0,
+          11
+        ]
+      ]
+    },
+    {
+      "name": "optical-deck",
+      "triangles": 2796,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 59572.8601419036,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          11,
+          16
+        ]
+      ]
+    },
+    {
+      "name": "cable-clamp",
+      "triangles": 276,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 304.89221534907875,
+      "bounds": [
+        [
+          -10,
+          10
+        ],
+        [
+          -56,
+          -48
+        ],
+        [
+          5.650000095367432,
+          7.650000095367432
+        ]
+      ]
+    },
+    {
+      "name": "mount-access-plug",
+      "triangles": 252,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 438.3383659429853,
+      "bounds": [
+        [
+          -6.5,
+          6.5
+        ],
+        [
+          -70.5,
+          -57.5
+        ],
+        [
+          11.199999809265137,
+          15.600000381469727
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-1",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          70,
+          82.30000305175781
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-2",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          70,
+          82.30000305175781
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-3",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          -82.30000305175781,
+          -70
+        ],
+        [
+          -6,
+          6
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "panel-clip-4",
+      "triangles": 164,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 419.046043549999,
+      "bounds": [
+        [
+          -6,
+          6
+        ],
+        [
+          -82.30000305175781,
+          -70
+        ],
+        [
+          14,
+          20
+        ]
+      ]
+    },
+    {
+      "name": "glare-cap",
+      "triangles": 3320,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 92535.88815595428,
+      "bounds": [
+        [
+          -80,
+          80
+        ],
+        [
+          -80,
+          80
+        ],
+        [
+          123.9881591796875,
+          174
+        ]
+      ]
+    },
+    {
+      "name": "concept-gold-rim",
+      "triangles": 1920,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 890.5391970009834,
+      "bounds": [
+        [
+          -79.6500015258789,
+          79.6500015258789
+        ],
+        [
+          -79.6500015258789,
+          79.6500015258789
+        ],
+        [
+          174,
+          175
+        ]
+      ]
+    },
+    {
+      "name": "concept-rosette",
+      "triangles": 3296,
+      "closed": true,
+      "components": 1,
+      "outward": true,
+      "volumeMM3": 499.8027411398159,
+      "bounds": [
+        [
+          -24.799999237060547,
+          24.799999237060547
+        ],
+        [
+          -24.799999237060547,
+          24.799999237060547
+        ],
+        [
+          174,
+          174.8000030517578
+        ]
+      ]
+    }
+  ],
+  "quality": {
+    "illuminationProfile": "physical circular aperture",
+    "illuminatedAreaFraction": 0.7708222222222222,
+    "targetUnlitFraction": 0,
+    "iou": 0.9349696635410921,
+    "edgeF1": 0.9588526709541635,
+    "precision": 0.9608490566037736,
+    "recall": 0.9568645640074211,
+    "contrast": 0.8857925958070553,
+    "strayShadow": 0.0004469802679436293,
+    "faceShares": [
+      0.2745727039733863,
+      0.27817098630276493,
+      0.38656075496036796,
+      0.060695554763480826
+    ],
+    "leakage": 0.0004469802679436293,
+    "outsideShadow": 0.00041557576154983844,
+    "reachableIoU": 0.9320215846275336,
+    "inaccessibleLightFraction": 0.04976141785957737,
+    "targetCoverage": 0.27564239501953125,
+    "accepted": true,
+    "reasons": [],
+    "score": 0.9338640450690208,
+    "source": "fixed raw target in measured-by-geometry aperture field; unlit background excluded; clipped target reported separately; full assembly including base",
+    "physicalValidation": false
+  },
+  "frontalEmitterVisibleRays": 0,
+  "compiledTargetHash": "1ecc0e43"
+}

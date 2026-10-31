@@ -1,0 +1,33 @@
+{
+  "format": "shadowforge-real-blender-union-v1",
+  "targetHash": "1ecc0e43",
+  "settings": {
+    "bodySide": 160,
+    "sourceZ": 140,
+    "wallWidth": 700,
+    "imageX": 0,
+    "imageY": 160,
+    "emitter": 1.2,
+    "minWeb": 0.8,
+    "thickness": 1.2,
+    "resolution": 512,
+    "panelPitch": 0.6,
+    "threshold": 0.34,
+    "contrast": 1,
+    "smooth": 2,
+    "detailMM": 0,
+    "stencilMode": "artwork",
+    "filamentLift": 12,
+    "socketDiameter": 10.6,
+    "socketHeight": 13.2,
+    "cableDiameter": 2.8,
+    "bodyShape": "round",
+    "serviceMode": 1,
+    "glareScreen": 1,
+    "composition": "surround",
+    "conceptMatch": 1
+  },
+  "triangles": 106918,
+  "construction": "Exact Boolean union of the sculpted cylindrical shell and thin crown support. No display-only replacement.",
+  "physicalValidation": false
+}

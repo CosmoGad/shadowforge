@@ -1,0 +1,2 @@
+export function targetFingerprint(mask){let h=2166136261;for(const v of mask){h^=v;h=Math.imul(h,16777619);}return(h>>>0).toString(16);}
+export function decodeConceptStl(buffer){const v=new DataView(buffer),n=v.getUint32(80,true);if(buffer.byteLength!==84+n*50||n>1e6)throw Error('Invalid compiled concept mesh.');return Array.from({length:n},(_,i)=>Array.from({length:9},(_,k)=>v.getFloat32(84+i*50+12+k*4,true)));}

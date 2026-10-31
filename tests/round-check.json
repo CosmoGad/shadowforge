@@ -271,6 +271,9 @@
   "maxRadiusErrorMM": 0.00006563922306668246,
   "seamRaysChecked": 9,
   "quality": {
+    "illuminationProfile": "unrestricted point source",
+    "illuminatedAreaFraction": 1,
+    "targetUnlitFraction": 0,
     "iou": 0.9327253957329663,
     "edgeF1": 0.9474870756934343,
     "precision": 0.9497635933806147,
