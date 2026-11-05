@@ -16,13 +16,13 @@ export function parseBinarySTL(buffer){
 async function readJSON(file){const r=await fetch(file,{cache:'no-store'});if(!r.ok)throw Error(file+' недоступен');return r.json();}
 async function metrics(){
  $('refreshMetrics').disabled=true;
- try{const q=await readJSON('final-metrics.json'),metric=q.quality||q,percent=(key,id)=>$(id).textContent=Number.isFinite(metric[key])?fmt(metric[key]*100)+'%':'—';percent('iou','metricIou');percent('missingTargetFraction','metricMissing');percent('lightWeightedExtraShadow','metricExtra');$('metricSamples').textContent=Number.isFinite(q.samples)?fmt(q.samples,0):'—';$('metricsStatus').textContent='Загружены финальные результаты расчёта';$('metricScope').textContent=q.region||metric.region||'Область оценки не указана в файле результатов.';const a=q.assumptions||{};if(a.photometry)$('metricScope').textContent+=' '+a.photometry;if(a.physicalValidation===false)$('metricScope').textContent+=' Физическое испытание ещё не проведено.';
+ try{const q=await readJSON('final-metrics.json'),metric=q.quality||q,percent=(key,id)=>$(id).textContent=Number.isFinite(metric[key])?fmt(metric[key]*100,2)+'%':'—';percent('iou','metricIou');percent('missingTargetFraction','metricMissing');percent('lightWeightedExtraShadow','metricExtra');$('metricSamples').textContent=Number.isFinite(q.samples)?fmt(q.samples,0):'—';$('metricsStatus').textContent='Загружены финальные результаты расчёта';$('metricScope').textContent=q.region||metric.region||'Область оценки не указана в файле результатов.';const a=q.assumptions||{};if(a.photometry)$('metricScope').textContent+=' '+a.photometry;if(a.physicalValidation===false)$('metricScope').textContent+=' Физическое испытание ещё не проведено.';
  }catch{$('metricsStatus').textContent='Финальный расчёт ещё не опубликован';$('metricScope').textContent='Готовые значения появятся после сохранения final-metrics.json. Промежуточные оценки не подставляются.';for(const id of['metricIou','metricMissing','metricExtra','metricSamples'])$(id).textContent='—';}finally{$('refreshMetrics').disabled=false;}
  try{const r=await fetch('./hilal-kit.zip',{method:'HEAD',cache:'no-store'});if(r.ok){$('kitDownload').setAttribute('aria-disabled','false');$('kitDownload').textContent='Скачать STL-комплект';}}catch{}
 }
 function switchTab(name){activeTab=name;for(const b of document.querySelectorAll('[data-tab]')){const selected=b.dataset.tab===name;b.setAttribute('aria-selected',String(selected));b.tabIndex=selected?0:-1;}for(const n of['model','shadow','analysis'])$('pane-'+n).hidden=n!==name;if(name==='model')resize();}
 function resize(){if(!renderer)return;const host=$('viewer'),w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
-function setCamera(front=false){camera.up.set(0,1,0);controls.target.set(0,0,70);camera.position.set(...(front?[0,0,390]:[210,115,310]));controls.update();}
+function setCamera(front=false){camera.up.set(0,1,0);controls.target.set(0,0,70);camera.position.set(...(front?[0,0,520]:[300,165,440]));controls.update();}
 function refreshOptions(){
  const exploded=$('explode').checked,hardware=$('hardware').checked,opened=$('openCover').checked;
  for(const entry of loaded){const {mesh,name,bought}=entry;mesh.visible=(!bought||hardware)&&!(opened&&(name==='front-cover-ivory'||name==='front-brass-rim'||name.includes('cover-M2')));let z=0;
@@ -51,3 +51,5 @@ for(const id of['explode','hardware','openCover','showSource'])$(id).addEventLis
 $('frontView').addEventListener('click',()=>{if(camera)setCamera(true);});$('angleView').addEventListener('click',()=>{if(camera)setCamera(false);});$('refreshMetrics').addEventListener('click',metrics);
 for(const id of['shadowImage','analysisImage'])$(id).addEventListener('error',()=>{$(id).hidden=true;$(id).nextElementSibling.hidden=false;});
 void metrics();void init();
+
+

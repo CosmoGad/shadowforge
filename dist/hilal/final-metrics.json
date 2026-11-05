@@ -5,13 +5,13 @@
   "missingTargetFraction": 0.0015772215996347487,
   "extraShadowAreaMM2": 58.41975308641975,
   "lightWeightedExtraShadow": 0.0004492837340617062,
-  "region": "entire 650mm square excluding fixed product disk radius76mm; no brightness cropping",
+  "region": "Поле 650 × 650 мм, кроме центральной зоны радиусом 76 мм, занятой корпусом. Тёмные края не исключены из оценки.",
   "assumptions": {
     "emitterMM": [
       1,
       1
     ],
-    "photometry": "Lambertian approximation; no measured LED IES",
+    "photometry": "LED 1 × 1 мм; приближённая диаграмма излучения. Учтены преломление и потери на границах PMMA; вторичные отражения не учтены.",
     "ambient": "not included in visibility; display uses 0.002 relative ambient",
     "physicalValidation": false
   }
