@@ -1,0 +1,84 @@
+{
+  "assembly": "C:\\Users\\13dan\\Documents\\Codex\\2026-10-28\\new-chat\\outputs\\hilal-v2-print\\assembly.json",
+  "blender": "5.2.3 LTS",
+  "coordinates": "Source STL millimetres converted to mesh metres; unit scale 1",
+  "printed": [
+    {
+      "name": "rear-mount",
+      "triangles": 4180,
+      "file": "assembly/rear-mount.stl"
+    },
+    {
+      "name": "optical-insert",
+      "triangles": 54924,
+      "file": "assembly/optical-insert.stl"
+    },
+    {
+      "name": "front-body",
+      "triangles": 15086,
+      "file": "assembly/front-body.stl"
+    },
+    {
+      "name": "front-cover-ivory",
+      "triangles": 5520,
+      "file": "assembly/front-cover-ivory.stl"
+    },
+    {
+      "name": "front-brass-rim",
+      "triangles": 1024,
+      "file": "assembly/front-brass-rim.stl"
+    }
+  ],
+  "shadow": {
+    "engine": "Cycles CPU direct lighting with refractive shadow caustics",
+    "samples": 256,
+    "denoising": false,
+    "emitter": "1x1 mm rectangular Lambertian area, faces -Z",
+    "source_mm": [
+      0,
+      0,
+      100
+    ],
+    "radiant_power_W": 0.05,
+    "power_note": "Illustrative radiant power, not electrical rating or calibrated lux",
+    "color_linear_RGB": [
+      1,
+      0.78,
+      0.48
+    ],
+    "world_strength": 0,
+    "diffuse_bounces": 2,
+    "wall_reflectance_linear_RGB": [
+      0.75,
+      0.75,
+      0.75
+    ],
+    "transmission_bounces": 12,
+    "max_bounces": 12,
+    "optical_sleeve": {
+      "role": "optical-sleeve",
+      "IOR": 1.49,
+      "transmission_weight": 1,
+      "roughness": 0.02,
+      "shadow_caustics_caster": true,
+      "receiver": "wall",
+      "caustics_light": "LED",
+      "mesh": "Exact nominal tube triangles; no transparent-shadow shortcut"
+    },
+    "wall_z_mm": 0,
+    "exposure_stops": 3,
+    "display_transform": "Standard",
+    "camera_center_mm": [
+      0,
+      90,
+      0
+    ],
+    "camera_orthoscale_mm": 650,
+    "resolution": [
+      1000,
+      1000
+    ],
+    "compositing": "none; no textures or reference image on wall"
+  },
+  "studio": "Assembly and exploded views use separate studio lights and mild world illumination; these are not optical simulation results"
+}

@@ -1,0 +1,553 @@
+{
+  "units": "mm",
+  "source": [
+    0,
+    0,
+    100
+  ],
+  "parts": [
+    {
+      "name": "rear-mount",
+      "file": "assembly/rear-mount.stl",
+      "color": [
+        0.76,
+        0.69,
+        0.55
+      ],
+      "printToAssembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          1.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "optical-insert",
+      "file": "assembly/optical-insert.stl",
+      "color": [
+        0.04,
+        0.04,
+        0.04
+      ],
+      "printToAssembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "front-body",
+      "file": "assembly/front-body.stl",
+      "color": [
+        0.76,
+        0.69,
+        0.55
+      ],
+      "printToAssembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          101.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "front-cover-ivory",
+      "file": "assembly/front-cover-ivory.stl",
+      "color": [
+        0.76,
+        0.69,
+        0.55
+      ],
+      "printToAssembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          130.3000030517578
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "front-brass-rim",
+      "file": "assembly/front-brass-rim.stl",
+      "color": [
+        0.65,
+        0.43,
+        0.16
+      ],
+      "printToAssembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          135.1999969482422
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "hardware": [
+    {
+      "name": "bought-prepared-aluminium-spreader",
+      "file": "assembly/bought-prepared-aluminium-spreader.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-LED-MCPCB-envelope",
+      "file": "assembly/bought-LED-MCPCB-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-3AA-holder-nominal",
+      "file": "assembly/bought-3AA-holder-nominal.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-AA-cell-1",
+      "file": "assembly/bought-AA-cell-1.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-AA-cell-2",
+      "file": "assembly/bought-AA-cell-2.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-AA-cell-3",
+      "file": "assembly/bought-AA-cell-3.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-driver-envelope",
+      "file": "assembly/bought-driver-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-driver-insulating-pad-envelope",
+      "file": "assembly/bought-driver-insulating-pad-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-radial-button-envelope",
+      "file": "assembly/bought-radial-button-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-button-actuator-envelope",
+      "file": "assembly/bought-button-actuator-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-button-nut-envelope",
+      "file": "assembly/bought-button-nut-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-cover-M2x4-1",
+      "file": "assembly/bought-cover-M2x4-1.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-cover-M2x4-2",
+      "file": "assembly/bought-cover-M2x4-2.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-spreader-M2x4-1",
+      "file": "assembly/bought-spreader-M2x4-1.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-spreader-M2x4-2",
+      "file": "assembly/bought-spreader-M2x4-2.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "bought-flexible-5mm-strap-envelope",
+      "file": "assembly/bought-flexible-5mm-strap-envelope.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "nominal-hardware"
+    },
+    {
+      "name": "optical-sleeve",
+      "file": "assembly/optical-sleeve.stl",
+      "color": [
+        0.3,
+        0.32,
+        0.34
+      ],
+      "role": "optical-sleeve"
+    }
+  ],
+  "service": {
+    "units": "mm",
+    "source": [
+      0,
+      0,
+      100
+    ],
+    "frontModuleBoundsZ": [
+      101,
+      136.2
+    ],
+    "housingDiameter": 130,
+    "housingOuterRadius": 65,
+    "bodyInnerRadius": 62.4,
+    "bodyWall": 2.6,
+    "coverZ": [
+      132.8,
+      135.2
+    ],
+    "coverReliefTopZ": 136.2,
+    "coupling": {
+      "type": "bonded-clear-PMMA-tube",
+      "tubeOuterRadius": 60,
+      "tubeInnerRadius": 58,
+      "tubeFrontEndZ": 103,
+      "tubeRearEndZ": 5,
+      "tubeLength": 98,
+      "purchasedTube": "Clear PMMA tube OD120 ID116 length98; supplied by optical assembly generator",
+      "innerLocatorRadii": [
+        56,
+        57.7
+      ],
+      "outerLocatorRadii": [
+        60.3,
+        63
+      ],
+      "locatorZ": [
+        101,
+        103
+      ],
+      "radialBondGap": 0.3,
+      "axialEngagement": 2,
+      "bond": "Product-specific PMMA-compatible adhesive; adhesive not selected or tested",
+      "mechanicalRetentionTested": false,
+      "removal": "Front housing permanently bonded to clear sleeve; front service cover remains separately removable"
+    },
+    "wallSafetyAccess": {
+      "xy": [
+        0,
+        -48
+      ],
+      "trayHoleDiameter": 6.5,
+      "trayHoleZ": [
+        103,
+        105
+      ],
+      "operation": "Remove front cover and use a straight screwdriver through the rear tray to the base safety screw. Battery holder remains installed."
+    },
+    "coverFasteners": {
+      "xy": [
+        [
+          28.000000000000007,
+          48.49742261192856
+        ],
+        [
+          28.000000000000007,
+          -48.49742261192856
+        ]
+      ],
+      "type": "2 x M2x4",
+      "clearanceDiameter": 2.2,
+      "pilotDiameter": 1.6,
+      "pilotZ": [
+        129.2,
+        132.8
+      ],
+      "underHeadZ": 133.4,
+      "removal": "Remove two M2 cover screws, lift cover +Z >=3mm; four clearance pegs disengage. PMMA sleeve stays bonded to the body while the cover is removed."
+    },
+    "coverAlignment": {
+      "pegsXY": [
+        [
+          60.0,
+          0.0
+        ],
+        [
+          0.0,
+          60.0
+        ],
+        [
+          -60.0,
+          0.0
+        ],
+        [
+          0.0,
+          -60.0
+        ]
+      ],
+      "pegDiameter": 2,
+      "socketDiameter": 2.6,
+      "engagement": 2.5
+    },
+    "batteryHolder": {
+      "nominal": true,
+      "size": [
+        58,
+        48,
+        18
+      ],
+      "centre": [
+        0,
+        -16,
+        117
+      ],
+      "seatZ": 108,
+      "retention": "Bought flexible 5mm strap through two printed ears; remove strap before changing cells",
+      "measuredProductSelected": false
+    },
+    "driver": {
+      "envelope": [
+        28,
+        16,
+        8
+      ],
+      "centre": [
+        0,
+        34,
+        112
+      ],
+      "mounting": "Insulating adhesive pad; match actual driver dimensions before printing",
+      "selected": false
+    },
+    "LED": {
+      "MCPCBdiameter": 20,
+      "MCPCBz": [
+        101,
+        103
+      ],
+      "emittingPlaneZ": 100,
+      "spreaderSize": [
+        32,
+        32,
+        2
+      ],
+      "spreaderZ": [
+        103,
+        105
+      ],
+      "spreaderFasteners": [
+        [
+          -13.0,
+          -13.0
+        ],
+        [
+          13.0,
+          13.0
+        ]
+      ],
+      "attachment": "Thermally conductive electrical-insulating adhesive; centre LED using a jig before bonding. Cover does not locate the LED.",
+      "spreader": "Prepared aluminium plate with two drilled clearance holes, not a printed part",
+      "temperatureTested": false
+    },
+    "button": {
+      "axis": [
+        0,
+        1,
+        0
+      ],
+      "centre": [
+        0,
+        -60,
+        118
+      ],
+      "clearanceDiameter": 8.2,
+      "flatSeatY": -64,
+      "nominalBoughtEnvelope": true,
+      "actuatorProtrusionMM": 0.5
+    },
+    "materials": {
+      "front-body": "ivory PETG candidate",
+      "front-cover-ivory": "ivory",
+      "front-brass-rim": "brass-coloured polymer"
+    },
+    "physicalAssemblyTested": false,
+    "strengthTested": false,
+    "thermalTested": false,
+    "electronicsImplemented": false,
+    "bayonetImplemented": false,
+    "printOrientation": {
+      "front-body": "Rear side on bed; inspect bridges over strap slots and the central metal-plate opening",
+      "front-cover-ivory": "Front relief facing up; supports under the rear plate around four projecting pegs preserve the visible face",
+      "front-brass-rim": "Flat face on bed, no supports"
+    },
+    "note": "Screw service cover replaces the proposed bayonet for this prototype. Purchased envelopes need product-specific verification."
+  },
+  "status": "Prototype; physical assembly and thermal tests pending"
+}

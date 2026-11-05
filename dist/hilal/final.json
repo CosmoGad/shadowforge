@@ -1,0 +1,195 @@
+{
+  "n": 450,
+  "span": 650,
+  "cx": 0,
+  "cy": 90,
+  "S": 100,
+  "source": "1x1 mm square Lambertian emitter; midpoint samples",
+  "samples": 25,
+  "sourceOffset": [
+    0,
+    0,
+    0
+  ],
+  "files": [
+    "assembly/rear-mount.stl",
+    "assembly/optical-insert.stl",
+    "assembly/front-body.stl",
+    "assembly/front-cover-ivory.stl",
+    "assembly/front-brass-rim.stl",
+    "assembly/bought-prepared-aluminium-spreader.stl",
+    "assembly/bought-LED-MCPCB-envelope.stl",
+    "assembly/bought-3AA-holder-nominal.stl",
+    "assembly/bought-AA-cell-1.stl",
+    "assembly/bought-AA-cell-2.stl",
+    "assembly/bought-AA-cell-3.stl",
+    "assembly/bought-driver-envelope.stl",
+    "assembly/bought-driver-insulating-pad-envelope.stl",
+    "assembly/bought-radial-button-envelope.stl",
+    "assembly/bought-button-actuator-envelope.stl",
+    "assembly/bought-button-nut-envelope.stl",
+    "assembly/bought-cover-M2x4-1.stl",
+    "assembly/bought-cover-M2x4-2.stl",
+    "assembly/bought-spreader-M2x4-1.stl",
+    "assembly/bought-spreader-M2x4-2.stl",
+    "assembly/bought-flexible-5mm-strap-envelope.stl"
+  ],
+  "inputSnapshot": [
+    {
+      "file": "assembly/rear-mount.stl",
+      "sha256": "54e2125838c610837b4be76678d7860fc84f72e8529a8c9d6193b839a79d2cbf",
+      "bytes": 209084,
+      "mtime": "2026-11-05T05:34:42.988Z"
+    },
+    {
+      "file": "assembly/optical-insert.stl",
+      "sha256": "028c294269a2dd31bfae6f43fb9672e64a4cb7b00298abb69735c384ef269d73",
+      "bytes": 2746284,
+      "mtime": "2026-11-05T05:34:43.024Z"
+    },
+    {
+      "file": "assembly/front-body.stl",
+      "sha256": "ca96e3d0fdac8d760d98d9656425326855557ee31625e44ac39fd500ae5ed545",
+      "bytes": 754384,
+      "mtime": "2026-11-05T05:34:43.191Z"
+    },
+    {
+      "file": "assembly/front-cover-ivory.stl",
+      "sha256": "8cff93cfc47decd73a4748525dc60898a4f9e4b22a639d2676611185b3226b1b",
+      "bytes": 276084,
+      "mtime": "2026-11-05T05:34:43.243Z"
+    },
+    {
+      "file": "assembly/front-brass-rim.stl",
+      "sha256": "9dd7282f48ea83071381b0b4b4cdddba4cfae0d6d7e2ad50c9aee133327c360e",
+      "bytes": 51284,
+      "mtime": "2026-11-05T05:34:43.255Z"
+    },
+    {
+      "file": "assembly/bought-prepared-aluminium-spreader.stl",
+      "sha256": "88499ece15fdabd0e6edfc8888ad478b0ba2a222152ed07d2f47dd26ec78ef9a",
+      "bytes": 20284,
+      "mtime": "2026-11-05T05:34:43.278Z"
+    },
+    {
+      "file": "assembly/bought-LED-MCPCB-envelope.stl",
+      "sha256": "9cc7f36f064856a8f4d0579f20395150bb629447d1a96440b3bb475a0b8d2317",
+      "bytes": 25684,
+      "mtime": "2026-11-05T05:34:43.279Z"
+    },
+    {
+      "file": "assembly/bought-3AA-holder-nominal.stl",
+      "sha256": "81a92538f5395f7f5b279c5e2d97fb66782a42ca8ffc6ca2a0e6226531169167",
+      "bytes": 1484,
+      "mtime": "2026-11-05T05:34:43.279Z"
+    },
+    {
+      "file": "assembly/bought-AA-cell-1.stl",
+      "sha256": "c04765469bc310235e2ea6f26cd436e3dd24322653261fa7297672fc79908ccf",
+      "bytes": 12884,
+      "mtime": "2026-11-05T05:34:43.280Z"
+    },
+    {
+      "file": "assembly/bought-AA-cell-2.stl",
+      "sha256": "677e0c9ffbe26c7a7e84d3b7cd2e4e9aad4ae92060e419124ef2b3c8698a3069",
+      "bytes": 12884,
+      "mtime": "2026-11-05T05:34:43.281Z"
+    },
+    {
+      "file": "assembly/bought-AA-cell-3.stl",
+      "sha256": "7225a3c64ac413c4613433f4114e78c5930df0de5caa1928911aac5ce2d055dd",
+      "bytes": 12884,
+      "mtime": "2026-11-05T05:34:43.281Z"
+    },
+    {
+      "file": "assembly/bought-driver-envelope.stl",
+      "sha256": "12c89571aa0879ccc513d115bd1b7987d56049a8bccb3d69adf8ffa47d551f67",
+      "bytes": 684,
+      "mtime": "2026-11-05T05:34:43.282Z"
+    },
+    {
+      "file": "assembly/bought-driver-insulating-pad-envelope.stl",
+      "sha256": "497ee17cb2901b222606ba0fbf962d745ef1a44601a4ea3860b8ad9f5a1ecff5",
+      "bytes": 684,
+      "mtime": "2026-11-05T05:34:43.282Z"
+    },
+    {
+      "file": "assembly/bought-radial-button-envelope.stl",
+      "sha256": "cea28b74b0d44abd3dc3fa189c16c12807b145e769aeb22973458ec466d6a0b5",
+      "bytes": 38484,
+      "mtime": "2026-11-05T05:34:43.283Z"
+    },
+    {
+      "file": "assembly/bought-button-actuator-envelope.stl",
+      "sha256": "a8a48f14c6494f75ddb098f786a45aac1c817027158c69fd366c8535e8fb4d9d",
+      "bytes": 19284,
+      "mtime": "2026-11-05T05:34:43.284Z"
+    },
+    {
+      "file": "assembly/bought-button-nut-envelope.stl",
+      "sha256": "5e7965c10ee9c2c4771952806dcb39ae59812a21dc1249d2c8d22427f1cc35d5",
+      "bytes": 20484,
+      "mtime": "2026-11-05T05:34:43.284Z"
+    },
+    {
+      "file": "assembly/bought-cover-M2x4-1.stl",
+      "sha256": "21bd71335b9ca772f2405e5deeb07f51a1f0a5c86e30e9185bd79f6b5a6ff43f",
+      "bytes": 19284,
+      "mtime": "2026-11-05T05:34:43.285Z"
+    },
+    {
+      "file": "assembly/bought-cover-M2x4-2.stl",
+      "sha256": "b8677e7dcccc1ffcb4225e88332bcef3bbce8d90e70dedcb629f4ccb6dfbee93",
+      "bytes": 19284,
+      "mtime": "2026-11-05T05:34:43.285Z"
+    },
+    {
+      "file": "assembly/bought-spreader-M2x4-1.stl",
+      "sha256": "6b562afca09967c823daa64753b140589ec1e1fa1e601e80a5811bc93c5ba9ab",
+      "bytes": 19284,
+      "mtime": "2026-11-05T05:34:43.286Z"
+    },
+    {
+      "file": "assembly/bought-spreader-M2x4-2.stl",
+      "sha256": "ece9d73add2700c37a6343921c90dbb7bd00efa06a0b4b7319f49ff9c353d710",
+      "bytes": 19284,
+      "mtime": "2026-11-05T05:34:43.286Z"
+    },
+    {
+      "file": "assembly/bought-flexible-5mm-strap-envelope.stl",
+      "sha256": "cf43989338c7166bad2e971cf9df04d37836a918238e6135c3ac89a2a924c068",
+      "bytes": 15084,
+      "mtime": "2026-11-05T05:34:43.287Z"
+    }
+  ],
+  "inputAssembly": "assembly.json",
+  "assemblyCoordinates": true,
+  "printToAssemblyIgnored": true,
+  "refraction": {
+    "innerRadius": 58,
+    "outerRadius": 60,
+    "zMin": 5,
+    "zMax": 103,
+    "ior": 1.49,
+    "model": "Exact vector Snell intersections with finite concentric cylinders; Newton wall solve; launch-solid-angle to wall-area Jacobian; scalar unpolarized two-surface Fresnel transmission",
+    "paths": "Primary transmitted branch only; secondary Fresnel-reflected ghost paths and scattering are not included",
+    "sleeveSTLExcludedFromOpaqueBVH": true
+  },
+  "visibility": "Opaque visibility normalized by the transmitted no-opaque PMMA reference per pixel; failed no-wall branches count dark",
+  "irradiance": "Relative Lambertian direct irradiance, normalized to the same unobstructed source at100mm on-axis; includes Fresnel and geometric Jacobian",
+  "stats": {
+    "rays": 5062500,
+    "refracted": 4912469,
+    "failedSolve": 9727,
+    "failedOutsideProductDisk": 0,
+    "maxResidualMM": 1.211609870265587e-7,
+    "maxIterations": 1,
+    "minJacobian": 1,
+    "maxJacobian": 1.010086139760632,
+    "minTransmission": 0.8454076015035756,
+    "maxTransmission": 1
+  },
+  "startedAt": "2026-11-05T05:36:36.919Z",
+  "seconds": 112.104,
+  "physicalValidation": false
+}
