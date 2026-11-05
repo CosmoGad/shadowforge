@@ -1,0 +1,132 @@
+{
+  "currentOpaqueInputHashesMatch": true,
+  "cases": [
+    {
+      "stem": "final",
+      "n": 450,
+      "samples": 25,
+      "sourceOffset": [
+        0,
+        0,
+        0
+      ],
+      "iou": 0.9972637950333734,
+      "extraShadowMM2": 58.41975308641975,
+      "missingFraction": 0.0015772215996347487,
+      "lightWeightedExtra": 0.0004492837340617062,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 5062500,
+      "failedOutsideProductDisk": 0
+    },
+    {
+      "stem": "offset-x",
+      "n": 300,
+      "samples": 9,
+      "sourceOffset": [
+        0.5,
+        0,
+        0
+      ],
+      "iou": 0.9610258295799247,
+      "extraShadowMM2": 1253.4166666666665,
+      "missingFraction": 0.01479457218243498,
+      "lightWeightedExtra": 0.010273203940965925,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 810000,
+      "failedOutsideProductDisk": 0
+    },
+    {
+      "stem": "offset-x-minus",
+      "n": 300,
+      "samples": 9,
+      "sourceOffset": [
+        -0.5,
+        0,
+        0
+      ],
+      "iou": 0.961591727448989,
+      "extraShadowMM2": 1028.0833333333333,
+      "missingFraction": 0.018563889935921597,
+      "lightWeightedExtra": 0.009607353863541458,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 810000,
+      "failedOutsideProductDisk": 0
+    },
+    {
+      "stem": "offset-y",
+      "n": 300,
+      "samples": 9,
+      "sourceOffset": [
+        0,
+        0.5,
+        0
+      ],
+      "iou": 0.9755870294446515,
+      "extraShadowMM2": 563.3333333333333,
+      "missingFraction": 0.013381078024877497,
+      "lightWeightedExtra": 0.00467310753251112,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 810000,
+      "failedOutsideProductDisk": 0
+    },
+    {
+      "stem": "offset-y-minus",
+      "n": 300,
+      "samples": 9,
+      "sourceOffset": [
+        0,
+        -0.5,
+        0
+      ],
+      "iou": 0.974632967849842,
+      "extraShadowMM2": 704.1666666666665,
+      "missingFraction": 0.011590652091971354,
+      "lightWeightedExtra": 0.0036814981636001023,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 810000,
+      "failedOutsideProductDisk": 0
+    },
+    {
+      "stem": "offset-z",
+      "n": 300,
+      "samples": 9,
+      "sourceOffset": [
+        0,
+        0,
+        0.5
+      ],
+      "iou": 0.9106767741346241,
+      "extraShadowMM2": 1582.0277777777776,
+      "missingFraction": 0.06040331699962307,
+      "lightWeightedExtra": 0.011731273965955214,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 810000,
+      "failedOutsideProductDisk": 0
+    },
+    {
+      "stem": "offset-z-minus",
+      "n": 300,
+      "samples": 9,
+      "sourceOffset": [
+        0,
+        0,
+        -0.5
+      ],
+      "iou": 0.9239149689991143,
+      "extraShadowMM2": 3182.833333333333,
+      "missingFraction": 0.01705616283452695,
+      "lightWeightedExtra": 0.016743299894828503,
+      "hashesMatchCurrent": true,
+      "opaqueFiles": 21,
+      "rays": 810000,
+      "failedOutsideProductDisk": 0
+    }
+  ],
+  "physicalValidation": false
+}
