@@ -1,0 +1,18 @@
+{
+  "stlTrace": true,
+  "samples": 25,
+  "iou": 0.997534118447345,
+  "missingTargetFraction": 0.0011069011026437908,
+  "extraShadowAreaMM2": 66.76543209876543,
+  "lightWeightedExtraShadow": 0.00041957383354242287,
+  "region": "Поле 650 × 650 мм; центральный круг R80 мм исключён как зона изделия и его центральной тени.",
+  "assumptions": {
+    "emitterMM": [
+      1,
+      1
+    ],
+    "photometry": "Условный LED 1 × 1 мм, Z=100 мм; непрозрачный цоколь заканчивается на Z=96 мм. Реальный диод и его линза ещё не проверены.",
+    "ambient": "not included in visibility; display uses 0.002 relative ambient",
+    "physicalValidation": false
+  }
+}

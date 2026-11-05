@@ -1,0 +1,71 @@
+{
+  "assembly": "C:\\Users\\13dan\\Documents\\Codex\\2026-10-28\\new-chat\\outputs\\hilal-budget\\assembly.json",
+  "blender": "5.2.3 LTS",
+  "coordinates": "Source STL millimetres converted to mesh metres; unit scale 1",
+  "printed": [
+    {
+      "name": "base-with-central-mast",
+      "triangles": 8558,
+      "file": "assembly/base-with-central-mast.stl"
+    },
+    {
+      "name": "rear-snap-cover",
+      "triangles": 7114,
+      "file": "assembly/rear-snap-cover.stl"
+    },
+    {
+      "name": "crescent-bayonet-cartridge",
+      "triangles": 58548,
+      "file": "assembly/crescent-bayonet-cartridge.stl"
+    },
+    {
+      "name": "led-glare-cap",
+      "triangles": 1024,
+      "file": "assembly/led-glare-cap.stl"
+    }
+  ],
+  "shadow": {
+    "engine": "Cycles CPU, opaque STL, no acrylic",
+    "samples": 96,
+    "denoising": false,
+    "emitter": "1x1 mm rectangular Lambertian area, faces -Z",
+    "source_mm": [
+      0,
+      0,
+      100
+    ],
+    "radiant_power_W": 0.05,
+    "power_note": "Illustrative radiant power, not electrical rating or calibrated lux",
+    "color_linear_RGB": [
+      1,
+      0.78,
+      0.48
+    ],
+    "world_strength": 0,
+    "diffuse_bounces": 2,
+    "wall_reflectance_linear_RGB": [
+      0.75,
+      0.75,
+      0.75
+    ],
+    "transmission_bounces": 12,
+    "max_bounces": 12,
+    "optical_sleeve": null,
+    "wall_z_mm": 0,
+    "exposure_stops": 3,
+    "display_transform": "Standard",
+    "camera_center_mm": [
+      0,
+      90,
+      0
+    ],
+    "camera_orthoscale_mm": 650,
+    "resolution": [
+      900,
+      900
+    ],
+    "compositing": "none; no textures or reference image on wall",
+    "source_limit": "Ideal area emitter, no measured LED lens/package model"
+  },
+  "studio": "Assembly and exploded views use separate studio lights and mild world illumination; these are not optical simulation results"
+}
