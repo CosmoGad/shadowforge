@@ -1,0 +1,11 @@
+{
+  "id": "mosque",
+  "title": "Мечеть с двумя минаретами",
+  "watertight": true,
+  "components": 1,
+  "massSolidPETG": 14.204188606341551,
+  "assembledOverlapMM3": {},
+  "physicalValidation": false,
+  "exportReloadVerified": true,
+  "meshCleanupVolumeToleranceMM3": 0.01
+}

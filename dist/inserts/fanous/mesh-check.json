@@ -1,0 +1,11 @@
+{
+  "id": "fanous",
+  "title": "Фанус — фонарь Рамадана",
+  "watertight": true,
+  "components": 1,
+  "massSolidPETG": 18.3583265207993,
+  "assembledOverlapMM3": {},
+  "physicalValidation": false,
+  "exportReloadVerified": true,
+  "meshCleanupVolumeToleranceMM3": 0.01
+}

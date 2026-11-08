@@ -1,0 +1,11 @@
+{
+  "id": "crescent-star",
+  "title": "Полумесяц и звезда",
+  "watertight": true,
+  "components": 1,
+  "massSolidPETG": 14.026892227133443,
+  "assembledOverlapMM3": {},
+  "physicalValidation": false,
+  "exportReloadVerified": true,
+  "meshCleanupVolumeToleranceMM3": 0.01
+}

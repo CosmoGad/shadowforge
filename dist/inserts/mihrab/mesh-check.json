@@ -1,0 +1,11 @@
+{
+  "id": "mihrab",
+  "title": "јрка и сад",
+  "watertight": true,
+  "components": 1,
+  "massSolidPETG": 12.592948530123373,
+  "assembledOverlapMM3": {},
+  "physicalValidation": false,
+  "exportReloadVerified": true,
+  "meshCleanupVolumeToleranceMM3": 0.01
+}

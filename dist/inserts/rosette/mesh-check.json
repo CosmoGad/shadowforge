@@ -1,0 +1,11 @@
+{
+  "id": "rosette",
+  "title": "Восьмилучевая розетка",
+  "watertight": true,
+  "components": 1,
+  "massSolidPETG": 22.367330797623158,
+  "assembledOverlapMM3": {},
+  "physicalValidation": false,
+  "exportReloadVerified": true,
+  "meshCleanupVolumeToleranceMM3": 0.01
+}

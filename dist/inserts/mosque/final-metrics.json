@@ -1,0 +1,18 @@
+{
+  "stlTrace": true,
+  "samples": 25,
+  "iou": 0.8767335354447526,
+  "missingTargetFraction": 0.0011757789535567313,
+  "extraShadowAreaMM2": 3953.7654320987654,
+  "lightWeightedExtraShadow": 0.012636352910414816,
+  "region": "Поле 650 × 650 мм; центральная зона радиусом 80 мм исключена как область корпуса. Тёмные края включены в оценку.",
+  "assumptions": {
+    "emitterMM": [
+      1,
+      1
+    ],
+    "photometry": "Условный LED 1 × 1 мм с ламбертовской диаграммой; реальная диаграмма излучения не измерена.",
+    "ambient": "not included in visibility; display uses 0.002 relative ambient",
+    "physicalValidation": false
+  }
+}
