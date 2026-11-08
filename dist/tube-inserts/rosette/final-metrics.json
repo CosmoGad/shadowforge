@@ -1,0 +1,18 @@
+{
+  "stlTrace": true,
+  "samples": 25,
+  "iou": 0.9992834654217783,
+  "missingTargetFraction": 0.00013035543582167377,
+  "extraShadowAreaMM2": 56.33333333333333,
+  "lightWeightedExtraShadow": 0.0008102784071312751,
+  "region": "Поле 650 × 650 мм, кроме центральной зоны радиусом 76 мм. Тёмные края включены в оценку.",
+  "assumptions": {
+    "emitterMM": [
+      1,
+      1
+    ],
+    "photometry": "Условный LED 1 × 1 мм. Учтены преломление и потери Френеля в PMMA; вторичные отражения и рассеяние не учтены.",
+    "ambient": "not included in visibility; display uses 0.002 relative ambient",
+    "physicalValidation": false
+  }
+}

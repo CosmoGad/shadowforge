@@ -1,0 +1,18 @@
+{
+  "id": "mihrab",
+  "title": "Арка и сад",
+  "tube": true,
+  "watertight": true,
+  "components": 1,
+  "exportReloadVerified": true,
+  "massSolidPETG": 45.87379153347962,
+  "assembledOverlapMM3": {},
+  "sizeMM": [
+    108.5999984741211,
+    108.5999984741211,
+    74.1364974975586
+  ],
+  "footOD": 108.6,
+  "footID": 98,
+  "physicalValidation": false
+}
