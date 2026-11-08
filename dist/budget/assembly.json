@@ -10,28 +10,18 @@
       "name": "base-with-central-mast",
       "file": "assembly/base-with-central-mast.stl",
       "color": [
+        0.68,
         0.6,
-        0.49,
-        0.3
-      ],
-      "explode": [
-        0,
-        0,
-        0
+        0.43
       ]
     },
     {
       "name": "rear-snap-cover",
       "file": "assembly/rear-snap-cover.stl",
       "color": [
+        0.68,
         0.6,
-        0.49,
-        0.3
-      ],
-      "explode": [
-        0,
-        0,
-        -25
+        0.43
       ]
     },
     {
@@ -39,27 +29,17 @@
       "file": "assembly/crescent-bayonet-cartridge.stl",
       "color": [
         0.025,
-        0.03,
-        0.025
-      ],
-      "explode": [
-        0,
-        0,
-        65
+        0.028,
+        0.022
       ]
     },
     {
       "name": "led-glare-cap",
       "file": "assembly/led-glare-cap.stl",
       "color": [
+        0.68,
         0.6,
-        0.49,
-        0.3
-      ],
-      "explode": [
-        0,
-        0,
-        90
+        0.43
       ]
     }
   ],
@@ -94,6 +74,15 @@
     "cells": "3 AA",
     "wireChannelDiameterMM": 3,
     "holderRetention": "nominal 68x48x19.5 holder located by rails and rear cover; verify purchased dimensions"
+  },
+  "capMount": {
+    "type": "keyed sliding sleeve with split detent and axial stop",
+    "radialGapMM": 0.3,
+    "stopZ": 85,
+    "removal": "flex the split tongue outward and pull axially; do not rotate",
+    "armAngleDegrees": 200,
+    "LEDLoadBearing": false,
+    "physicalFitTested": false
   },
   "physicalValidation": false
 }
