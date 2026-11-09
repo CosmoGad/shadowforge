@@ -1,0 +1,126 @@
+{
+  "n": 450,
+  "span": 650,
+  "cx": 0,
+  "cy": 70,
+  "S": 100,
+  "source": "1.4142 mm square equivalent emitter; LED dome not modelled",
+  "emitterMM": 1.4142,
+  "samples": 25,
+  "sourceOffset": [
+    0,
+    0,
+    0
+  ],
+  "files": [
+    "assembly/base-with-central-mast.stl",
+    "assembly/rear-snap-cover.stl",
+    "assembly/crescent-bayonet-cartridge.stl",
+    "assembly/led-head-carrier.stl",
+    "assembly/led-mcpcb-20mm.stl",
+    "assembly/aluminium-spreader-32mm.stl",
+    "assembly/battery-holder-envelope.stl",
+    "assembly/driver-17mm-envelope.stl",
+    "assembly/switch-body-envelope.stl",
+    "assembly/wire-positive-optical.stl",
+    "assembly/wire-negative-optical.stl"
+  ],
+  "inputSnapshot": [
+    {
+      "file": "assembly/base-with-central-mast.stl",
+      "sha256": "94e543492b86b2b276269410dae17d36e8b5022ecbc9d8cf71ef45d912ea1c2e",
+      "bytes": 462584,
+      "mtime": "2026-11-09T11:45:22.586Z"
+    },
+    {
+      "file": "assembly/rear-snap-cover.stl",
+      "sha256": "c25bda077b4d19298d25c3b7641fa6d0f57a77912ce5d9f0e7414322bcb3a6c5",
+      "bytes": 410784,
+      "mtime": "2026-11-09T11:45:22.594Z"
+    },
+    {
+      "file": "assembly/crescent-bayonet-cartridge.stl",
+      "sha256": "5bec4cbf1641b1fc1281062f1d6558ff9652c9e5009b1ba6576ef1c5e80cebbf",
+      "bytes": 2934684,
+      "mtime": "2026-11-09T11:45:22.657Z"
+    },
+    {
+      "file": "assembly/led-head-carrier.stl",
+      "sha256": "0df2f00b4f06ce5f3ce708d3f30ac2326ef154c8a02b5ceba851a136c0c60ac8",
+      "bytes": 132284,
+      "mtime": "2026-11-09T11:45:22.691Z"
+    },
+    {
+      "file": "assembly/led-mcpcb-20mm.stl",
+      "sha256": "be28e0d73d0903505f02af6883349ee84b8166fda82a486248c717f0379a6c31",
+      "bytes": 25684,
+      "mtime": "2026-11-09T11:45:22.691Z"
+    },
+    {
+      "file": "assembly/aluminium-spreader-32mm.stl",
+      "sha256": "5d7319aa1702bed7cc6374bc7070aff8b5f2a057e5aea8e0bb95527f4551fbaa",
+      "bytes": 52284,
+      "mtime": "2026-11-09T11:45:22.691Z"
+    },
+    {
+      "file": "assembly/battery-holder-envelope.stl",
+      "sha256": "6d26eb586982ecd0d07906b4ebc6ae1c70e57dfb4d8c828b1eb2bdbef0bb0ad8",
+      "bytes": 684,
+      "mtime": "2026-11-09T11:45:22.691Z"
+    },
+    {
+      "file": "assembly/driver-17mm-envelope.stl",
+      "sha256": "e7c93a44cec13312f776855d32114de0ed32005e8b59835c001043aa4b7e37f0",
+      "bytes": 25684,
+      "mtime": "2026-11-09T11:45:22.703Z"
+    },
+    {
+      "file": "assembly/switch-body-envelope.stl",
+      "sha256": "c17024ffa15d4d99698c191770f95a76a6cec6acd2600db7519127940bcf6602",
+      "bytes": 684,
+      "mtime": "2026-11-09T11:45:22.703Z"
+    },
+    {
+      "file": "assembly/wire-positive-optical.stl",
+      "sha256": "ebdf0a05998deacb76373c17304b031fe7462ac74fa90dd3f59a34b43ab8eecb",
+      "bytes": 4084,
+      "mtime": "2026-11-09T11:45:22.705Z"
+    },
+    {
+      "file": "assembly/wire-negative-optical.stl",
+      "sha256": "24b0b9c6b09a4f52964fc02e3142986f1666957d04faef3a657ac4e13a3a02f9",
+      "bytes": 4084,
+      "mtime": "2026-11-09T11:45:22.705Z"
+    }
+  ],
+  "inputAssembly": "assembly.json",
+  "assemblyCoordinates": true,
+  "printToAssemblyIgnored": true,
+  "refraction": {
+    "innerRadius": 3,
+    "outerRadius": 5,
+    "zMin": 81.5,
+    "zMax": 101.5,
+    "ior": 1.49,
+    "model": "Exact vector Snell intersections with finite concentric cylinders; Newton wall solve; launch-solid-angle to wall-area Jacobian; scalar unpolarized two-surface Fresnel transmission",
+    "paths": "Primary transmitted branch only; secondary Fresnel-reflected ghost paths and scattering are not included",
+    "sleeveSTLExcludedFromOpaqueBVH": true
+  },
+  "visibility": "Opaque visibility normalized by the transmitted no-opaque PMMA reference per pixel; failed no-wall branches count dark",
+  "irradiance": "Relative Lambertian direct irradiance, normalized to the same unobstructed source at100mm on-axis; includes Fresnel and geometric Jacobian",
+  "stats": {
+    "rays": 5062500,
+    "refracted": 5047919,
+    "failedSolve": 4689,
+    "failedOutsideProductDisk": 0,
+    "maxResidualMM": 0.00000999992533655196,
+    "maxIterations": 5,
+    "minJacobian": 0.9453656569570302,
+    "maxJacobian": 1.140616424995872,
+    "minTransmission": 0.267983479894523,
+    "maxTransmission": 1
+  },
+  "startedAt": "2026-11-09T11:47:07.376Z",
+  "seconds": 179.094,
+  "physicalValidation": false
+}

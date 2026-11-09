@@ -1,0 +1,153 @@
+{
+  "units": "mm",
+  "source": [
+    0,
+    0,
+    100
+  ],
+  "parts": [
+    {
+      "name": "base-with-central-mast",
+      "file": "assembly/base-with-central-mast.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    },
+    {
+      "name": "rear-snap-cover",
+      "file": "assembly/rear-snap-cover.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    },
+    {
+      "name": "crescent-bayonet-cartridge",
+      "file": "assembly/crescent-bayonet-cartridge.stl",
+      "color": [
+        0.025,
+        0.028,
+        0.022
+      ]
+    },
+    {
+      "name": "led-head-carrier",
+      "file": "assembly/led-head-carrier.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    }
+  ],
+  "hardware": [
+    {
+      "name": "led-mcpcb-20mm",
+      "file": "assembly/led-mcpcb-20mm.stl",
+      "color": [
+        0.48,
+        0.24,
+        0.08
+      ]
+    },
+    {
+      "name": "aluminium-spreader-32mm",
+      "file": "assembly/aluminium-spreader-32mm.stl",
+      "color": [
+        0.65,
+        0.67,
+        0.69
+      ],
+      "metallic": 0.7
+    },
+    {
+      "name": "battery-holder-envelope",
+      "file": "assembly/battery-holder-envelope.stl",
+      "color": [
+        0.025,
+        0.025,
+        0.025
+      ]
+    },
+    {
+      "name": "driver-17mm-envelope",
+      "file": "assembly/driver-17mm-envelope.stl",
+      "color": [
+        0.025,
+        0.12,
+        0.055
+      ]
+    },
+    {
+      "name": "switch-body-envelope",
+      "file": "assembly/switch-body-envelope.stl",
+      "color": [
+        0.025,
+        0.08,
+        0.2
+      ]
+    },
+    {
+      "name": "optical-sleeve",
+      "file": "assembly/optical-sleeve.stl",
+      "role": "optical-sleeve",
+      "color": [
+        0.95,
+        0.98,
+        1
+      ]
+    },
+    {
+      "name": "wire-positive-optical",
+      "file": "assembly/wire-positive-optical.stl",
+      "color": [
+        0.48,
+        0.19,
+        0.06
+      ]
+    },
+    {
+      "name": "wire-negative-optical",
+      "file": "assembly/wire-negative-optical.stl",
+      "color": [
+        0.48,
+        0.19,
+        0.06
+      ]
+    }
+  ],
+  "status": "Optical and mechanical prototype, NOT a production release",
+  "sourceAssumptions": {
+    "emitterMM": [
+      1.4142,
+      1.4142
+    ],
+    "actualLED": "SST20 3500K CRI95 on20mm MCPCB",
+    "lens": "Actual dome not modelled; equivalent square area 2mm2, sensitivity test required"
+  },
+  "cartridge": {
+    "turnDegrees": 20,
+    "keyed": true,
+    "physicalFitTested": false
+  },
+  "electrical": {
+    "batteriesIncluded": false,
+    "cells": "3 AA alkaline or NiMH; no14500",
+    "switch": "Goobay10013 in nominal printed cradle; adhesive retention, actual actuator clearance must be checked",
+    "driver": "S031000 1x7135 350mA, 2.7-6V, modes and low-battery flashing remain",
+    "wire": "0.20mm enamel copper, model outer diameter0.24; two optical-zone runs aimed135degrees, toward crescent"
+  },
+  "headMount": {
+    "type": "short clear PMMA sleeve 10/6x20, two bonded sockets; thermal plate screwed to printed head",
+    "tubeZ": [
+      81.5,
+      101.5
+    ],
+    "thermalValidation": false,
+    "physicalFitTested": false
+  },
+  "physicalValidation": false
+}

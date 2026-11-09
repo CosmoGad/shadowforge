@@ -1,0 +1,14 @@
+[
+ {
+  "run": "Было: провода на 135°, Ø0,24",
+  "samples": 81,
+  "lightWeightedLossOnBrightWall": 0.03617,
+  "maxLossOnBrightWall": 0.795
+ },
+ {
+  "run": "Стало: пара на 165°, Ø0,17",
+  "samples": 81,
+  "lightWeightedLossOnBrightWall": 0.01411,
+  "maxLossOnBrightWall": 0.759
+ }
+]

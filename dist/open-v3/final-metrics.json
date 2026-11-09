@@ -1,0 +1,18 @@
+{
+  "stlTrace": true,
+  "samples": 81,
+  "iou": 0.9952041422629658,
+  "missingTargetFraction": 0.002297579032463941,
+  "extraShadowAreaMM2": 123.09876543209876,
+  "lightWeightedExtraShadow": 0.0008287200208659382,
+  "region": "entire 650mm square excluding fixed product disk radius80mm; no brightness cropping",
+  "assumptions": {
+    "emitterMM": [
+      1.74,
+      1.74
+    ],
+    "photometry": "Lambertian approximation; no measured LED IES",
+    "ambient": "not included in visibility; display uses 0.002 relative ambient",
+    "physicalValidation": false
+  }
+}

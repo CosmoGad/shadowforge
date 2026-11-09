@@ -1,0 +1,35 @@
+{
+ "note": "Same STL geometry, wires and PMMA refraction; only the apparent emitter changes. Apparent size = die size x1.4 dome estimate. Not a measurement.",
+ "runs": [
+  {
+   "run": "sst20",
+   "label": "Luminus SST-20 (было в V2)",
+   "emitter": "1.85 mm square apparent emitter (die size x1.4 dome estimate)",
+   "iou": 0.9888,
+   "penumbraArea10to90mm2": 62810,
+   "lightWeightedExtraShadow": 0.002788851756688927,
+   "missingTargetFraction": 0.001701910394417734,
+   "penumbraVsSST12": 1.03
+  },
+  {
+   "run": "final",
+   "label": "Luminus SST-12 (выбрано для V3)",
+   "emitter": "1.74 mm disc apparent emitter (die size x1.4 dome estimate)",
+   "iou": 0.9896,
+   "penumbraArea10to90mm2": 60984,
+   "lightWeightedExtraShadow": 0.002675055724991172,
+   "missingTargetFraction": 0.0017444581542781772,
+   "penumbraVsSST12": 1.0
+  },
+  {
+   "run": "n519a",
+   "label": "Nichia 519A (для сравнения)",
+   "emitter": "2.8 mm square apparent emitter (die size x1.4 dome estimate)",
+   "iou": 0.9808,
+   "penumbraArea10to90mm2": 75568,
+   "lightWeightedExtraShadow": 0.004598951186494079,
+   "missingTargetFraction": 0.005616304301578522,
+   "penumbraVsSST12": 1.24
+  }
+ ]
+}

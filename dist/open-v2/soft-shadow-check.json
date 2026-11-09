@@ -1,0 +1,7 @@
+{
+  "outsideTargetPlus5mm": true,
+  "meanVisibilityLossUnweighted": 0.03659635782241821,
+  "meanVisibilityLossWeighted": 0.02671388007893827,
+  "maxVisibilityLoss": 0.3997885584831238,
+  "note": "Includes wires; binary IoU does not measure this penumbra."
+}

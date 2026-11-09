@@ -1,0 +1,178 @@
+{
+  "units": "mm",
+  "source": [
+    0,
+    0,
+    100
+  ],
+  "parts": [
+    {
+      "name": "base-with-central-mast",
+      "file": "assembly/base-with-central-mast.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    },
+    {
+      "name": "rear-snap-cover",
+      "file": "assembly/rear-snap-cover.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    },
+    {
+      "name": "crescent-bayonet-cartridge",
+      "file": "assembly/crescent-bayonet-cartridge.stl",
+      "color": [
+        0.025,
+        0.028,
+        0.022
+      ]
+    },
+    {
+      "name": "led-head-carrier",
+      "file": "assembly/led-head-carrier.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    },
+    {
+      "name": "head-cover-star",
+      "file": "assembly/head-cover-star.stl",
+      "color": [
+        0.68,
+        0.6,
+        0.43
+      ]
+    }
+  ],
+  "hardware": [
+    {
+      "name": "led-mcpcb-20mm",
+      "file": "assembly/led-mcpcb-20mm.stl",
+      "color": [
+        0.48,
+        0.24,
+        0.08
+      ]
+    },
+    {
+      "name": "aluminium-spreader-45mm",
+      "file": "assembly/aluminium-spreader-45mm.stl",
+      "color": [
+        0.12,
+        0.12,
+        0.12
+      ],
+      "metallic": 0.3
+    },
+    {
+      "name": "battery-holder-envelope",
+      "file": "assembly/battery-holder-envelope.stl",
+      "color": [
+        0.025,
+        0.025,
+        0.025
+      ]
+    },
+    {
+      "name": "driver-17mm-envelope",
+      "file": "assembly/driver-17mm-envelope.stl",
+      "color": [
+        0.025,
+        0.12,
+        0.055
+      ]
+    },
+    {
+      "name": "switch-body-envelope",
+      "file": "assembly/switch-body-envelope.stl",
+      "color": [
+        0.025,
+        0.08,
+        0.2
+      ]
+    },
+    {
+      "name": "optical-sleeve",
+      "file": "assembly/optical-sleeve.stl",
+      "role": "optical-sleeve",
+      "color": [
+        0.95,
+        0.98,
+        1
+      ]
+    },
+    {
+      "name": "wire-positive-optical",
+      "file": "assembly/wire-positive-optical.stl",
+      "color": [
+        0.48,
+        0.19,
+        0.06
+      ]
+    },
+    {
+      "name": "wire-negative-optical",
+      "file": "assembly/wire-negative-optical.stl",
+      "color": [
+        0.48,
+        0.19,
+        0.06
+      ]
+    }
+  ],
+  "status": "V3 home test build, NOT a production release",
+  "sourceAssumptions": {
+    "emitterMM": [
+      1.74,
+      1.74
+    ],
+    "actualLED": "Luminus SST-12 3000K CRI95 on 20mm DTP copper MCPCB (round 1.2mm2 die)",
+    "lens": "Dome modelled only as x1.4 apparent enlargement of the die; no measured IES"
+  },
+  "cartridge": {
+    "turnDegrees": 20,
+    "keyed": true,
+    "physicalFitTested": false
+  },
+  "electrical": {
+    "batteriesIncluded": false,
+    "cells": "3 AA NiMH recommended (driver rated 3-4.5V); no 14500",
+    "switch": "Goobay10013 in nominal printed cradle; adhesive retention, actual actuator clearance must be checked",
+    "driver": "Nanjg 105C 17mm, 1 mode without MCU, 1x AMC7135 380mA, 3-4.5V; no modes, no flashing, no low-voltage cut-off",
+    "wire": "0.15mm enamel copper (model outer 0.17), two runs bonded into a flat pair standing edge-on to the LED, at 165 deg against the inner sleeve wall"
+  },
+  "cover": {
+    "part": "head-cover-star",
+    "screws": "2x M2x12 through cover, plate, MCPCB clamp",
+    "airGapMM": 6,
+    "ventilation": "8 face arches + 8 skirt arches"
+  },
+  "thermal": {
+    "plateMM": [
+      45,
+      45,
+      2
+    ],
+    "interface": "thermal paste clamped by 2x M2, no thermal adhesive",
+    "finish": "matte black heat-resistant paint on room side recommended",
+    "estimate": "hand estimate only, see README"
+  },
+  "headMount": {
+    "type": "short clear PMMA sleeve 10/6x20, two bonded sockets; 45mm aluminium plate clamps MCPCB to printed head",
+    "tubeZ": [
+      81.5,
+      101.5
+    ],
+    "thermalValidation": false,
+    "physicalFitTested": false
+  },
+  "physicalValidation": false
+}

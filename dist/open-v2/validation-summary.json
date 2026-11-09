@@ -1,0 +1,22 @@
+{
+  "status": "prototype",
+  "physicalValidation": false,
+  "nominalBinaryIoU": 0.99205745669624,
+  "offsetAndLargerSourceBinaryIoU": 0.9563691548895001,
+  "printedParts": 4,
+  "solidPETGMassGrams": 82.92498505946378,
+  "softShadow": {
+    "outsideTargetPlus5mm": true,
+    "meanVisibilityLossUnweighted": 0.03659635782241821,
+    "meanVisibilityLossWeighted": 0.02671388007893827,
+    "maxVisibilityLoss": 0.3997885584831238,
+    "note": "Includes wires; binary IoU does not measure this penumbra."
+  },
+  "limits": [
+    "Real SST20 lens not modelled",
+    "No thermal or adhesive load test",
+    "Switch cradle must be checked against actual part",
+    "Driver has multiple modes and low battery flashing",
+    "Short clear purchased sleeve is required; this is not an all-printed optical module"
+  ]
+}

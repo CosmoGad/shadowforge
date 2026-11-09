@@ -1,0 +1,434 @@
+[
+ {
+  "azimuth": 0,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 453.67207525683614,
+  "fanVs135": 0.98
+ },
+ {
+  "azimuth": 5,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 403.0016034812824,
+  "fanVs135": 0.87
+ },
+ {
+  "azimuth": 10,
+  "darkUntilR": 147.5,
+  "fanLightOnBrightWall": 365.9340963694222,
+  "fanVs135": 0.79
+ },
+ {
+  "azimuth": 15,
+  "darkUntilR": 125.5,
+  "fanLightOnBrightWall": 375.4672245353012,
+  "fanVs135": 0.81
+ },
+ {
+  "azimuth": 20,
+  "darkUntilR": 94.0,
+  "fanLightOnBrightWall": 428.5391528267316,
+  "fanVs135": 0.92
+ },
+ {
+  "azimuth": 25,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 503.6497595917473,
+  "fanVs135": 1.08
+ },
+ {
+  "azimuth": 30,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 564.8066750497474,
+  "fanVs135": 1.21
+ },
+ {
+  "azimuth": 35,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 596.1452524210556,
+  "fanVs135": 1.28
+ },
+ {
+  "azimuth": 40,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 595.3122856664858,
+  "fanVs135": 1.28
+ },
+ {
+  "azimuth": 45,
+  "darkUntilR": 82.5,
+  "fanLightOnBrightWall": 566.8965252286416,
+  "fanVs135": 1.22
+ },
+ {
+  "azimuth": 50,
+  "darkUntilR": 86.5,
+  "fanLightOnBrightWall": 520.7098329691022,
+  "fanVs135": 1.12
+ },
+ {
+  "azimuth": 55,
+  "darkUntilR": 102.5,
+  "fanLightOnBrightWall": 463.96077688139366,
+  "fanVs135": 1.0
+ },
+ {
+  "azimuth": 60,
+  "darkUntilR": 111.5,
+  "fanLightOnBrightWall": 414.15929717515917,
+  "fanVs135": 0.89
+ },
+ {
+  "azimuth": 65,
+  "darkUntilR": 116.5,
+  "fanLightOnBrightWall": 376.99112224631085,
+  "fanVs135": 0.81
+ },
+ {
+  "azimuth": 70,
+  "darkUntilR": 120.5,
+  "fanLightOnBrightWall": 360.50236987013164,
+  "fanVs135": 0.77
+ },
+ {
+  "azimuth": 75,
+  "darkUntilR": 124.5,
+  "fanLightOnBrightWall": 369.13393867677195,
+  "fanVs135": 0.79
+ },
+ {
+  "azimuth": 80,
+  "darkUntilR": 129.5,
+  "fanLightOnBrightWall": 398.46530290208665,
+  "fanVs135": 0.86
+ },
+ {
+  "azimuth": 85,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 436.17102612818803,
+  "fanVs135": 0.94
+ },
+ {
+  "azimuth": 90,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 448.4581150028322,
+  "fanVs135": 0.96
+ },
+ {
+  "azimuth": 95,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 432.6653631356078,
+  "fanVs135": 0.93
+ },
+ {
+  "azimuth": 100,
+  "darkUntilR": 129.5,
+  "fanLightOnBrightWall": 390.76133167584754,
+  "fanVs135": 0.84
+ },
+ {
+  "azimuth": 105,
+  "darkUntilR": 124.5,
+  "fanLightOnBrightWall": 356.08978326858505,
+  "fanVs135": 0.77
+ },
+ {
+  "azimuth": 110,
+  "darkUntilR": 120.5,
+  "fanLightOnBrightWall": 340.8061289812548,
+  "fanVs135": 0.73
+ },
+ {
+  "azimuth": 115,
+  "darkUntilR": 116.5,
+  "fanLightOnBrightWall": 348.71567459737486,
+  "fanVs135": 0.75
+ },
+ {
+  "azimuth": 120,
+  "darkUntilR": 111.5,
+  "fanLightOnBrightWall": 374.6156018492206,
+  "fanVs135": 0.81
+ },
+ {
+  "azimuth": 125,
+  "darkUntilR": 102.5,
+  "fanLightOnBrightWall": 409.10259576983304,
+  "fanVs135": 0.88
+ },
+ {
+  "azimuth": 130,
+  "darkUntilR": 86.5,
+  "fanLightOnBrightWall": 444.79297319781256,
+  "fanVs135": 0.96
+ },
+ {
+  "azimuth": 135,
+  "darkUntilR": 82.5,
+  "fanLightOnBrightWall": 465.27412611211986,
+  "fanVs135": 1.0
+ },
+ {
+  "azimuth": 140,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 464.9764683524613,
+  "fanVs135": 1.0
+ },
+ {
+  "azimuth": 145,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 437.46212082700674,
+  "fanVs135": 0.94
+ },
+ {
+  "azimuth": 150,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 381.6206586637611,
+  "fanVs135": 0.82
+ },
+ {
+  "azimuth": 155,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 307.52153669767233,
+  "fanVs135": 0.66
+ },
+ {
+  "azimuth": 160,
+  "darkUntilR": 94.0,
+  "fanLightOnBrightWall": 234.00005610404676,
+  "fanVs135": 0.5
+ },
+ {
+  "azimuth": 165,
+  "darkUntilR": 207.5,
+  "fanLightOnBrightWall": 197.96830516049477,
+  "fanVs135": 0.43
+ },
+ {
+  "azimuth": 170,
+  "darkUntilR": 199.0,
+  "fanLightOnBrightWall": 216.67090610205747,
+  "fanVs135": 0.47
+ },
+ {
+  "azimuth": 175,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 283.0569081042717,
+  "fanVs135": 0.61
+ },
+ {
+  "azimuth": 180,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 363.6239848223729,
+  "fanVs135": 0.78
+ },
+ {
+  "azimuth": 185,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 427.8518710963987,
+  "fanVs135": 0.92
+ },
+ {
+  "azimuth": 190,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 465.0161884128112,
+  "fanVs135": 1.0
+ },
+ {
+  "azimuth": 195,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 473.3105357754915,
+  "fanVs135": 1.02
+ },
+ {
+  "azimuth": 200,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 453.7647331024187,
+  "fanVs135": 0.98
+ },
+ {
+  "azimuth": 205,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 412.15095019142177,
+  "fanVs135": 0.89
+ },
+ {
+  "azimuth": 210,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 360.28346492409054,
+  "fanVs135": 0.77
+ },
+ {
+  "azimuth": 215,
+  "darkUntilR": 137.0,
+  "fanLightOnBrightWall": 317.51759283240585,
+  "fanVs135": 0.68
+ },
+ {
+  "azimuth": 220,
+  "darkUntilR": 132.5,
+  "fanLightOnBrightWall": 297.92145182077496,
+  "fanVs135": 0.64
+ },
+ {
+  "azimuth": 225,
+  "darkUntilR": 128.5,
+  "fanLightOnBrightWall": 296.3908247430651,
+  "fanVs135": 0.64
+ },
+ {
+  "azimuth": 230,
+  "darkUntilR": 125.0,
+  "fanLightOnBrightWall": 306.5784489569823,
+  "fanVs135": 0.66
+ },
+ {
+  "azimuth": 235,
+  "darkUntilR": 122.0,
+  "fanLightOnBrightWall": 318.03499614721255,
+  "fanVs135": 0.68
+ },
+ {
+  "azimuth": 240,
+  "darkUntilR": 119.5,
+  "fanLightOnBrightWall": 327.8476226845602,
+  "fanVs135": 0.7
+ },
+ {
+  "azimuth": 245,
+  "darkUntilR": 117.0,
+  "fanLightOnBrightWall": 336.2635560209248,
+  "fanVs135": 0.72
+ },
+ {
+  "azimuth": 250,
+  "darkUntilR": 115.5,
+  "fanLightOnBrightWall": 343.1059352071013,
+  "fanVs135": 0.74
+ },
+ {
+  "azimuth": 255,
+  "darkUntilR": 114.0,
+  "fanLightOnBrightWall": 348.3814426916312,
+  "fanVs135": 0.75
+ },
+ {
+  "azimuth": 260,
+  "darkUntilR": 113.0,
+  "fanLightOnBrightWall": 352.0473696963785,
+  "fanVs135": 0.76
+ },
+ {
+  "azimuth": 265,
+  "darkUntilR": 112.5,
+  "fanLightOnBrightWall": 354.16940979063617,
+  "fanVs135": 0.76
+ },
+ {
+  "azimuth": 270,
+  "darkUntilR": 112.0,
+  "fanLightOnBrightWall": 354.86916943340606,
+  "fanVs135": 0.76
+ },
+ {
+  "azimuth": 275,
+  "darkUntilR": 112.5,
+  "fanLightOnBrightWall": 354.16940979063617,
+  "fanVs135": 0.76
+ },
+ {
+  "azimuth": 280,
+  "darkUntilR": 113.0,
+  "fanLightOnBrightWall": 352.0473696963786,
+  "fanVs135": 0.76
+ },
+ {
+  "azimuth": 285,
+  "darkUntilR": 114.0,
+  "fanLightOnBrightWall": 348.3814426916312,
+  "fanVs135": 0.75
+ },
+ {
+  "azimuth": 290,
+  "darkUntilR": 115.5,
+  "fanLightOnBrightWall": 343.1059352071012,
+  "fanVs135": 0.74
+ },
+ {
+  "azimuth": 295,
+  "darkUntilR": 117.0,
+  "fanLightOnBrightWall": 336.2635560209248,
+  "fanVs135": 0.72
+ },
+ {
+  "azimuth": 300,
+  "darkUntilR": 119.5,
+  "fanLightOnBrightWall": 327.8476226845601,
+  "fanVs135": 0.7
+ },
+ {
+  "azimuth": 305,
+  "darkUntilR": 122.0,
+  "fanLightOnBrightWall": 318.0349961472125,
+  "fanVs135": 0.68
+ },
+ {
+  "azimuth": 310,
+  "darkUntilR": 125.0,
+  "fanLightOnBrightWall": 306.5784489569823,
+  "fanVs135": 0.66
+ },
+ {
+  "azimuth": 315,
+  "darkUntilR": 128.5,
+  "fanLightOnBrightWall": 296.3908247430651,
+  "fanVs135": 0.64
+ },
+ {
+  "azimuth": 320,
+  "darkUntilR": 132.5,
+  "fanLightOnBrightWall": 298.02473029258414,
+  "fanVs135": 0.64
+ },
+ {
+  "azimuth": 325,
+  "darkUntilR": 137.0,
+  "fanLightOnBrightWall": 317.72414977602403,
+  "fanVs135": 0.68
+ },
+ {
+  "azimuth": 330,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 360.5933003395179,
+  "fanVs135": 0.78
+ },
+ {
+  "azimuth": 335,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 413.1103463569419,
+  "fanVs135": 0.89
+ },
+ {
+  "azimuth": 340,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 459.20924543577047,
+  "fanVs135": 0.99
+ },
+ {
+  "azimuth": 345,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 490.2087319486254,
+  "fanVs135": 1.05
+ },
+ {
+  "azimuth": 350,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 501.6787903925035,
+  "fanVs135": 1.08
+ },
+ {
+  "azimuth": 355,
+  "darkUntilR": 80.0,
+  "fanLightOnBrightWall": 490.12919845650435,
+  "fanVs135": 1.05
+ }
+]

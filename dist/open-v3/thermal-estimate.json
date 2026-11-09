@@ -1,0 +1,16 @@
+{
+ "heatW": 0.74,
+ "plateRiseAboveAmbientK": {
+  "V2 32mm, only room face open, bare Al (eps .1)": 69.1,
+  "V3 45mm, room face + free rim of wall face, bare Al": 34.8,
+  "V3 45mm, same, matte black paint (eps .9)": 22.4
+ },
+ "method": "Rough steady-state plate temperature. Hand estimate, NOT a measurement.\nVertical plate in still air (lamp on a wall), laminar natural convection\nh = 1.42*(dT/L)^0.25 W/m2K, plus grey-body radiation. Heat = 70% of electrical\ninput of an SST-12 at 380 mA (Vf ~2.8 V). Conduction into PETG/PMMA ignored\n(conservative), spreading resistance inside the plate ignored (optimistic).",
+ "withStarCover": {
+  "cover, effectiveness 40%, black plate": 37.8,
+  "cover, effectiveness 60%, black plate": 30.6,
+  "cover, effectiveness 40%, bare Al": 57.6,
+  "cover, effectiveness 60%, bare Al": 47.0
+ },
+ "withStarCoverMethod": "Thermal estimate with the decorative cover: same hand model as thermal.py.\nRoom face of the plate sits behind a cover with 6 mm air gap, 8 face arches and\n8 skirt arches. Assumption (not measured): room-face convection and radiation\nwork at 40-60 % of the open plate; wall-side rim of the plate unchanged."
+}
