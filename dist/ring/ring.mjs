@@ -1,7 +1,8 @@
-import {OPENING,flowerTarget} from './flower.mjs';
-import {CONFIG as C,makeModel,rgba,stl,light,sub,norm,unit,mul,add} from './core.mjs';
+import {fadeWeight,mixIrradiance} from './transition.mjs';
+import {OPENING,flowerTarget,flowerHoles} from './flower.mjs?v=lotus2';
+import {CONFIG as C,makeModel,rgba,stl,light,sub,norm,unit,mul,add} from './core.mjs?v=lotus2';
 const pattern=document.body.dataset.pattern||'triangle',isFlower=pattern==='flower';
-const $=id=>document.getElementById(id),model=makeModel(undefined,pattern),frames=new Map(),worker=new Worker('./worker.mjs',{type:'module'});
+const $=id=>document.getElementById(id),model=makeModel(undefined,pattern),frames=new Map(),worker=new Worker('./worker.mjs?v=lotus2',{type:'module'});
 let index=0,view='wall',playing=false,lastTick=0,requestId=0,complete=false;
 let THREE,scene,camera,renderer,orbit,wallTexture,wallMesh,housing,cover,maskMeshes=[],wireMeshes=[],sourceMeshes=[],rayGroup,threePromise;
 const wallCanvas=$('wallCanvas'),ctx=wallCanvas.getContext('2d'),textureCanvas=document.createElement('canvas');
@@ -9,11 +10,13 @@ textureCanvas.width=textureCanvas.height=256;
 const texctx=textureCanvas.getContext('2d');
 const fmt=x=>Number(x).toLocaleString('ru-RU',{maximumFractionDigits:2});
 function download(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-const strips=[];
+const strips=[],blendBuffer=new Float32Array(256*256);
+let blend=0;
+const pathData=i=>[flowerTarget(i),...flowerHoles(i)].map(p=>'M'+p.map(([x,y])=>(x/1.55)+','+(-y/1.55)).join('L')+'Z').join(' ');
 for(let i=0;i<C.frames;i++){
  const button=document.createElement('button');button.type='button';button.setAttribute('aria-label','Кадр '+(i+1)+(isFlower?', раскрытие '+Math.round(OPENING[i]*100)+' процентов':', поворот '+i*10+' градусов'));
  const pts=isFlower?flowerTarget(i).map(p=>p[0]+','+(-p[1])).join(' '):'0,-48 41.57,24 -41.57,24';
- button.innerHTML='<svg viewBox="-60 -60 120 120" aria-hidden="true"><polygon points="'+pts+'" transform="rotate('+(isFlower?0:i*10)+')" fill="currentColor"/></svg><span>'+String(i+1).padStart(2,'0')+'</span>';
+ button.innerHTML='<svg viewBox="-60 -60 120 120" aria-hidden="true">'+(isFlower?'<path d="'+pathData(i)+'" fill="currentColor" fill-rule="evenodd"/>':'<polygon points="'+pts+'" transform="rotate('+i*10+')" fill="currentColor"/>')+'</svg><span>'+String(i+1).padStart(2,'0')+'</span>';
  button.addEventListener('click',()=>{pause();selectFrame(i);});$('frameStrip').append(button);strips.push(button);
 }
 function setStatus(message){$('calcStatus').textContent=message;}
@@ -23,7 +26,7 @@ function recalculate(){
  worker.postMessage({id:requestId,pattern,selected:index,diameter:Number($('emitter').value),mounts:$('mounts').checked});
  const d=Number($('emitter').value);
  $('observation').textContent=d===0?'Идеальный точечный источник проверяет геометрию. Такой вариант не показывает физическую полутень.':d>=.3?'Сравните края силуэта: близость фигур к источнику и косой свет увеличивают полутень. Яркость апертуры требует отдельного опыта.':'Малая апертура сохраняет читаемый контур. Проверяем, хватит ли её светового потока для реальной стены.';
- $('supportNote').textContent=$('mounts').checked?'Две проволоки Ø 0,15 мм держат каждую фигуру. Их дополнительные тени входят в расчёт. Прочность крепления не проверена.':'Крепление исключено из расчёта для сравнения. Свободно висящая в воздухе фигура физически невозможна: для сборки нужно вернуть крепёж.';
+ $('supportNote').textContent=$('mounts').checked?'Две проволоки Ø 0,15 мм держат каждую фигуру. Их дополнительные тени входят в расчёт. Прочность крепления не проверена.':'Художественный просмотр без теней крепления. Конструкцию держателей ещё нужно разработать; включите опцию для проверки прежнего проволочного варианта.';
 }
 worker.onmessage=({data})=>{
  if(data.id!==requestId)return;
@@ -36,37 +39,42 @@ worker.onmessage=({data})=>{
 };
 worker.onerror=()=>{setStatus('Ошибка запуска вычислений. Перезагрузите страницу.');$('loadStatus').textContent='Не удалось запустить расчёт лучей.';};
 function selectFrame(i){
+ blend=0;
  index=(i+C.frames)%C.frames;$('frame').value=String(index);$('frameLabel').textContent='КАДР '+String(index+1).padStart(2,'0')+' / 12';$('angle').textContent=isFlower?Math.round(OPENING[index]*100)+'%':index*10+'°';
  $('downloadFrame').firstChild.textContent='Скачать фигуру кадра '+String(index+1).padStart(2,'0')+' ';
+ if($('downloadFlat'))$('downloadFlat').href='flower/cut/frame-'+String(index+1).padStart(2,'0')+'.svg';
  strips.forEach((b,j)=>b.setAttribute('aria-pressed',String(j===index)));
  if(frames.has(index)){$('loadStatus').hidden=true;paint();}else{$('loadStatus').hidden=false;$('loadStatus').textContent='Считаем кадр '+(index+1)+'…';}
  if(renderer)refresh3D();
 }
 function paint(){
  const field=frames.get(index);if(!field)return;
- const image=new ImageData(rgba(field),field.size,field.size);texctx.putImageData(image,0,0);
+ const next=frames.get((index+1)%C.frames),shown=blend>0&&next?{...field,irradiance:mixIrradiance(field.irradiance,next.irradiance,blend,blendBuffer)}:field;
+ const image=new ImageData(rgba(shown),field.size,field.size);texctx.putImageData(image,0,0);
  const w=wallCanvas.width,h=wallCanvas.height,scale=w/field.span;ctx.clearRect(0,0,w,h);ctx.imageSmoothingEnabled=true;ctx.drawImage(textureCanvas,0,0,w,h);
  ctx.save();ctx.translate(w/2,h/2);
  // The ring is a diagram of the front bezel; channel markers are annotations.
  const gradient=ctx.createLinearGradient(-200*scale,-200*scale,200*scale,200*scale);gradient.addColorStop(0,isFlower?'#f1e9d5':'#4c5146');gradient.addColorStop(.3,isFlower?'#d7c9ac':'#77796a');gradient.addColorStop(.55,isFlower?'#e7dcc4':'#40473c');gradient.addColorStop(1,isFlower?'#b6a688':'#282f27');
- ctx.beginPath();ctx.arc(0,0,C.outerRadius*scale,0,Math.PI*2);ctx.arc(0,0,C.innerRadius*scale,0,Math.PI*2,true);ctx.fillStyle=gradient;ctx.fill();
- ctx.strokeStyle='#b4a374';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(0,0,(C.outerRadius-1.5)*scale,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='#20271f';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,C.innerRadius*scale,0,Math.PI*2);ctx.stroke();
+ ctx.beginPath();ctx.arc(0,0,C.outerRadius*scale,0,Math.PI*2);ctx.arc(0,0,C.innerRadius*scale,0,Math.PI*2,true);ctx.fillStyle=isFlower?'#e3ddcf':gradient;ctx.fill();
+ if(!isFlower){ctx.strokeStyle='#b4a374';ctx.lineWidth=1.2;ctx.beginPath();ctx.arc(0,0,(C.outerRadius-1.5)*scale,0,Math.PI*2);ctx.stroke();ctx.strokeStyle='#20271f';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,C.innerRadius*scale,0,Math.PI*2);ctx.stroke();
  for(let j=0;j<C.frames;j++){const s=light(j),x=s[0]*scale,y=-s[1]*scale;ctx.beginPath();ctx.arc(x,y,12,0,Math.PI*2);ctx.fillStyle=j===index?'#b59b60':isFlower?'#e2d7bd':'#323b30';ctx.fill();ctx.fillStyle=j===index?'#30392e':isFlower?'#756b54':'#b1b39d';ctx.font='12px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(j+1).padStart(2,'0'),x,y);}
+ }
  ctx.restore();
  if(wallTexture)wallTexture.needsUpdate=true;
 }
-function pause(){playing=false;$('play').textContent='▶ Смотреть движение';$('play').setAttribute('aria-label','Запустить анимацию');}
+function pause(){playing=false;blend=0;paint();$('play').textContent='▶ Смотреть движение';$('play').setAttribute('aria-label','Запустить анимацию');}
 $('play').addEventListener('click',()=>{if(playing){pause();return;}if(!complete)return;playing=true;lastTick=performance.now();$('play').textContent='Ⅱ Остановить';$('play').setAttribute('aria-label','Остановить анимацию');});
 $('previous').addEventListener('click',()=>{pause();selectFrame(index-1);});
 $('next').addEventListener('click',()=>{pause();selectFrame(index+1);});
 $('frame').addEventListener('input',()=>{pause();selectFrame(Number($('frame').value));});
-$('fps').addEventListener('input',()=>{$('fpsLabel').textContent=$('fps').value+' кадра/с';lastTick=performance.now();});
+$('fps').addEventListener('input',()=>{$('fpsLabel').textContent=$('fps').value+' кадров/с · '+fmt(12/Number($('fps').value))+' с / цикл';lastTick=performance.now();});
+if($('fade'))$('fade').addEventListener('input',()=>{$('fadeLabel').textContent=$('fade').value+'%';if(!playing)paint();});
 for(const id of['emitter','mounts'])$(id).addEventListener('change',()=>{recalculate();if(renderer)refresh3D();});
 $('downloadFrame').addEventListener('click',()=>download((isFlower?'flower-frame-':'ring-frame-')+String(index+1).padStart(2,'0')+'.stl',stl(model.masks[index]),'model/stl'));
 $('cover').addEventListener('change',refresh3D);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 function tick(now){
- if(playing&&!document.hidden){const dt=1000/Number($('fps').value);if(now-lastTick>=dt){const steps=Math.floor((now-lastTick)/dt);lastTick+=steps*dt;selectFrame(index+steps);}}
+ if(playing&&!document.hidden){const dt=1000/Number($('fps').value);if(now-lastTick>=dt){const steps=Math.floor((now-lastTick)/dt);lastTick+=steps*dt;selectFrame(index+steps);}blend=fadeWeight((now-lastTick)/dt,Number($('fade')?.value||0)/100);paint();if(renderer){sourceMeshes.forEach((m,i)=>{const power=i===index?1-blend:i===(index+1)%12?blend:0;m.material.color.setRGB(.3+.7*power,.32+.5*power,.25+.2*power);});}}
  if(renderer&&view!=='wall'){orbit.update();renderer.render(scene,camera);}requestAnimationFrame(tick);
 }
 function geometry(triangles){const vertices=new Float32Array(triangles.flat(2)),g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(vertices,3));g.computeVertexNormals();return g;}
@@ -102,13 +110,13 @@ function refresh3D(){
  wireMeshes.forEach(m=>m.visible=$('mounts').checked&&(!detail||m.userData.index===index));
  while(rayGroup.children.length){const child=rayGroup.children[0];rayGroup.remove(child);child.geometry.dispose();child.material.dispose();}
  const selected=model.masks[index],s=selected.source,outline=detail?selected.vertices.slice(0,selected.target.length):selected.target,rayEnds=isFlower?outline.filter((_,i)=>i%8===0):outline;
- for(const p of rayEnds){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...s),new THREE.Vector3(...p)]),line=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xd1b570,transparent:true,opacity:.65}));rayGroup.add(line);}
+ for(const p of (isFlower?[]:rayEnds)){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...s),new THREE.Vector3(...p)]),line=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xd1b570,transparent:true,opacity:.65}));rayGroup.add(line);}
  if(detail){const center=mul(selected.vertices.reduce(add,[0,0,0]),1/selected.vertices.length);orbit.target.set(...center);camera.position.set(center[0]+22,center[1]+24,center[2]+48);orbit.update();}
 }
 async function setView(name){
  view=name;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));
  $('wallCanvas').hidden=name!=='wall';$('modelView').hidden=name==='wall';$('coverControl').hidden=name!=='model';
- $('viewCaption').textContent=name==='wall'?'Тень — расчёт · номера каналов — схема':name==='model'?'Вращайте мышью · крышка снята для осмотра':'Реальный объём клина · золотой контур — лучи от источника';
+ $('viewCaption').textContent=name==='wall'?(isFlower?'Лучевая проекция · без технических линий':'Тень — расчёт · номера каналов — схема'):name==='model'?'Вращайте мышью · крышка снята для осмотра':(isFlower?'Тонкая маска 0,2 мм · прорези пропускают свет':'Реальный объём клина · золотой контур — лучи от источника');
  if(name==='wall')return;
  try{threePromise??=init3D();await threePromise;refresh3D();if(name==='model'){orbit.target.set(0,0,15);camera.position.set(330,180,650);orbit.update();}resize3D();}
  catch(error){$('loadStatus').hidden=false;$('loadStatus').textContent='3D недоступен: '+error.message+'. Расчёт тени доступен в первом виде.';}

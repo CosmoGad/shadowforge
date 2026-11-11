@@ -9,14 +9,14 @@
       "opening": 0,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.8828571428571429,
-      "partialPixels": 214,
-      "volumeMm3": 77.74245659722295,
-      "triangles": 248,
+      "finiteSourceIou": 0.9978802331743508,
+      "partialPixels": 609,
+      "volumeMm3": 13.763925248981643,
+      "triangles": 596,
       "dimensionsMm": [
-        4.2518518518518515,
-        27.275000000000006,
-        3
+        11.888500000000008,
+        21.896500000000003,
+        0.20000000000000284
       ]
     },
     {
@@ -24,14 +24,14 @@
       "opening": 0.08,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.912987012987013,
-      "partialPixels": 323,
-      "volumeMm3": 91.6595544028139,
-      "triangles": 248,
+      "finiteSourceIou": 0.9940202391904324,
+      "partialPixels": 814,
+      "volumeMm3": 15.674330847341352,
+      "triangles": 596,
       "dimensionsMm": [
-        10.918685185185183,
-        25.4161024775091,
-        3
+        12.110750000000024,
+        21.744400698500584,
+        0.20000000000000284
       ]
     },
     {
@@ -39,14 +39,14 @@
       "opening": 0.28,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9369708372530574,
-      "partialPixels": 432,
-      "volumeMm3": 127.22454013199463,
-      "triangles": 248,
+      "finiteSourceIou": 0.994793474488025,
+      "partialPixels": 954,
+      "volumeMm3": 20.915403624102453,
+      "triangles": 596,
       "dimensionsMm": [
-        17.820639514546116,
-        20.337500000000006,
-        3
+        12.653166279267651,
+        21.137491199999985,
+        0.20000000000000284
       ]
     },
     {
@@ -54,14 +54,14 @@
       "opening": 0.6,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9261400128452152,
-      "partialPixels": 504,
-      "volumeMm3": 186.42317690971691,
-      "triangles": 248,
+      "finiteSourceIou": 0.9976531942633637,
+      "partialPixels": 975,
+      "volumeMm3": 27.989004711400877,
+      "triangles": 596,
       "dimensionsMm": [
-        22.784999999999997,
-        17.15,
-        3
+        19.511156450254845,
+        20.31442400000001,
+        0.20000000000000284
       ]
     },
     {
@@ -69,14 +69,14 @@
       "opening": 0.86,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9675704412546517,
-      "partialPixels": 478,
-      "volumeMm3": 236.60160456427886,
-      "triangles": 248,
+      "finiteSourceIou": 0.9976286459568413,
+      "partialPixels": 964,
+      "volumeMm3": 30.78408621858842,
+      "triangles": 596,
       "dimensionsMm": [
-        23.71460247750909,
-        20.48750000000001,
-        3
+        22.487685205846248,
+        19.861438944,
+        0.20000000000000284
       ]
     },
     {
@@ -84,14 +84,14 @@
       "opening": 1,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9709385421629347,
-      "partialPixels": 476,
-      "volumeMm3": 264.3929991319599,
-      "triangles": 248,
+      "finiteSourceIou": 0.998589562764457,
+      "partialPixels": 983,
+      "volumeMm3": 31.157664982308994,
+      "triangles": 596,
       "dimensionsMm": [
-        20.13749999999999,
-        25.566102477509077,
-        3
+        22.596500000000034,
+        20.114073498500602,
+        0.20000000000000284
       ]
     },
     {
@@ -99,14 +99,14 @@
       "opening": 1,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9595103578154426,
-      "partialPixels": 464,
-      "volumeMm3": 264.3929991319388,
-      "triangles": 248,
+      "finiteSourceIou": 0.9981189748412885,
+      "partialPixels": 976,
+      "volumeMm3": 31.157664981995325,
+      "triangles": 596,
       "dimensionsMm": [
-        16.800000000000004,
-        27.42500000000001,
-        3
+        22.568000000000012,
+        20.238000000000028,
+        0.20000000000000284
       ]
     },
     {
@@ -114,14 +114,14 @@
       "opening": 0.86,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9650053022269353,
-      "partialPixels": 446,
-      "volumeMm3": 236.60160456417844,
-      "triangles": 248,
+      "finiteSourceIou": 0.9978657813611572,
+      "partialPixels": 967,
+      "volumeMm3": 30.784086218244468,
+      "triangles": 596,
       "dimensionsMm": [
-        18.635999999999996,
-        25.566102477509077,
-        3
+        22.149111707345625,
+        20.200012442500622,
+        0.20000000000000284
       ]
     },
     {
@@ -129,14 +129,14 @@
       "opening": 0.6,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9574750830564784,
-      "partialPixels": 455,
-      "volumeMm3": 186.423176909934,
-      "triangles": 248,
+      "finiteSourceIou": 0.9981751824817519,
+      "partialPixels": 904,
+      "volumeMm3": 27.989004711621256,
+      "triangles": 596,
       "dimensionsMm": [
-        20.926102477509062,
-        20.48750000000001,
-        3
+        19.38722994875542,
+        20.342923999999996,
+        0.20000000000000284
       ]
     },
     {
@@ -144,14 +144,14 @@
       "opening": 0.28,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.8821966341895483,
-      "partialPixels": 485,
-      "volumeMm3": 127.22454013194483,
-      "triangles": 248,
+      "finiteSourceIou": 0.9940951719346995,
+      "partialPixels": 961,
+      "volumeMm3": 20.915403623969283,
+      "triangles": 596,
       "dimensionsMm": [
-        19.679537037037022,
-        17.150000000000006,
-        3
+        12.792502673814454,
+        21.050630848000026,
+        0.20000000000000284
       ]
     },
     {
@@ -159,14 +159,14 @@
       "opening": 0.08,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9025641025641026,
-      "partialPixels": 430,
-      "volumeMm3": 91.6595544028355,
-      "triangles": 248,
+      "finiteSourceIou": 0.989010989010989,
+      "partialPixels": 948,
+      "volumeMm3": 15.674330847515154,
+      "triangles": 596,
       "dimensionsMm": [
-        15.997287662694276,
-        20.33750000000002,
-        3
+        12.472573498500651,
+        21.40582719999999,
+        0.20000000000000284
       ]
     },
     {
@@ -174,19 +174,19 @@
       "opening": 0,
       "idealWrongPixels": 0,
       "foreignShadowPixels": 0,
-      "finiteSourceAndMountIou": 0.9046920821114369,
-      "partialPixels": 351,
-      "volumeMm3": 77.74245659722101,
-      "triangles": 248,
+      "finiteSourceIou": 0.9905113336847654,
+      "partialPixels": 802,
+      "volumeMm3": 13.76392524900631,
+      "triangles": 596,
       "dimensionsMm": [
-        10.278240740740756,
-        25.4161024775091,
-        3
+        12.133999999999986,
+        21.772573498500577,
+        0.20000000000000284
       ]
     }
   ],
   "checks": [
-    "12 simple connected polygon silhouettes",
+    "12 simple outer contours with two light apertures",
     "12 closed consistently oriented positive-volume solids",
     "All optical solids fit beneath ring annulus",
     "All ideal ray silhouettes match independent polygon fill",
@@ -200,7 +200,9 @@
     "radiusMm": 110
   },
   "finiteIouRange": [
-    0.8821966341895483,
-    0.9709385421629347
-  ]
+    0.989010989010989,
+    0.998589562764457
+  ],
+  "mountsIncluded": false,
+  "artisticDepthValidated": false
 }

@@ -1,0 +1,182 @@
+[
+  {
+    "frame": 1,
+    "file": "frame-01.svg",
+    "widthMm": 11.659875000000007,
+    "heightMm": 20.948249999999973,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -5.533499999999989,
+      "offsetY": 171.29375
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 2,
+    "file": "frame-02.svg",
+    "widthMm": 11.659875,
+    "heightMm": 20.91951374399997,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": 75.17274999999998,
+      "offsetY": 149.6398392323557
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 3,
+    "file": "frame-03.svg",
+    "widthMm": 11.859797727290754,
+    "heightMm": 20.64581102400001,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": 134.05390276106493,
+      "offsetY": 90.285061024
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 4,
+    "file": "frame-04.svg",
+    "widthMm": 18.586156450254805,
+    "heightMm": 19.92376200000001,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": 152.1194217748726,
+      "offsetY": 8.856762000000003
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 5,
+    "file": "frame-05.svg",
+    "widthMm": 21.686611707345662,
+    "heightMm": 19.451536271999984,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": 128.9440196346829,
+      "offsetY": -72.32171372799999
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 6,
+    "file": "frame-06.svg",
+    "widthMm": 22.13400000000003,
+    "heightMm": 19.367249999999956,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": 69.63924999999996,
+      "offsetY": -131.48707548835574
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 7,
+    "file": "frame-07.svg",
+    "widthMm": 22.134000000000015,
+    "heightMm": 19.367250000000013,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -11.066999999999993,
+      "offsetY": -153.11224999999996
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 8,
+    "file": "frame-08.svg",
+    "widthMm": 21.686611707345634,
+    "heightMm": 19.45153627199997,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -91.54955585367277,
+      "offsetY": -131.40278921635573
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 9,
+    "file": "frame-09.svg",
+    "widthMm": 18.586156450254805,
+    "heightMm": 19.923761999999996,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -149.08040371348307,
+      "offsetY": -71.84948800000005
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 10,
+    "file": "frame-10.svg",
+    "widthMm": 11.859797727290754,
+    "heightMm": 20.645811023999997,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -167.14592272729072,
+      "offsetY": 9.578811023999975
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 11,
+    "file": "frame-11.svg",
+    "widthMm": 11.659875,
+    "heightMm": 20.919513744000028,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -145.3208254883557,
+      "offsetY": 90.55876374400002
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  },
+  {
+    "frame": 12,
+    "file": "frame-12.svg",
+    "widthMm": 11.659875,
+    "heightMm": 20.948249999999973,
+    "svgToAssembly": {
+      "x": "svgX + offsetX",
+      "y": "offsetY - svgY",
+      "z": 34.9,
+      "offsetX": -86.23975000000007,
+      "offsetY": 149.66857548835566
+    },
+    "thicknessMm": 0.2,
+    "kerfCompensated": false
+  }
+]

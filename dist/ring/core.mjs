@@ -1,5 +1,5 @@
 import earcut from "../vendor/earcut.mjs";
-import {flowerTarget,makeBVH,OPENING} from "./flower.mjs";
+import {flowerTarget,flowerHoles,makeBVH,OPENING} from "./flower.mjs?v=lotus2";
 // Coordinates: millimetres; wall z=0, observer in +z. No artwork overlay.
 export const CONFIG = Object.freeze({outerRadius:200,innerRadius:140,sourceRadius:185,sourceZ:40,frontZ:45,maskBack:33,maskFront:36,frames:12,targetRadius:50,wireDiameter:.15,beamHalfAngle:90});
 export const add=(a,b)=>a.map((x,i)=>x+b[i]);
@@ -17,17 +17,18 @@ export function lift(p,s,z){return [p[0]+(s[0]-p[0])*z/s[2],p[1]+(s[1]-p[1])*z/s
 export function project(p,s){const t=s[2]/(s[2]-p[2]);return [s[0]+t*(p[0]-s[0]),s[1]+t*(p[1]-s[1]),0];}
 export function bounds(vertices){return {min:[0,1,2].map(k=>Math.min(...vertices.map(v=>v[k]))),max:[0,1,2].map(k=>Math.max(...vertices.map(v=>v[k])))};}
 export function makeModel(c=CONFIG,pattern='triangle'){
+ if(pattern==='flower')c={...c,maskBack:34.8,maskFront:35};
  const masks=[],wires=[];
  for(let i=0;i<c.frames;i++){
-  const s=light(i,c),goal=pattern==='flower'?flowerTarget(i):target(i,c),n=goal.length;
+  const s=light(i,c),outer=pattern==='flower'?flowerTarget(i):target(i,c),holes=pattern==='flower'?flowerHoles(i):[],contours=[outer,...holes],goal=contours.flat(),n=goal.length;
   const vertices=[...goal.map(p=>lift(p,s,c.maskBack)),...goal.map(p=>lift(p,s,c.maskFront))],ids=[];
-  const caps=earcut(goal.flatMap(p=>p.slice(0,2)));
+  const caps=earcut(goal.flatMap(p=>p.slice(0,2)),holes.map((_,j)=>contours.slice(0,j+1).reduce((a,p)=>a+p.length,0)));
   for(let j=0;j<caps.length;j+=3){let [a,b,d]=caps.slice(j,j+3);if(cross(sub(goal[b],goal[a]),sub(goal[d],goal[a]))[2]<0)[b,d]=[d,b];ids.push([a,d,b],[a+n,b+n,d+n]);}
-  for(let a=0;a<n;a++){const b=(a+1)%n;ids.push([a,b,b+n],[a,b+n,a+n]);}
+  let offset=0;for(const contour of contours){for(let j=0;j<contour.length;j++){const a=offset+j,b=offset+(j+1)%contour.length;ids.push([a,b,b+n],[a,b+n,a+n]);}offset+=contour.length;}
   const triangles=ids.map(t=>t.map(k=>vertices[k]));
-  masks.push({index:i,vertices,triangles,bounds:bounds(vertices),target:goal,source:s,...(n>3?{bvh:makeBVH(triangles)}:{})});
+  masks.push({index:i,vertices,triangles,bounds:bounds(vertices),target:goal,outer,holes,source:s,...(n>3?{bvh:makeBVH(triangles)}:{})});
   const e=[s[0]/c.sourceRadius,s[1]/c.sourceRadius,0];let r=-Infinity;
-  for(let j=0;j<n;j++){const a=goal[j],edge=sub(goal[(j+1)%n],a),den=cross2(e,edge);if(Math.abs(den)<1e-8)continue;const t=cross2(a,edge)/den,u=cross2(a,e)/den;if(t>0&&u>=-1e-8&&u<=1+1e-8)r=Math.max(r,t);}
+  for(let j=0;j<outer.length;j++){const a=outer[j],edge=sub(outer[(j+1)%outer.length],a),den=cross2(e,edge);if(Math.abs(den)<1e-8)continue;const t=cross2(a,edge)/den,u=cross2(a,e)/den;if(t>0&&u>=-1e-8&&u<=1+1e-8)r=Math.max(r,t);}
   if(!Number.isFinite(r))throw Error('Mount intersection failed');
   for(const z of[c.maskBack,c.maskFront]){
    const a=lift(mul(e,r),s,z),b=[e[0]*(c.outerRadius-1),e[1]*(c.outerRadius-1),z],rad=c.wireDiameter/2,bb=bounds([a,b]);
@@ -105,5 +106,5 @@ export function stl(mask){
 }
 export function assembly(model){
  const c=model.config;
- return {name:model.pattern==='flower'?'ShadowForge Ring / opening flower':'ShadowForge Ring / optical prototype 01',units:'mm',wall:'z=0; +z toward viewer',config:c,sequence:{frames:c.frames,fps:model.pattern==='flower'?6:24,oneChannelAtATime:true,rotationPerLoopDegrees:model.pattern==='flower'?0:120,...(model.pattern==='flower'?{openingSequence:OPENING,cycleSeconds:2}: {}),physicalValidation:false},source:{type:'effective emitting disk perpendicular to aim',diameterMm:.15,samples:7,photometry:'relative Lambertian cosine intensity over forward hemisphere; real LED distribution unverified; no lumen/lux claim'},housing:{frontAnnulus:[140,200,42,45],rearAnnulus:[180,200,0,3],outerWall:[198,200,0,45],status:'envelope; full housing and electronics mounts not production-designed'},masks:model.masks.map(m=>({frame:m.index+1,source:m.source,aim:[0,0,0],target:m.target,assemblyVertices:m.vertices,printToAssemblyTranslation:m.bounds.min,printFile:(model.pattern==='flower'?'flower/print/frame-':'print/frame-')+String(m.index+1).padStart(2,'0')+'.stl'})),mounts:model.wires.map(w=>({frame:w.index+1,from:w.a,to:w.b,diameter:2*w.radius,material:'opaque wire; purchased, not printable; no mechanical qualification'})),limitations:['No physical prototype tested.','Absolute light output, heating, wiring, source package, connectors and tolerances not validated.','Source disk quadrature uses seven samples; preview is not a photometric measurement.','Opaque wire supports and all masks/housing are included in ray tests.','Thin optical parts may require slicer supports; inspect before printing.']};
+ return {name:model.pattern==='flower'?'ShadowForge Ring / opening flower':'ShadowForge Ring / optical prototype 01',units:'mm',wall:'z=0; +z toward viewer',config:c,sequence:{frames:c.frames,fps:model.pattern==='flower'?12:24,oneChannelAtATime:model.pattern!=='flower',rotationPerLoopDegrees:model.pattern==='flower'?0:120,...(model.pattern==='flower'?{openingSequence:OPENING,cycleSeconds:1,crossfadeFraction:.8}: {}),physicalValidation:false},source:{type:'effective emitting disk perpendicular to aim',diameterMm:.15,samples:7,photometry:'relative Lambertian cosine intensity over forward hemisphere; real LED distribution unverified; no lumen/lux claim'},housing:{frontAnnulus:[140,200,42,45],rearAnnulus:[180,200,0,3],outerWall:[198,200,0,45],status:'envelope; full housing and electronics mounts not production-designed'},masks:model.masks.map(m=>({frame:m.index+1,source:m.source,aim:[0,0,0],target:m.target,outer:m.outer,holes:m.holes,assemblyVertices:m.vertices,printToAssemblyTranslation:m.bounds.min,printFile:(model.pattern==='flower'?'flower/print/frame-':'print/frame-')+String(m.index+1).padStart(2,'0')+'.stl'})),mounts:model.wires.map(w=>({frame:w.index+1,from:w.a,to:w.b,diameter:2*w.radius,material:'opaque wire; purchased, not printable; no mechanical qualification'})),limitations:['No physical prototype tested.','Absolute light output, heating, wiring, source package, connectors and tolerances not validated.','Source disk quadrature uses seven samples; preview is not a photometric measurement.','Opaque wire supports and all masks/housing are included in ray tests.','Thin optical parts may require slicer supports; inspect before printing.']};
 }
