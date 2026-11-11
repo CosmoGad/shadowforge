@@ -2,3 +2,7 @@ test-output/
 __pycache__/
 *.zip
 *.tar.gz
+
+# Downloadable project bundles
+!dist/**/*.zip
+!dist/*.zip
