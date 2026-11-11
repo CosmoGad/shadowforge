@@ -1,0 +1,194 @@
+{
+  "kind": "independent geometric and ray-intersection verification",
+  "physicalValidation": false,
+  "frames": [
+    {
+      "frame": 1,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1168,
+      "volumeMm3": 188.7664747311423,
+      "dimensionsMm": [
+        15.155444566227679,
+        23.25,
+        3
+      ]
+    },
+    {
+      "frame": 2,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.76647473115264,
+      "dimensionsMm": [
+        18.990032647471594,
+        22.564532827327355,
+        3
+      ]
+    },
+    {
+      "frame": 3,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.76647473111882,
+      "dimensionsMm": [
+        23.84710836479863,
+        18.3388519812206,
+        3
+      ]
+    },
+    {
+      "frame": 4,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1168,
+      "volumeMm3": 188.76647473114303,
+      "dimensionsMm": [
+        25.125,
+        15.155444566227686,
+        3
+      ]
+    },
+    {
+      "frame": 5,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.7664747311277,
+      "dimensionsMm": [
+        23.847108364798615,
+        18.338851981220614,
+        3
+      ]
+    },
+    {
+      "frame": 6,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.7664747311486,
+      "dimensionsMm": [
+        18.990032647471594,
+        22.56453282732734,
+        3
+      ]
+    },
+    {
+      "frame": 7,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1168,
+      "volumeMm3": 188.76647473113806,
+      "dimensionsMm": [
+        15.155444566227679,
+        23.25,
+        3
+      ]
+    },
+    {
+      "frame": 8,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.76647473115185,
+      "dimensionsMm": [
+        18.990032647471594,
+        22.564532827327355,
+        3
+      ]
+    },
+    {
+      "frame": 9,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.76647473113445,
+      "dimensionsMm": [
+        23.847108364798615,
+        18.33885198122063,
+        3
+      ]
+    },
+    {
+      "frame": 10,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1168,
+      "volumeMm3": 188.76647473114295,
+      "dimensionsMm": [
+        25.125,
+        15.155444566227679,
+        3
+      ]
+    },
+    {
+      "frame": 11,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.76647473116245,
+      "dimensionsMm": [
+        23.847108364798586,
+        18.3388519812206,
+        3
+      ]
+    },
+    {
+      "frame": 12,
+      "idealIou": 1,
+      "wrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "targetPixels": 1171,
+      "volumeMm3": 188.76647473115003,
+      "dimensionsMm": [
+        18.990032647471608,
+        22.564532827327312,
+        3
+      ]
+    }
+  ],
+  "checks": [
+    "12 closed, oriented positive-volume meshes; all fit under annulus",
+    "Exact projected vertices and independently rasterized triangle silhouettes",
+    "Remove each active figure: no shadow from the other 11 figures or housing within radius 110 mm",
+    "Finite tilted emitter disk produces more partial shadow pixels as diameter increases",
+    "Opaque wire supports produce additional obstruction; excluded only by explicit comparison control",
+    "120 degree triangle symmetry gives continuous pose sequence at wrap"
+  ],
+  "resolution": {
+    "size": 144,
+    "spanMm": 240
+  },
+  "finiteSource": {
+    "smallDiameterMm": 0.15,
+    "largeDiameterMm": 1,
+    "smallPartialPixels": 530,
+    "largePartialPixels": 3938,
+    "sourceSamples": 7
+  },
+  "supports": {
+    "diameterMm": 0.15,
+    "extraShadowPixels": 242,
+    "testSize": 360,
+    "testSpanMm": 300
+  },
+  "sensitivity": {
+    "sourceLateralShiftMm": 0.1,
+    "maxApproxWallShiftMm": 0.9,
+    "sourceDepthShiftMm": 0.1,
+    "centerRayApproxWallShiftMm": 4.1625,
+    "description": "Local derivative at z=36 mm; fixed blocker; not an assembly tolerance qualification."
+  }
+}
