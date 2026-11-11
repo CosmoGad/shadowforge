@@ -1,0 +1,206 @@
+{
+  "name": "Opening flower / independent optical checks",
+  "physicalValidation": false,
+  "sourceDiameterMm": 0.15,
+  "sourceSamples": 7,
+  "frames": [
+    {
+      "frame": 1,
+      "opening": 0,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.8828571428571429,
+      "partialPixels": 214,
+      "volumeMm3": 77.74245659722295,
+      "triangles": 248,
+      "dimensionsMm": [
+        4.2518518518518515,
+        27.275000000000006,
+        3
+      ]
+    },
+    {
+      "frame": 2,
+      "opening": 0.08,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.912987012987013,
+      "partialPixels": 323,
+      "volumeMm3": 91.6595544028139,
+      "triangles": 248,
+      "dimensionsMm": [
+        10.918685185185183,
+        25.4161024775091,
+        3
+      ]
+    },
+    {
+      "frame": 3,
+      "opening": 0.28,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9369708372530574,
+      "partialPixels": 432,
+      "volumeMm3": 127.22454013199463,
+      "triangles": 248,
+      "dimensionsMm": [
+        17.820639514546116,
+        20.337500000000006,
+        3
+      ]
+    },
+    {
+      "frame": 4,
+      "opening": 0.6,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9261400128452152,
+      "partialPixels": 504,
+      "volumeMm3": 186.42317690971691,
+      "triangles": 248,
+      "dimensionsMm": [
+        22.784999999999997,
+        17.15,
+        3
+      ]
+    },
+    {
+      "frame": 5,
+      "opening": 0.86,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9675704412546517,
+      "partialPixels": 478,
+      "volumeMm3": 236.60160456427886,
+      "triangles": 248,
+      "dimensionsMm": [
+        23.71460247750909,
+        20.48750000000001,
+        3
+      ]
+    },
+    {
+      "frame": 6,
+      "opening": 1,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9709385421629347,
+      "partialPixels": 476,
+      "volumeMm3": 264.3929991319599,
+      "triangles": 248,
+      "dimensionsMm": [
+        20.13749999999999,
+        25.566102477509077,
+        3
+      ]
+    },
+    {
+      "frame": 7,
+      "opening": 1,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9595103578154426,
+      "partialPixels": 464,
+      "volumeMm3": 264.3929991319388,
+      "triangles": 248,
+      "dimensionsMm": [
+        16.800000000000004,
+        27.42500000000001,
+        3
+      ]
+    },
+    {
+      "frame": 8,
+      "opening": 0.86,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9650053022269353,
+      "partialPixels": 446,
+      "volumeMm3": 236.60160456417844,
+      "triangles": 248,
+      "dimensionsMm": [
+        18.635999999999996,
+        25.566102477509077,
+        3
+      ]
+    },
+    {
+      "frame": 9,
+      "opening": 0.6,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9574750830564784,
+      "partialPixels": 455,
+      "volumeMm3": 186.423176909934,
+      "triangles": 248,
+      "dimensionsMm": [
+        20.926102477509062,
+        20.48750000000001,
+        3
+      ]
+    },
+    {
+      "frame": 10,
+      "opening": 0.28,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.8821966341895483,
+      "partialPixels": 485,
+      "volumeMm3": 127.22454013194483,
+      "triangles": 248,
+      "dimensionsMm": [
+        19.679537037037022,
+        17.150000000000006,
+        3
+      ]
+    },
+    {
+      "frame": 11,
+      "opening": 0.08,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9025641025641026,
+      "partialPixels": 430,
+      "volumeMm3": 91.6595544028355,
+      "triangles": 248,
+      "dimensionsMm": [
+        15.997287662694276,
+        20.33750000000002,
+        3
+      ]
+    },
+    {
+      "frame": 12,
+      "opening": 0,
+      "idealWrongPixels": 0,
+      "foreignShadowPixels": 0,
+      "finiteSourceAndMountIou": 0.9046920821114369,
+      "partialPixels": 351,
+      "volumeMm3": 77.74245659722101,
+      "triangles": 248,
+      "dimensionsMm": [
+        10.278240740740756,
+        25.4161024775091,
+        3
+      ]
+    }
+  ],
+  "checks": [
+    "12 simple connected polygon silhouettes",
+    "12 closed consistently oriented positive-volume solids",
+    "All optical solids fit beneath ring annulus",
+    "All ideal ray silhouettes match independent polygon fill",
+    "Removal test detects no foreign obstruction within radius 110 mm",
+    "BVH ray tests match brute-force triangle intersection",
+    "Closed loop and open/closed hold poses"
+  ],
+  "pixelScope": {
+    "size": 160,
+    "spanMm": 240,
+    "radiusMm": 110
+  },
+  "finiteIouRange": [
+    0.8821966341895483,
+    0.9709385421629347
+  ]
+}

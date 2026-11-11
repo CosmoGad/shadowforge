@@ -1,3 +1,5 @@
+import earcut from "../vendor/earcut.mjs";
+import {flowerTarget,makeBVH,OPENING} from "./flower.mjs";
 // Coordinates: millimetres; wall z=0, observer in +z. No artwork overlay.
 export const CONFIG = Object.freeze({outerRadius:200,innerRadius:140,sourceRadius:185,sourceZ:40,frontZ:45,maskBack:33,maskFront:36,frames:12,targetRadius:50,wireDiameter:.15,beamHalfAngle:90});
 export const add=(a,b)=>a.map((x,i)=>x+b[i]);
@@ -14,24 +16,25 @@ export function target(i,c=CONFIG){return Array.from({length:3},(_,j)=>{const a=
 export function lift(p,s,z){return [p[0]+(s[0]-p[0])*z/s[2],p[1]+(s[1]-p[1])*z/s[2],z];}
 export function project(p,s){const t=s[2]/(s[2]-p[2]);return [s[0]+t*(p[0]-s[0]),s[1]+t*(p[1]-s[1]),0];}
 export function bounds(vertices){return {min:[0,1,2].map(k=>Math.min(...vertices.map(v=>v[k]))),max:[0,1,2].map(k=>Math.max(...vertices.map(v=>v[k])))};}
-export function makeModel(c=CONFIG){
+export function makeModel(c=CONFIG,pattern='triangle'){
  const masks=[],wires=[];
  for(let i=0;i<c.frames;i++){
-  const s=light(i,c),goal=target(i,c),vertices=[...goal.map(p=>lift(p,s,c.maskBack)),...goal.map(p=>lift(p,s,c.maskFront))];
-  const center=mul(vertices.reduce(add,[0,0,0]),1/6);
-  const ids=[[0,2,1],[3,4,5],[0,1,4],[0,4,3],[1,2,5],[1,5,4],[2,0,3],[2,3,5]];
-  const triangles=ids.map(ids=>{let t=ids.map(k=>vertices[k]);if(dot(cross(sub(t[1],t[0]),sub(t[2],t[0])),sub(t[0],center))<0)t=[t[0],t[2],t[1]];return t;});
-  masks.push({index:i,vertices,triangles,bounds:bounds(vertices),target:goal,source:s});
-  const e=[s[0]/c.sourceRadius,s[1]/c.sourceRadius,0];
-  let r=Infinity;
-  for(let j=0;j<3;j++){const a=goal[j],edge=sub(goal[(j+1)%3],a),den=cross2(e,edge);if(Math.abs(den)<1e-8)continue;const t=cross2(a,edge)/den,u=cross2(a,e)/den;if(t>0&&u>=-1e-8&&u<=1+1e-8)r=Math.min(r,t);}
+  const s=light(i,c),goal=pattern==='flower'?flowerTarget(i):target(i,c),n=goal.length;
+  const vertices=[...goal.map(p=>lift(p,s,c.maskBack)),...goal.map(p=>lift(p,s,c.maskFront))],ids=[];
+  const caps=earcut(goal.flatMap(p=>p.slice(0,2)));
+  for(let j=0;j<caps.length;j+=3){let [a,b,d]=caps.slice(j,j+3);if(cross(sub(goal[b],goal[a]),sub(goal[d],goal[a]))[2]<0)[b,d]=[d,b];ids.push([a,d,b],[a+n,b+n,d+n]);}
+  for(let a=0;a<n;a++){const b=(a+1)%n;ids.push([a,b,b+n],[a,b+n,a+n]);}
+  const triangles=ids.map(t=>t.map(k=>vertices[k]));
+  masks.push({index:i,vertices,triangles,bounds:bounds(vertices),target:goal,source:s,...(n>3?{bvh:makeBVH(triangles)}:{})});
+  const e=[s[0]/c.sourceRadius,s[1]/c.sourceRadius,0];let r=-Infinity;
+  for(let j=0;j<n;j++){const a=goal[j],edge=sub(goal[(j+1)%n],a),den=cross2(e,edge);if(Math.abs(den)<1e-8)continue;const t=cross2(a,edge)/den,u=cross2(a,e)/den;if(t>0&&u>=-1e-8&&u<=1+1e-8)r=Math.max(r,t);}
   if(!Number.isFinite(r))throw Error('Mount intersection failed');
   for(const z of[c.maskBack,c.maskFront]){
    const a=lift(mul(e,r),s,z),b=[e[0]*(c.outerRadius-1),e[1]*(c.outerRadius-1),z],rad=c.wireDiameter/2,bb=bounds([a,b]);
    wires.push({index:i,a,b,radius:rad,bounds:{min:bb.min.map(x=>x-rad),max:bb.max.map(x=>x+rad)}});
   }
  }
- return {config:c,masks,wires};
+ return {config:c,masks,wires,pattern};
 }
 export function inTriangle(p,t){const v=t.map((a,i)=>cross2(sub(t[(i+1)%3],a),sub(p,a)));return v.every(x=>x>=-1e-8)||v.every(x=>x<=1e-8);}
 function boxHit(o,d,box){
@@ -59,10 +62,16 @@ function annulusHit(o,d,z0,z1,r0,r1){
  const v=den?Math.max(a,Math.min(b,-(o[0]*d[0]+o[1]*d[1])/den)):a;
  return Math.min(rr(a),rr(b),rr(v))<=r1*r1&&Math.max(rr(a),rr(b))>=r0*r0;
 }
+function meshHit(o,d,m){
+ if(!m.bvh)return m.triangles.some(t=>triangleHit(o,d,t));
+ const stack=[m.bvh];
+ while(stack.length){const node=stack.pop();if(!boxHit(o,d,node))continue;if(node.indices){if(node.indices.some(i=>triangleHit(o,d,m.triangles[i])))return true;}else{stack.push(node.left,node.right);}}
+ return false;
+}
 export function blocked(o,p,model,{mounts=true,ignoreMask=-1,ignoreHousing=false}={}){
  const d=sub(p,o),c=model.config;
  if(!ignoreHousing&&(annulusHit(o,d,0,3,180,c.outerRadius)||annulusHit(o,d,42,c.frontZ,c.innerRadius,c.outerRadius)||annulusHit(o,d,0,c.frontZ,198,c.outerRadius)))return true;
- for(const m of model.masks)if(m.index!==ignoreMask&&boxHit(o,d,m.bounds)&&m.triangles.some(t=>triangleHit(o,d,t)))return true;
+ for(const m of model.masks)if(m.index!==ignoreMask&&boxHit(o,d,m.bounds)&&meshHit(o,d,m))return true;
  if(mounts)for(const w of model.wires)if(boxHit(o,d,w.bounds)&&segmentDistanceSquared(o,p,w.a,w.b)<=w.radius*w.radius)return true;
  return false;
 }
@@ -96,5 +105,5 @@ export function stl(mask){
 }
 export function assembly(model){
  const c=model.config;
- return {name:'ShadowForge Ring / optical prototype 01',units:'mm',wall:'z=0; +z toward viewer',config:c,sequence:{frames:c.frames,fps:24,oneChannelAtATime:true,rotationPerLoopDegrees:120,physicalValidation:false},source:{type:'effective emitting disk perpendicular to aim',diameterMm:.15,samples:7,photometry:'relative Lambertian cosine intensity over forward hemisphere; real LED distribution unverified; no lumen/lux claim'},housing:{frontAnnulus:[140,200,42,45],rearAnnulus:[180,200,0,3],outerWall:[198,200,0,45],status:'envelope; full housing and electronics mounts not production-designed'},masks:model.masks.map(m=>({frame:m.index+1,source:m.source,aim:[0,0,0],target:m.target,assemblyVertices:m.vertices,printToAssemblyTranslation:m.bounds.min,printFile:'print/frame-'+String(m.index+1).padStart(2,'0')+'.stl'})),mounts:model.wires.map(w=>({frame:w.index+1,from:w.a,to:w.b,diameter:2*w.radius,material:'opaque wire; purchased, not printable; no mechanical qualification'})),limitations:['No physical prototype tested.','Absolute light output, heating, wiring, source package, connectors and tolerances not validated.','Source disk quadrature uses seven samples; preview is not a photometric measurement.','Opaque wire supports and all masks/housing are included in ray tests.','Thin optical parts may require slicer supports; inspect before printing.']};
+ return {name:model.pattern==='flower'?'ShadowForge Ring / opening flower':'ShadowForge Ring / optical prototype 01',units:'mm',wall:'z=0; +z toward viewer',config:c,sequence:{frames:c.frames,fps:model.pattern==='flower'?6:24,oneChannelAtATime:true,rotationPerLoopDegrees:model.pattern==='flower'?0:120,...(model.pattern==='flower'?{openingSequence:OPENING,cycleSeconds:2}: {}),physicalValidation:false},source:{type:'effective emitting disk perpendicular to aim',diameterMm:.15,samples:7,photometry:'relative Lambertian cosine intensity over forward hemisphere; real LED distribution unverified; no lumen/lux claim'},housing:{frontAnnulus:[140,200,42,45],rearAnnulus:[180,200,0,3],outerWall:[198,200,0,45],status:'envelope; full housing and electronics mounts not production-designed'},masks:model.masks.map(m=>({frame:m.index+1,source:m.source,aim:[0,0,0],target:m.target,assemblyVertices:m.vertices,printToAssemblyTranslation:m.bounds.min,printFile:(model.pattern==='flower'?'flower/print/frame-':'print/frame-')+String(m.index+1).padStart(2,'0')+'.stl'})),mounts:model.wires.map(w=>({frame:w.index+1,from:w.a,to:w.b,diameter:2*w.radius,material:'opaque wire; purchased, not printable; no mechanical qualification'})),limitations:['No physical prototype tested.','Absolute light output, heating, wiring, source package, connectors and tolerances not validated.','Source disk quadrature uses seven samples; preview is not a photometric measurement.','Opaque wire supports and all masks/housing are included in ray tests.','Thin optical parts may require slicer supports; inspect before printing.']};
 }
