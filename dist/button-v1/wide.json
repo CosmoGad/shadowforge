@@ -1,0 +1,78 @@
+{
+  "n": 450,
+  "span": 650,
+  "cx": 0,
+  "cy": 70,
+  "S": 100,
+  "source": "3 mm disc apparent emitter (scenario assumption; module emitter unmeasured)",
+  "emitterShape": "disc",
+  "emitterMM": 3,
+  "samples": 25,
+  "sourceOffset": [
+    0,
+    0,
+    0
+  ],
+  "files": [
+    "assembly/wall-base.stl",
+    "assembly/crescent-bayonet-cartridge.stl",
+    "assembly/button-module-holder.stl",
+    "assembly/button-module-envelope.stl"
+  ],
+  "inputSnapshot": [
+    {
+      "file": "assembly/wall-base.stl",
+      "sha256": "a5cd1d93fe9dc4d7339d30f1b8a1bdcc827055382f218714d612804092c3f23a",
+      "bytes": 431984,
+      "mtime": "2026-11-16T15:07:06.740Z"
+    },
+    {
+      "file": "assembly/crescent-bayonet-cartridge.stl",
+      "sha256": "5bec4cbf1641b1fc1281062f1d6558ff9652c9e5009b1ba6576ef1c5e80cebbf",
+      "bytes": 2934684,
+      "mtime": "2026-11-16T15:07:06.821Z"
+    },
+    {
+      "file": "assembly/button-module-holder.stl",
+      "sha256": "b59a37e095b7bf5f079a593abf5156d2c919f7dbe997799e5307260821649a93",
+      "bytes": 136784,
+      "mtime": "2026-11-16T15:07:06.849Z"
+    },
+    {
+      "file": "assembly/button-module-envelope.stl",
+      "sha256": "b21d45e899f0abcf0c9d53d83eb7e70030792b262d7e51df761aa37de8325c7e",
+      "bytes": 51284,
+      "mtime": "2026-11-16T15:07:06.852Z"
+    }
+  ],
+  "inputAssembly": "assembly.json",
+  "assemblyCoordinates": true,
+  "printToAssemblyIgnored": true,
+  "refraction": {
+    "innerRadius": 3,
+    "outerRadius": 5,
+    "zMin": 81.5,
+    "zMax": 103.5,
+    "ior": 1.49,
+    "model": "Exact vector Snell intersections with finite concentric cylinders; Newton wall solve; launch-solid-angle to wall-area Jacobian; scalar unpolarized two-surface Fresnel transmission",
+    "paths": "Primary transmitted branch only; secondary Fresnel-reflected ghost paths and scattering are not included",
+    "sleeveSTLExcludedFromOpaqueBVH": true
+  },
+  "visibility": "Opaque visibility normalized by the transmitted no-opaque PMMA reference per pixel; failed no-wall branches count dark",
+  "irradiance": "Relative Lambertian direct irradiance, normalized to the same unobstructed source at100mm on-axis; includes Fresnel and geometric Jacobian",
+  "stats": {
+    "rays": 5062500,
+    "refracted": 5047595,
+    "failedSolve": 5021,
+    "failedOutsideProductDisk": 0,
+    "maxResidualMM": 9.99986615617661e-06,
+    "maxIterations": 9,
+    "minJacobian": 0.8741151422786692,
+    "maxJacobian": 1.193440950425308,
+    "minTransmission": 0.1634233086272325,
+    "maxTransmission": 1
+  },
+  "startedAt": "2026-11-16T15:08:40.441Z",
+  "seconds": 105.909,
+  "physicalValidation": false
+}

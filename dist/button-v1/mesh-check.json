@@ -1,0 +1,56 @@
+[
+  {
+    "name": "wall-base",
+    "watertight": true,
+    "components": 1,
+    "solidPETGgrams": 45.93561324715176,
+    "bounds": [
+      [
+        -55.0,
+        -55.0,
+        0.0
+      ],
+      [
+        55.0,
+        55.0,
+        87.0
+      ]
+    ]
+  },
+  {
+    "name": "crescent-bayonet-cartridge",
+    "watertight": true,
+    "components": 1,
+    "solidPETGgrams": 16.406498073382814,
+    "bounds": [
+      [
+        -50.0,
+        -51.92873764038086,
+        23.0
+      ],
+      [
+        50.0,
+        50.0,
+        83.70719909667969
+      ]
+    ]
+  },
+  {
+    "name": "button-module-holder",
+    "watertight": true,
+    "components": 1,
+    "solidPETGgrams": 2.7532748262087368,
+    "bounds": [
+      [
+        -7.199999809265137,
+        -7.199999809265137,
+        100.5
+      ],
+      [
+        7.199999809265137,
+        7.199999809265137,
+        128.5
+      ]
+    ]
+  }
+]

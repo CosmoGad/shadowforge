@@ -1,0 +1,82 @@
+{
+  "units": "mm",
+  "source": [
+    0,
+    0,
+    100
+  ],
+  "parts": [
+    {
+      "name": "wall-base",
+      "file": "assembly/wall-base.stl"
+    },
+    {
+      "name": "crescent-bayonet-cartridge",
+      "file": "assembly/crescent-bayonet-cartridge.stl"
+    },
+    {
+      "name": "button-module-holder",
+      "file": "assembly/button-module-holder.stl"
+    }
+  ],
+  "hardware": [
+    {
+      "name": "button-module-envelope",
+      "file": "assembly/button-module-envelope.stl",
+      "role": "button-module-envelope",
+      "color": [
+        0.75,
+        0.8,
+        0.75
+      ]
+    },
+    {
+      "name": "optical-sleeve",
+      "file": "assembly/optical-sleeve.stl",
+      "role": "optical-sleeve",
+      "color": [
+        0.75,
+        0.8,
+        0.75
+      ]
+    }
+  ],
+  "physicalValidation": false,
+  "status": "Dimensioned concept: module lens location, battery type, beam and fit NOT measured",
+  "module": {
+    "nominalEnvelopeMM": [
+      10,
+      32
+    ],
+    "evidence": "Author BOM photograph, not supplier drawing",
+    "bodyShoulderZ": 104,
+    "buttonEndZ": 132,
+    "emitterZ": 100,
+    "emitterLocation": "assumed 4mm in front of body shoulder; calibrate before bonding",
+    "battery": "unknown: read marking on purchased module",
+    "electrical": "self-contained constant-on push-lock LED module, no external driver"
+  },
+  "headMount": {
+    "sleeveMM": [
+      10,
+      6,
+      22
+    ],
+    "socketBoreMM": 10.4,
+    "glue": true,
+    "adjustment": "Seat module against shoulder; if emitter datum differs, regenerate spacer/holder. Do not assume body end is emitter."
+  },
+  "optics": {
+    "emitterScenariosMM": [
+      1,
+      3
+    ],
+    "beamFWHMScenariosDeg": [
+      60,
+      120,
+      160
+    ],
+    "fluxLumens": null,
+    "absoluteBrightnessValidated": false
+  }
+}
